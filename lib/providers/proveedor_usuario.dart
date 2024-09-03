@@ -1,13 +1,12 @@
 //lib/providers/proveedor_usuario
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/modelos/usuario.dart';
 
 class UserProvider with ChangeNotifier {
-  Usuario? _user;
+  Map<String, dynamic>? _user;
 
-  Usuario? get user => _user;
+  Map<String, dynamic>? get user => _user;
 
-  void setUser(Usuario user) {
+  void setUser(Map<String, dynamic> user) {
     _user = user;
     notifyListeners();
   }

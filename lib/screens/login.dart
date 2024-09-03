@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/modelos/usuario.dart';
 import 'package:flutter_frontend/servicios/autenticacion_services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_frontend/providers/proveedor_usuario.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'home_page.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -44,7 +43,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   void _login() async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    Provider.of<UserProvider>(context, listen: false);
     final ci = _usernameController.text;
     final password = _passwordController.text;
 
@@ -57,13 +56,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
       if (response != null) {
         final token = response['token'];
-        final userMap = response['user'] as Map<String, dynamic>;
-        final user = Usuario.fromMap(userMap);
-
-        userProvider.setUser(user);
-
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', token);
+        final storage = FlutterSecureStorage();
+        await storage.write(key: 'token', value: token);
 
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(

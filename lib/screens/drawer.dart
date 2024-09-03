@@ -1,14 +1,5 @@
 import 'package:flutter/material.dart';
-
-class User {
-  final String name;
-  final String role;
-
-  User({required this.name, required this.role});
-}
-
-// Ejemplo de un usuario con rol de doctor
-User currentUser = User(name: 'Dr. House', role: 'Doctor');
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -24,15 +15,16 @@ class AppDrawer extends StatelessWidget {
               accountName: Text('Administrador de Sistema'),
               accountEmail: Text('@misadev'),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('lib/screens/usuarioLogo.png'),
+                backgroundImage: AssetImage(''),
               ),
               decoration: BoxDecoration(
                 color: Colors.green,
               ),
             ),
-            _listTile("home", Icons.home, context, '/home'),
-            _listTile('Historial', Icons.description, context, '/home'),
-            _listTile('Reservar Citas', Icons.calendar_today, context, '/home'),
+            _listTile("Inicio", Icons.home, context, '/home'),
+            _listTile('Historial', Icons.description, context, '/historial'),
+            _listTile('Reservar Citas', Icons.calendar_today, context,
+                '/reservar_citas'),
             ExpansionTile(
               title: const Text(
                 'Personal',
@@ -45,9 +37,11 @@ class AppDrawer extends StatelessWidget {
                     Icons.subdirectory_arrow_right,
                     context,
                     '/registro_empleados'),
+                // Puedes añadir más ListTile aquí si es necesario
               ],
             ),
-            _listTile('Configuración', Icons.settings, context, '/home'),
+            _listTile(
+                'Configuración', Icons.settings, context, '/configuracion'),
           ],
         ),
       ),
@@ -66,12 +60,13 @@ class AppDrawer extends StatelessWidget {
       leading: Icon(icon),
       onTap: () {
         Navigator.pop(context); // Cierra el Drawer
-        Navigator.pushNamed(
-            context, routeName); // Navega a la ruta especificada
+        Navigator.pushReplacementNamed(context,
+            routeName); // Reemplaza la ruta actual en lugar de apilarla
       },
     );
   }
 }
+
 
 /*ExpansionTile(
               title: const Text(
