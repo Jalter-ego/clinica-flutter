@@ -12,7 +12,7 @@ class AutenticacionServices {
   }) async {
     try {
       final response = await http.post(
-        Uri.parse('${Constantes.uri}/login'),
+        Uri.parse('${Constantes.uri}/usuarios/login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

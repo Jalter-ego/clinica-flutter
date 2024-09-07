@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
       if (response != null) {
         final token = response['token'];
-        final storage = FlutterSecureStorage();
+        const storage = FlutterSecureStorage();
         await storage.write(key: 'token', value: token);
 
         Navigator.of(context).pushReplacement(
