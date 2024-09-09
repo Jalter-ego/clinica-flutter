@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:flutter_frontend/servicios/autenticacion_services.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_frontend/providers/proveedor_usuario.dart';
-import 'home_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'home_page.dart';
+import 'package:flutter_frontend/providers/proveedor_usuario.dart'; // Asegúrate de que la ruta es correcta
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginPageState createState() => _LoginPageState();
 }
 
@@ -43,7 +44,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   void _login() async {
-    Provider.of<UserProvider>(context, listen: false);
+    final userProvider = Get.find<UserProvider>();
     final ci = _usernameController.text;
     final password = _passwordController.text;
 
@@ -59,44 +60,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         const storage = FlutterSecureStorage();
         await storage.write(key: 'token', value: token);
 
-        Navigator.of(context).pushReplacement(
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                const MyHomePage(),
-            transitionDuration: const Duration(milliseconds: 1200),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              const begin = Offset(1.0, 0.0);
-              const end = Offset.zero;
-              const curve = Curves.easeInOut;
-              final tween =
-                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-              final offsetAnimation = animation.drive(tween);
+        // Actualiza el estado del usuario
+        userProvider.setUser({'token': token});
 
-              final whiteScreen = Container(color: Colors.white);
-              final slideTransition =
-                  SlideTransition(position: offsetAnimation, child: child);
-
-              return Stack(
-                children: [
-                  Positioned.fill(
-                    child: AnimatedBuilder(
-                      animation: animation,
-                      builder: (context, child) {
-                        final opacity = 1.0 - animation.value;
-                        return Opacity(
-                          opacity: opacity,
-                          child: whiteScreen,
-                        );
-                      },
-                    ),
-                  ),
-                  slideTransition,
-                ],
-              );
-            },
-          ),
-        );
+        // Navega a la página de inicio
+        Get.offAll(() => const MyHomePage());
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Usuario o contraseña incorrectos')),
