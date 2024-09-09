@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/assets.dart';
+
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
 
@@ -14,7 +16,7 @@ class AppDrawer extends StatelessWidget {
               accountName: Text('Administrador de Sistema'),
               accountEmail: Text('@misadev'),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage(''),
+                backgroundImage: AssetImage(Assets.imagesAppLogo),
               ),
               decoration: BoxDecoration(
                 color: Colors.green,

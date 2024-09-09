@@ -1,23 +1,13 @@
-//lib/main.dart
-import 'package:flutter_frontend/providers/proveedor_usuario.dart';
-import 'screens/home_page.dart';
-import 'screens/login.dart';
 import 'package:flutter/material.dart';
-import 'screens/Registro_de_empleados.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
+import 'screens/login.dart';
+import 'screens/splash.dart'; // Asegúrate de que el archivo es correcto
+import 'screens/home_page.dart';
+import 'screens/registro_de_empleados.dart';
 
 void main() {
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => UserProvider()),
-  ], child: const MyApp()));
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  runApp(
+    GetMaterialApp(
       title: 'Namer App',
       theme: ThemeData(
         useMaterial3: true,
@@ -26,12 +16,15 @@ class MyApp extends StatelessWidget {
         ),
       ),
       initialRoute: '/',
-      routes: {
-        '/': (context) => const LoginPage(),
-        '/home': (context) => const MyHomePage(),
-        '/registro_empleados': (context) => const EmployeeRegistrationPage(),
-      },
+      getPages: [
+        GetPage(name: '/', page: () => SplashScreen()),
+        GetPage(name: '/login', page: () => const LoginPage()),
+        GetPage(name: '/home', page: () => const MyHomePage()),
+        GetPage(
+            name: '/registro_empleados',
+            page: () => const EmployeeRegistrationPage()),
+      ],
       debugShowCheckedModeBanner: false,
-    );
-  }
+    ),
+  );
 }
