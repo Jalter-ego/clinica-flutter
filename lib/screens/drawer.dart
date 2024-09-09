@@ -19,7 +19,7 @@ class AppDrawer extends StatelessWidget {
                 backgroundImage: AssetImage(Assets.imagesAppLogo),
               ),
               decoration: BoxDecoration(
-                color: Colors.green,
+                color: Colors.lightBlue,
               ),
             ),
             _listTile("Inicio", Icons.home, context, '/home'),
