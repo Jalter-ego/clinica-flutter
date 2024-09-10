@@ -1,0 +1,84 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_frontend/screens/home.dart';
+import 'package:flutter_frontend/screens/horarios.dart';
+import 'package:flutter_frontend/screens/informacio.dart';
+import 'package:flutter_frontend/screens/perfil.dart';
+import 'drawer.dart';
+
+class Nav_Rutas extends StatefulWidget {
+  const Nav_Rutas({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _Nav_Rutas_State createState() => _Nav_Rutas_State();
+}
+
+class _Nav_Rutas_State extends State<Nav_Rutas> {
+  int selectedIndex = 0;
+  final screens = [
+    const HomeScreen(),
+    const HorariosScreen(), // Otra pantalla
+    const InformacionScreen(),
+    const PerfilScreen(),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Página Principal'),
+      ),
+      drawer: const AppDrawer(),
+      body: screens[
+          selectedIndex], // Cambia el contenido según el índice seleccionado
+      bottomNavigationBar: SizedBox(
+        height: 60,
+        child: BottomNavigationBar(
+          elevation: 5,
+          backgroundColor: Colors.white,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: const Color(0xFF3E69FE),
+          unselectedItemColor: Colors.black54,
+          currentIndex: selectedIndex,
+          onTap: (index) {
+            setState(() {
+              selectedIndex = index;
+            });
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_filled),
+              label: "Home",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_month_outlined),
+              label: "Horarios",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.medical_information),
+              label: "Informacion",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.perm_identity),
+              label: "Perfil",
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+Widget listTile(String title, IconData icono, BuildContext context) {
+  return ListTile(
+    title: Text(
+      title,
+      style: const TextStyle(
+        fontSize: 14,
+      ),
+    ),
+    leading: Icon(icono),
+    onTap: () {
+      Navigator.pop(context);
+    },
+  );
+}

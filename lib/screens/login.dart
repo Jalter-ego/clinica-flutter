@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_frontend/servicios/autenticacion_services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'home_page.dart';
+import 'navegador.dart';
 import 'package:flutter_frontend/providers/proveedor_usuario.dart'; // Asegúrate de que la ruta es correcta
 
 class LoginPage extends StatefulWidget {
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         userProvider.setUser({'token': token});
 
         // Navega a la página de inicio
-        Get.offAll(() => const MyHomePage());
+        Get.offAll(() => const Nav_Rutas());
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Usuario o contraseña incorrectos')),

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'providers/proveedor_usuario.dart';
 import 'screens/login.dart';
 import 'screens/splash.dart'; // Asegúrate de que el archivo es correcto
-import 'screens/home_page.dart';
+import 'screens/navegador.dart';
 import 'screens/registro_de_empleados.dart';
 
 void main() {
@@ -21,7 +21,7 @@ void main() {
       getPages: [
         GetPage(name: '/', page: () => SplashScreen()),
         GetPage(name: '/login', page: () => const LoginPage()),
-        GetPage(name: '/home', page: () => const MyHomePage()),
+        GetPage(name: '/home', page: () => const Nav_Rutas()),
         GetPage(
             name: '/registro_empleados',
             page: () => const EmployeeRegistrationPage()),
