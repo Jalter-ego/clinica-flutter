@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter_frontend/utils/assets.dart';
 
 class SplashScreen extends StatelessWidget {
-  SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
