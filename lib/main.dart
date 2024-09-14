@@ -1,32 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/providers/proveedor_usuario.dart';
 import 'package:get/get.dart';
-import 'providers/proveedor_usuario.dart';
+import 'package:provider/provider.dart';
 import 'screens/login.dart';
-import 'screens/splash.dart'; // Asegúrate de que el archivo es correcto
+import 'screens/splash.dart';
 import 'screens/navegador.dart';
 import 'screens/registro_de_empleados.dart';
 
-void main() {
-  Get.put(UserProvider());
-  runApp(
-    GetMaterialApp(
-      title: 'Namer App',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(137, 90, 135, 218),
+void main() async {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp();
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => UserProvider())],
+      child: GetMaterialApp(
+        title: 'Namer App',
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(137, 90, 135, 218),
+          ),
         ),
+        initialRoute: '/',
+        getPages: [
+          GetPage(name: '/', page: () => const SplashScreen()),
+          GetPage(name: '/login', page: () => const LoginPage()),
+          GetPage(name: '/home', page: () => const Nav_Rutas()),
+          GetPage(
+              name: '/registro_empleados',
+              page: () => const EmployeeRegistrationPage()),
+        ],
+        debugShowCheckedModeBanner: false,
       ),
-      initialRoute: '/',
-      getPages: [
-        GetPage(name: '/', page: () => SplashScreen()),
-        GetPage(name: '/login', page: () => const LoginPage()),
-        GetPage(name: '/home', page: () => const Nav_Rutas()),
-        GetPage(
-            name: '/registro_empleados',
-            page: () => const EmployeeRegistrationPage()),
-      ],
-      debugShowCheckedModeBanner: false,
-    ),
-  );
+    );
+  }
 }

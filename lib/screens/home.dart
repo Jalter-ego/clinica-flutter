@@ -1,22 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  static const storage = FlutterSecureStorage();
+  String? _nombre;
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarNombre();
+  }
+
+  Future<void> _cargarNombre() async {
+    final nombre = await storage.read(key: 'nombre');
+    setState(() {
+      _nombre = nombre;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_nombre == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Optivisión'),
+          backgroundColor: const Color(0xFF3E69FE), // Color principal de la app
+        ),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final bienvenidaText = 'Bienvenido, ${_nombre ?? 'Usuario'}';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Optivisión'),
-        backgroundColor: const Color(0xFF3E69FE) // Color principal de la app
+        backgroundColor: const Color(0xFF3E69FE), // Color principal de la app
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Bienvenido, [Nombre del usuario]',
+            Text(
+              bienvenidaText,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
@@ -66,7 +99,7 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 10),
             Card(
               child: ListTile(
-                leading: Icon(Icons.newspaper),
+                leading: const Icon(Icons.newspaper),
                 title: const Text('Nuevas técnicas para tratar el glaucoma'),
                 onTap: () {
                   // Acción al tocar la noticia
@@ -75,8 +108,9 @@ class HomeScreen extends StatelessWidget {
             ),
             Card(
               child: ListTile(
-                leading: Icon(Icons.newspaper),
-                title: const Text('Cuidados postoperatorios tras una cirugía ocular'),
+                leading: const Icon(Icons.newspaper),
+                title: const Text(
+                    'Cuidados postoperatorios tras una cirugía ocular'),
                 onTap: () {
                   // Acción al tocar la noticia
                 },
@@ -89,7 +123,7 @@ class HomeScreen extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             ListTile(
-              leading: Icon(Icons.phone),
+              leading: const Icon(Icons.phone),
               title: const Text('Llamar a la clínica'),
               onTap: () {
                 // Acción para hacer la llamada
@@ -101,19 +135,22 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Widget para crear accesos rápidos
-  Widget _buildQuickAction(BuildContext context, {required IconData icon, required String label, required String route}) {
-    return Column(
-      children: [
-        IconButton(
-          icon: Icon(icon, size: 40),
-          color: const Color(0xFF3E69FE),
-          onPressed: () {
-            Navigator.pushNamed(context, route);
-          },
-        ),
-        Text(label),
-      ],
-    );
-  }
+  void obtenerNombreUsuario() async {}
+}
+
+// Widget para crear accesos rápidos
+Widget _buildQuickAction(BuildContext context,
+    {required IconData icon, required String label, required String route}) {
+  return Column(
+    children: [
+      IconButton(
+        icon: Icon(icon, size: 40),
+        color: const Color(0xFF3E69FE),
+        onPressed: () {
+          Navigator.pushNamed(context, route);
+        },
+      ),
+      Text(label),
+    ],
+  );
 }

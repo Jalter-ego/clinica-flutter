@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_frontend/servicios/autenticacion_services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 import 'navegador.dart';
 import 'package:flutter_frontend/providers/proveedor_usuario.dart'; // Asegúrate de que la ruta es correcta
 
@@ -44,7 +45,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   void _login() async {
-    final userProvider = Get.find<UserProvider>();
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     final ci = _usernameController.text;
     final password = _passwordController.text;
 
@@ -60,8 +61,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         const storage = FlutterSecureStorage();
         await storage.write(key: 'token', value: token);
 
-        // Actualiza el estado del usuario
-        userProvider.setUser({'token': token});
+        // Obtén el nombre del usuario
+        final String? usuario = await authService.obtenerUsuario();
+        // Guarda el nombre en el almacenamiento seguro
+        await storage.write(key: 'nombre', value: usuario);
+        //actualiza el estado
+        userProvider.setUser({'token': token, 'nombre': usuario});
 
         // Navega a la página de inicio
         Get.offAll(() => const Nav_Rutas());

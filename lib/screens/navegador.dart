@@ -15,12 +15,14 @@ class Nav_Rutas extends StatefulWidget {
 
 class _Nav_Rutas_State extends State<Nav_Rutas> {
   int selectedIndex = 0;
-  final screens = [
-    const HomeScreen(),
-    const HorariosScreen(), // Otra pantalla
+
+  final List<Widget> screens = [
+    HomeScreen(),
+    const HorariosScreen(),
     const InformacionScreen(),
     const PerfilScreen(),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,8 +30,10 @@ class _Nav_Rutas_State extends State<Nav_Rutas> {
         title: const Text('Página Principal'),
       ),
       drawer: const AppDrawer(),
-      body: screens[
-          selectedIndex], // Cambia el contenido según el índice seleccionado
+      body: IndexedStack(
+        index: selectedIndex,
+        children: screens,
+      ),
       bottomNavigationBar: SizedBox(
         height: 60,
         child: BottomNavigationBar(
@@ -66,19 +70,4 @@ class _Nav_Rutas_State extends State<Nav_Rutas> {
       ),
     );
   }
-}
-
-Widget listTile(String title, IconData icono, BuildContext context) {
-  return ListTile(
-    title: Text(
-      title,
-      style: const TextStyle(
-        fontSize: 14,
-      ),
-    ),
-    leading: Icon(icono),
-    onTap: () {
-      Navigator.pop(context);
-    },
-  );
 }

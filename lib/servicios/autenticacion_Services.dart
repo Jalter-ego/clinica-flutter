@@ -2,9 +2,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/utils/constantes.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class AutenticacionServices {
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
+
   Future<Map<String, dynamic>?> loginUsuario({
     required BuildContext context,
     required String ci,
@@ -33,6 +36,33 @@ class AutenticacionServices {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),
       );
+      return null;
+    }
+  }
+
+  Future<String?> obtenerUsuario() async {
+    try {
+      String? token = await storage.read(key: 'token');
+
+      if (token != null) {
+        final response = await http.get(
+          Uri.parse('${Constantes.uri}/usuarios/obtenerUsuario'),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        );
+        if (response.statusCode == 200) {
+          final data = jsonDecode(response.body);
+          return data['nombre'];
+        } else {
+          print('Error al obtener el usuario: ${response.reasonPhrase}');
+          return null;
+        }
+      }
+      return null;
+    } catch (e) {
+      print('Error al obtener el usuario: $e');
       return null;
     }
   }
