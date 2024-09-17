@@ -46,7 +46,7 @@ class AutenticacionServices {
 
       if (token != null) {
         final response = await http.get(
-          Uri.parse('${Constantes.uri}/usuarios/obtenerUsuario'),
+          Uri.parse('${Constantes.uri}/usuarios/obtenerUsuarioToken'),
           headers: {
             'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
