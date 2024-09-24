@@ -4,7 +4,7 @@ import 'package:flutter_frontend/servicios/autenticacion_services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'navegador.dart';
-import 'package:flutter_frontend/providers/proveedor_usuario.dart'; // Asegúrate de que la ruta es correcta
+import 'package:flutter_frontend/providers/proveedor_usuario.dart'; 
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

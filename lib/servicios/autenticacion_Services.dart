@@ -1,5 +1,6 @@
 //lib/servicios/autenticacion_Services.dart
 import 'dart:convert';
+import 'dart:nativewrappers/_internal/vm/lib/internal_patch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/utils/constantes.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -63,6 +64,35 @@ class AutenticacionServices {
       return null;
     } catch (e) {
       print('Error al obtener el usuario: $e');
+      return null;
+    }
+  }
+
+  Future<String?> obtenerEmail() async {
+    try {
+      String? token = await storage.read(key: 'token');
+
+      if (token != null) {
+        final response = await http.get(
+          Uri.parse('${Constantes.uri}/usuarios/obtenerUsuarioToken'),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        );
+        if (response.statusCode == 200) {
+          final data = jsonDecode(response.body);
+
+          return data['email'];
+        } else {
+          print('Error al obtener el email: ${response.reasonPhrase}');
+          return null;
+        }
+      }
+      
+      return null;
+    } catch (e) {
+      print('Error al obtener el email: $e');
       return null;
     }
   }
