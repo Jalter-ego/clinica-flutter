@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/proveedor_usuario.dart';
+import 'drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -9,40 +13,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  static const storage = FlutterSecureStorage();
-  String? _nombre;
-
-  @override
-  void initState() {
-    super.initState();
-    _cargarNombre();
-  }
-
-  Future<void> _cargarNombre() async {
-    final nombre = await storage.read(key: 'nombre');
-    setState(() {
-      _nombre = nombre;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (_nombre == null) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Optivisión'),
-          backgroundColor: const Color(0xFF3E69FE), // Color principal de la app
-        ),
-        body: const Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    final bienvenidaText = 'Bienvenido, ${_nombre ?? 'Usuario'}';
+    final userProvider = Provider.of<UserProvider>(context);
+    final bienvenidaText = 'Bienvenido, ${userProvider.nombre ?? 'Usuario'}';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Optivisión'),
-        backgroundColor: const Color(0xFF3E69FE), // Color principal de la app
+        backgroundColor: const Color.fromARGB(
+            255, 62, 105, 254), // Color principal de la app
       ),
+      drawer: const AppDrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -50,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Text(
               bienvenidaText,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             // Accesos rápidos

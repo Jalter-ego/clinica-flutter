@@ -26,9 +26,6 @@ class _Nav_Rutas_State extends State<Nav_Rutas> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Página Principal'),
-      ),
       drawer: const AppDrawer(),
       body: IndexedStack(
         index: selectedIndex,

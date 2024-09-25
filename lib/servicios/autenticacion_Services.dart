@@ -1,6 +1,5 @@
 //lib/servicios/autenticacion_Services.dart
 import 'dart:convert';
-import 'dart:nativewrappers/_internal/vm/lib/internal_patch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/utils/constantes.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -89,7 +88,7 @@ class AutenticacionServices {
           return null;
         }
       }
-      
+
       return null;
     } catch (e) {
       print('Error al obtener el email: $e');

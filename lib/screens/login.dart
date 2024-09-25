@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:flutter_frontend/servicios/autenticacion_services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_frontend/providers/proveedor_usuario.dart';
+
 import 'navegador.dart';
-import 'package:flutter_frontend/providers/proveedor_usuario.dart'; 
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -58,15 +58,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
       if (response != null) {
         final token = response['token'];
-        const storage = FlutterSecureStorage();
-        await storage.write(key: 'token', value: token);
 
-        // Obtén el nombre del usuario
-        final String? usuario = await authService.obtenerUsuario();
-        // Guarda el nombre en el almacenamiento seguro
-        await storage.write(key: 'nombre', value: usuario);
-        //actualiza el estado
-        userProvider.setUser({'token': token, 'nombre': usuario});
+        // Guarda el token en el UserProvider
+        await userProvider.setToken(token);
 
         // Navega a la página de inicio
         Get.offAll(() => const Nav_Rutas());
