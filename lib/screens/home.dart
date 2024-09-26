@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Optivisión'),
         backgroundColor: const Color.fromARGB(
-            255, 62, 105, 254), // Color principal de la app
+            255, 13, 187, 167), // Color principal de la app
       ),
       drawer: const AppDrawer(),
       body: SingleChildScrollView(
@@ -126,7 +126,7 @@ Widget _buildQuickAction(BuildContext context,
     children: [
       IconButton(
         icon: Icon(icon, size: 40),
-        color: const Color(0xFF3E69FE),
+        color: const Color.fromARGB(255, 13, 187, 167),
         onPressed: () {
           Navigator.pushNamed(context, route);
         },

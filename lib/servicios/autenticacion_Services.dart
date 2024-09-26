@@ -1,9 +1,10 @@
 //lib/servicios/autenticacion_Services.dart
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/utils/constantes.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+
+import '../utils/constantes.dart';
 
 class AutenticacionServices {
   final FlutterSecureStorage storage = const FlutterSecureStorage();

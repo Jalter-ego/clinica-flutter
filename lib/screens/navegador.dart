@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/screens/home.dart';
-import 'package:flutter_frontend/screens/horarios.dart';
-import 'package:flutter_frontend/screens/informacio.dart';
-import 'package:flutter_frontend/screens/perfil.dart';
 import 'drawer.dart';
+import 'home.dart';
+import 'horarios.dart';
+import 'informacio.dart';
+import 'perfil.dart';
 
 class Nav_Rutas extends StatefulWidget {
   const Nav_Rutas({super.key});
@@ -37,7 +37,7 @@ class _Nav_Rutas_State extends State<Nav_Rutas> {
           elevation: 5,
           backgroundColor: Colors.white,
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: const Color(0xFF3E69FE),
+          selectedItemColor: const Color.fromARGB(255, 13, 187, 167),
           unselectedItemColor: Colors.black54,
           currentIndex: selectedIndex,
           onTap: (index) {

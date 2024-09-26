@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/servicios/autenticacion_services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_frontend/providers/proveedor_usuario.dart';
 
+import '../providers/proveedor_usuario.dart';
+import '../servicios/autenticacion_Services.dart';
+import '../utils/assets.dart';
 import 'navegador.dart';
 
 class LoginPage extends StatefulWidget {
@@ -83,82 +84,103 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(),
-        body: Center(
-          child: Transform.translate(
-            offset: const Offset(0, -40),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Seguridad',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Icon(
-                        Icons.login,
-                        color: Colors.blue,
-                        size: 30.0,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 0),
-                  const Text(
-                    'Inicio de sesión',
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      buildTextField(
-                          'Usuario', 'Usuario', _usernameController, false),
-                      const SizedBox(height: 12),
-                      buildTextField('Contraseña', 'Contraseña',
-                          _passwordController, true),
-                      const SizedBox(height: 15),
-                      ElevatedButton(
-                        onPressed: _login,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 13, 187, 167),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.lock_open,
-                              color: Colors.white,
-                              size: 20.0,
-                            ),
-                            SizedBox(width: 2),
-                            Text('Login'),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            // Imagen de fondo más pequeña y más transparente
+            Center(
+              child: Opacity(
+                opacity: 0.2, // Ajusta la opacidad aquí (0.0 - 1.0)
+                child: Image.asset(
+                  Assets
+                      .imagesAppLogo, // Cambia a Assets.imagesAppFondo si es tu fondo
+                  width: MediaQuery.of(context).size.width *
+                      0.8, // Ajusta el tamaño (40% del ancho)
+                  height: MediaQuery.of(context).size.height *
+                      0.8, // Ajusta el tamaño (40% de la altura)
+                  fit: BoxFit
+                      .contain, // Mantiene la relación de aspecto de la imagen
+                ),
               ),
             ),
-          ),
+            Center(
+              child: Transform.translate(
+                offset: const Offset(0, -40),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Seguridad',
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Icon(
+                            Icons.login,
+                            color: Colors.blue,
+                            size: 30.0,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 0),
+                      const Text(
+                        'Inicio de sesión',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          buildTextField(
+                              'Usuario', 'Usuario', _usernameController, false),
+                          const SizedBox(height: 12),
+                          buildTextField('Contraseña', 'Contraseña',
+                              _passwordController, true),
+                          const SizedBox(height: 15),
+                          ElevatedButton(
+                            onPressed: _login,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 13, 187, 167),
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.lock_open,
+                                  color: Colors.white,
+                                  size: 20.0,
+                                ),
+                                SizedBox(width: 2),
+                                Text('Login'),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/providers/proveedor_usuario.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'providers/proveedor_usuario.dart';
 import 'screens/login.dart';
 import 'screens/splash.dart';
 import 'screens/navegador.dart';

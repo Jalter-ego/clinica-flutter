@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/screens/login.dart';
-import 'package:flutter_frontend/servicios/autenticacion_Services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/proveedor_usuario.dart';
 import 'drawer.dart';
+import 'login.dart';
 
 class PerfilScreen extends StatefulWidget {
   const PerfilScreen({super.key});
@@ -31,7 +29,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Perfil de Usuario'),
-        backgroundColor: const Color(0xFF3E69FE),
+        backgroundColor: const Color.fromARGB(255, 13, 187, 167),
       ),
       drawer: const AppDrawer(),
       body: SingleChildScrollView(
@@ -48,7 +46,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
             // Información personal
             Text(
               userProvider.nombre ?? 'Usuario',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Text(
@@ -98,7 +96,8 @@ class _PerfilScreenState extends State<PerfilScreen> {
               icon: const Icon(Icons.exit_to_app),
               label: const Text('Cerrar Sesión'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
+                backgroundColor: const Color.fromARGB(255, 189, 189, 189),
+                foregroundColor: Colors.black,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               ),
@@ -115,7 +114,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
       required String label,
       required VoidCallback onTap}) {
     return ListTile(
-      leading: Icon(icon, color: const Color.fromARGB(255, 14, 71, 194)),
+      leading: Icon(icon, color: const Color.fromARGB(255, 13, 187, 167)),
       title: Text(
         label,
         style: const TextStyle(fontSize: 18),

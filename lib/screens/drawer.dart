@@ -16,10 +16,10 @@ class AppDrawer extends StatelessWidget {
               accountName: Text('Administrador de Sistema'),
               accountEmail: Text('@misadev'),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage(Assets.imagesAppLogo),
+                backgroundImage: AssetImage(Assets.imagesAppUserLogo),
               ),
               decoration: BoxDecoration(
-                color: Color(0xFF3E69FE),
+                color: Color.fromARGB(255, 13, 187, 167),
               ),
             ),
             _listTile("Inicio", Icons.home, context, '/home'),
