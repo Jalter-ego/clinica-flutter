@@ -1,3 +1,4 @@
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -21,11 +22,11 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(
         title: 'Namer App',
         theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(137, 90, 135, 218),
-          ),
-        ),
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color.fromARGB(137, 90, 135, 218),
+            ),
+            textTheme: GoogleFonts.nunitoTextTheme()),
         initialRoute: '/',
         getPages: [
           GetPage(name: '/', page: () => const SplashScreen()),
