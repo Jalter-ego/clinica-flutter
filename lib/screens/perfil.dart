@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-
 import '../providers/proveedor_usuario.dart';
-import 'drawer.dart';
+import '../providers/theme_Provider.dart';
 import 'login.dart';
 
 class PerfilScreen extends StatefulWidget {
@@ -26,101 +26,113 @@ class _PerfilScreenState extends State<PerfilScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    var isDark = themeProvider.isDarkMode;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Perfil de Usuario'),
-        backgroundColor: const Color.fromARGB(255, 13, 187, 167),
+        title: const Text(
+          'Perfil de Usuario',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              themeProvider.toggleTheme(!isDark);
+            },
+            icon: Icon(isDark ? LineAwesomeIcons.sun : LineAwesomeIcons.moon),
+          )
+        ],
       ),
-      drawer: const AppDrawer(),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Foto de perfil
-            const CircleAvatar(
-              radius: 50,
-              backgroundImage: AssetImage('assets/images/usuarioLogo.png'),
-            ),
-            const SizedBox(height: 20),
-            // Información personal
-            Text(
-              userProvider.nombre ?? 'Usuario',
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              userProvider.email ?? 'Correo',
-              style: const TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-            const SizedBox(height: 20),
-            // Opciones de cuenta
-            _buildProfileOption(
-              context,
-              icon: Icons.calendar_today,
-              label: 'Mis Citas',
-              onTap: () {
-                // Navegar a la sección de citas
-              },
-            ),
-            _buildProfileOption(
-              context,
-              icon: Icons.lock,
-              label: 'Cambiar Contraseña',
-              onTap: () {
-                // Navegar a la sección de cambio de contraseña
-              },
-            ),
-            _buildProfileOption(
-              context,
-              icon: Icons.info,
-              label: 'Historial Médico',
-              onTap: () {
-                // Navegar al historial médico
-              },
-            ),
-            _buildProfileOption(
-              context,
-              icon: Icons.settings,
-              label: 'Configuración de la Cuenta',
-              onTap: () {
-                // Navegar a la configuración de la cuenta
-              },
-            ),
-            const SizedBox(height: 40),
-            // Botón de cerrar sesión
-            ElevatedButton.icon(
-              onPressed: () {
-                _cerrarSesion();
-              },
-              icon: const Icon(Icons.exit_to_app),
-              label: const Text('Cerrar Sesión'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 189, 189, 189),
-                foregroundColor: Colors.black,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+        child: Container(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const CircleAvatar(
+                radius: 50,
+                backgroundImage: AssetImage('assets/images/usuarioLogo.png'),
               ),
-            ),
-          ],
+              const SizedBox(height: 10),
+              // Información personal
+              Text(
+                userProvider.nombre ?? 'Usuario',
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                userProvider.email ?? 'Correo',
+                style: const TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: 200,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0057E5),
+                      side: BorderSide.none,
+                      shape: const StadiumBorder()),
+                  child: const Text(
+                    'Editar Perfil',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Divider(color: Colors.black12),
+              const _ListTile("Configuracion", Icons.settings, true),
+              const _ListTile("Historial", Icons.history_outlined, true),
+              const Divider(color: Colors.black12),
+              const _ListTile("Informacion", Icons.info_outline, true),
+              const _ListTile("Cerrar Sesion", Icons.logout_outlined, false),
+            ],
+          ),
         ),
       ),
     );
   }
+}
 
-  // Widget para crear las opciones del perfil
-  Widget _buildProfileOption(BuildContext context,
-      {required IconData icon,
-      required String label,
-      required VoidCallback onTap}) {
+class _ListTile extends StatelessWidget {
+  const _ListTile(this.title, this.icon, this.isIcon);
+  final String title;
+  final IconData icon;
+  final bool isIcon;
+
+  @override
+  Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: const Color.fromARGB(255, 13, 187, 167)),
-      title: Text(
-        label,
-        style: const TextStyle(fontSize: 18),
+      leading: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+            color: const Color.fromARGB(255, 196, 205, 209)),
+        child: Icon(icon),
       ),
-      trailing: const Icon(Icons.arrow_forward_ios),
-      onTap: onTap,
+      title: Text(
+        title,
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+      trailing: isIcon
+          ? Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: const Color.fromARGB(255, 233, 238, 241)),
+              child: const Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: Colors.grey,
+              ),
+            )
+          : null,
     );
   }
 }

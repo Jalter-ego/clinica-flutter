@@ -37,7 +37,7 @@ class _Nav_Rutas_State extends State<Nav_Rutas> {
           elevation: 5,
           backgroundColor: Colors.white,
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: const Color.fromARGB(255, 13, 187, 167),
+          selectedItemColor: const Color(0xFF0057E5),
           unselectedItemColor: Colors.black54,
           currentIndex: selectedIndex,
           onTap: (index) {
