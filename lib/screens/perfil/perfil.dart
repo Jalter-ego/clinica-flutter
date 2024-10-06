@@ -1,5 +1,4 @@
 import 'package:OptiVision/screens/perfil/InformacionPersonal.dart';
-import 'package:OptiVision/screens/perfil/editPerfil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -21,7 +20,6 @@ class _PerfilScreenState extends State<PerfilScreen> {
     await storage.delete(key: 'token');
     await storage.delete(key: 'nombre');
 
-    // Redirigir a la página de inicio de sesión
     Get.offAll(() => const LoginPage());
   }
 

@@ -1,4 +1,5 @@
 import 'package:OptiVision/componets/ContainerIcon.dart';
+import 'package:OptiVision/providers/proveedor_usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,7 @@ class InfoPersonal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     final themeProvider = Provider.of<ThemeProvider>(context);
     var isDark = themeProvider.isDarkMode;
     return Scaffold(
@@ -70,65 +72,69 @@ class InfoPersonal extends StatelessWidget {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            ItemUser(
-              nombreTile: 'Nombre',
-              dataTile: 'Nombre de Usuario',
-              isEditable: true,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const ChangeName()),
-                );
-              },
-            ),
-            const ItemUser(
-              nombreTile: 'Apellido',
-              dataTile: 'Apellido de Usuario',
-              isEditable: false,
-            ),
-            Divider(
-              color: isDark ? Colors.white30 : Colors.black38,
-              height: 0,
-            ),
-            ItemUser(
-              nombreTile: 'Email',
-              dataTile: 'Email del Usuario',
-              isEditable: true,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const ChangeEmail()),
-                );
-              },
-            ),
-            Divider(
-              color: isDark ? Colors.white30 : Colors.black38,
-              height: 0,
-            ),
-            const ItemUser(
-              nombreTile: 'Teléfono',
-              dataTile: 'Teléfono del Usuario',
-              isEditable: false,
-            ),
-            Divider(
-              color: isDark ? Colors.white30 : Colors.black38,
-              height: 0,
-            ),
-            ItemUser(
-              nombreTile: 'Contraseña',
-              dataTile: '********',
-              isEditable: true,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const ChangePassword()),
-                );
-              },
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              ItemUser(
+                nombreTile: 'Nombre',
+                dataTile: userProvider.nombre ?? 'Nombre de Usuario',
+                isEditable: true,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const ChangeName()),
+                  );
+                },
+              ),
+              ItemUser(
+                nombreTile: 'Apellido Paterno',
+                dataTile:
+                    userProvider.apellido_paterno ?? 'Apellido de Usuario',
+                isEditable: false,
+              ),
+              Divider(
+                color: isDark ? Colors.white30 : Colors.black38,
+                height: 0,
+              ),
+              ItemUser(
+                nombreTile: 'Email',
+                dataTile: userProvider.email ?? 'Email del Usuario',
+                isEditable: true,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const ChangeEmail()),
+                  );
+                },
+              ),
+              Divider(
+                color: isDark ? Colors.white30 : Colors.black38,
+                height: 0,
+              ),
+              ItemUser(
+                nombreTile: 'Teléfono',
+                dataTile: userProvider.telefono ?? 'Teléfono del Usuario',
+                isEditable: false,
+              ),
+              Divider(
+                color: isDark ? Colors.white30 : Colors.black38,
+                height: 0,
+              ),
+              ItemUser(
+                nombreTile: 'Contraseña',
+                dataTile: '********',
+                isEditable: true,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const ChangePassword()),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

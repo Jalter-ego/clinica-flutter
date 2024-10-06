@@ -5,8 +5,17 @@ import '../../componets/ContainerIcon.dart';
 import '../../componets/TextFormFieldTheme.dart';
 import '../../componets/WabeClipper.dart';
 
-class ChangePassword extends StatelessWidget {
+class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
+
+  @override
+  _ChangePasswordState createState() => _ChangePasswordState();
+}
+
+class _ChangePasswordState extends State<ChangePassword> {
+  void _cambiarContrasena() {
+    print('object');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,58 +74,61 @@ class ChangePassword extends StatelessWidget {
           ],
         ),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 25,
-            ),
-            const Text(
-              'Cambiar contraseña',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 0,
-            ),
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Center(
-                child: Column(
-                  children: [
-                    Text(
-                      'Para cambiar tu contraseña debes ingresar la que usas actualmente',
-                      style: TextStyle(fontSize: 16),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 25,
+              ),
+              const Text(
+                'Cambiar contraseña',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 0,
+              ),
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        'Para cambiar tu contraseña debes ingresar la que usas actualmente',
+                        style: TextStyle(fontSize: 16),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            SizedBox(
-              width: 300,
-              child: TextFormField(
-                decoration: TextFormFieldTheme.customInputDecoration(
-                    labelText: 'Actual contraseña',
-                    icon: Icons.lock,
-                    context: context),
+              const SizedBox(
+                height: 15,
               ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            const SizedBox(height: 30),
-            const BottonChange(
-              colorBack: Colors.black,
-              colorFont: Colors.white,
-              textTile: 'Cambiar contraseña',
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-          ],
+              SizedBox(
+                width: 300,
+                child: TextFormField(
+                  decoration: TextFormFieldTheme.customInputDecoration(
+                      labelText: 'Actual contraseña',
+                      icon: Icons.lock,
+                      context: context),
+                ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              const SizedBox(height: 30),
+              BottonChange(
+                colorBack: Colors.black,
+                colorFont: Colors.white,
+                textTile: 'Cambiar contraseña',
+                onPressed: _cambiarContrasena,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
         ),
       ),
     );

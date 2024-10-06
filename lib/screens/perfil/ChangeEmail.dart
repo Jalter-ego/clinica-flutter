@@ -1,15 +1,36 @@
+import 'package:OptiVision/providers/proveedor_usuario.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../componets/BottonChange.dart';
 import '../../componets/ContainerIcon.dart';
 import '../../componets/TextFormFieldTheme.dart';
 import '../../componets/WabeClipper.dart';
 
-class ChangeEmail extends StatelessWidget {
+class ChangeEmail extends StatefulWidget {
   const ChangeEmail({super.key});
 
   @override
+  _ChangeEmailState createState() => _ChangeEmailState();
+}
+
+class _ChangeEmailState extends State<ChangeEmail> {
+  final TextEditingController _emailController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  void _cambiarEmail() {
+    print(_emailController.text);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    _emailController.text = userProvider.email ?? '';
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: ClipPath(
@@ -65,48 +86,52 @@ class ChangeEmail extends StatelessWidget {
           ],
         ),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 25,
-            ),
-            const Text(
-              'Cambiar correo electrónico',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            const Text(
-              'Ingresa un nuevo correo electrónico',
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            SizedBox(
-              width: 300,
-              child: TextFormField(
-                decoration: TextFormFieldTheme.customInputDecoration(
-                    labelText: 'Correo Electronico',
-                    icon: Icons.email,
-                    context: context),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 25,
               ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            const SizedBox(height: 30),
-            const BottonChange(
-              colorBack: Colors.black,
-              colorFont: Colors.white,
-              textTile: 'Enviar codigo de validacion',
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-          ],
+              const Text(
+                'Cambiar correo electrónico',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                'Ingresa un nuevo correo electrónico',
+                style: TextStyle(fontSize: 18),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              SizedBox(
+                width: 300,
+                child: TextFormField(
+                  controller: _emailController,
+                  decoration: TextFormFieldTheme.customInputDecoration(
+                      labelText: 'Correo Electronico',
+                      icon: Icons.email,
+                      context: context),
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              const SizedBox(height: 30),
+              BottonChange(
+                colorBack: Colors.black,
+                colorFont: Colors.white,
+                textTile: 'Enviar codigo de validacion',
+                onPressed: _cambiarEmail,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
         ),
       ),
     );

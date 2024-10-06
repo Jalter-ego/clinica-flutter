@@ -41,58 +41,41 @@ class AutenticacionServices {
     }
   }
 
-  Future<String?> obtenerUsuario() async {
+  Future<Map<String, dynamic>?> updateUserName({
+    required BuildContext context,
+    required String ci,
+    required String nombre,
+    required String apellidoPaterno,
+    required String apellidoMaterno,
+  }) async {
     try {
-      String? token = await storage.read(key: 'token');
+      final response = await http.put(
+        Uri.parse('${Constantes.uri}/usuarios/editUserName'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'ci': ci,
+          'nombre': nombre,
+          'apellido_paterno': apellidoPaterno,
+          'apellido_materno': apellidoMaterno,
+        }),
+      );
 
-      if (token != null) {
-        final response = await http.get(
-          Uri.parse('${Constantes.uri}/usuarios/obtenerUsuarioToken'),
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Content-Type': 'application/json',
-          },
+      print('Respuesta del servidor: ${response.body}');
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body) as Map<String, dynamic>;
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${response.reasonPhrase}')),
         );
-        if (response.statusCode == 200) {
-          final data = jsonDecode(response.body);
-          return data['nombre'];
-        } else {
-          print('Error al obtener el usuario: ${response.reasonPhrase}');
-          return null;
-        }
+        return null;
       }
-      return null;
     } catch (e) {
-      print('Error al obtener el usuario: $e');
-      return null;
-    }
-  }
-
-  Future<String?> obtenerEmail() async {
-    try {
-      String? token = await storage.read(key: 'token');
-
-      if (token != null) {
-        final response = await http.get(
-          Uri.parse('${Constantes.uri}/usuarios/obtenerUsuarioToken'),
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Content-Type': 'application/json',
-          },
-        );
-        if (response.statusCode == 200) {
-          final data = jsonDecode(response.body);
-
-          return data['email'];
-        } else {
-          print('Error al obtener el email: ${response.reasonPhrase}');
-          return null;
-        }
-      }
-
-      return null;
-    } catch (e) {
-      print('Error al obtener el email: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
       return null;
     }
   }

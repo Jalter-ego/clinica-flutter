@@ -8,6 +8,8 @@ class UserProvider with ChangeNotifier {
 
   String? _ci;
   String? _nombre;
+  String? _apellido_paterno;
+  String? _apellido_materno;
   String? _email;
   String? _telefono;
   String? _rol;
@@ -15,10 +17,28 @@ class UserProvider with ChangeNotifier {
 
   String? get ci => _ci;
   String? get nombre => _nombre;
+  String? get apellido_paterno => _apellido_paterno;
+  String? get apellido_materno => _apellido_materno;
   String? get email => _email;
   String? get telefono => _telefono;
   String? get rol => _rol;
   List<String>? get permisos => _permisos;
+
+  // Setters
+  set nombre(String? value) {
+    _nombre = value;
+    notifyListeners(); // Notificar a los oyentes sobre el cambio
+  }
+
+  set apellido_paterno(String? value) {
+    _apellido_paterno = value;
+    notifyListeners();
+  }
+
+  set apellido_materno(String? value) {
+    _apellido_materno = value;
+    notifyListeners();
+  }
 
   // Carga el token desde el almacenamiento seguro y decodifica los datos
   Future<void> loadUserFromToken() async {
@@ -27,6 +47,8 @@ class UserProvider with ChangeNotifier {
       final decodedToken = JwtDecoder.decode(token);
       _ci = decodedToken['ci'];
       _nombre = decodedToken['nombre'];
+      _apellido_paterno = decodedToken['apellido_paterno'];
+      _apellido_materno = decodedToken['apellido_materno'];
       _email = decodedToken['email'];
       _telefono = decodedToken['telefono'];
       _rol = decodedToken['rol']['nombre'];
@@ -47,6 +69,8 @@ class UserProvider with ChangeNotifier {
     await _storage.delete(key: 'token');
     _ci = null;
     _nombre = null;
+    _apellido_paterno = null;
+    _apellido_materno = null;
     _email = null;
     _telefono = null;
     _rol = null;
