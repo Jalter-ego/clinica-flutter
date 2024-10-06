@@ -25,7 +25,8 @@ class AppDrawer extends StatelessWidget {
                   ),
                 ),
                 // Aquí insertamos la ondulación con `Stack` para que se superponga
-                SizedBox(height: 40), // Espacio para que el contenido baje
+                const SizedBox(
+                    height: 40), // Espacio para que el contenido baje
                 _listTile("Inicio", Icons.home, context, '/home'),
                 _listTile(
                     'Historial', Icons.description, context, '/historial'),
@@ -51,8 +52,7 @@ class AppDrawer extends StatelessWidget {
             ),
             // Ondulación superpuesta
             Positioned(
-              top:
-                  150, // Ajusta para superponer sobre el `UserAccountsDrawerHeader`
+              top: 150,
               left: 0,
               right: 0,
               child: ClipPath(

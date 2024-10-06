@@ -1,11 +1,13 @@
+import 'package:OptiVision/screens/perfil/InformacionPersonal.dart';
+import 'package:OptiVision/screens/perfil/editPerfil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import '../providers/proveedor_usuario.dart';
-import '../providers/theme_Provider.dart';
-import 'login.dart';
+import '../../providers/proveedor_usuario.dart';
+import '../../providers/theme_Provider.dart';
+import '../login.dart';
 
 class PerfilScreen extends StatefulWidget {
   const PerfilScreen({super.key});
@@ -28,6 +30,8 @@ class _PerfilScreenState extends State<PerfilScreen> {
     final userProvider = Provider.of<UserProvider>(context);
     final themeProvider = Provider.of<ThemeProvider>(context);
     var isDark = themeProvider.isDarkMode;
+    print(isDark);
+    print(isDark);
 
     return Scaffold(
       appBar: AppBar(
@@ -70,7 +74,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
               SizedBox(
                 width: 200,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => Get.to(() => const InfoPersonal()),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF0057E5),
                       side: BorderSide.none,
@@ -85,12 +89,32 @@ class _PerfilScreenState extends State<PerfilScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Divider(color: Colors.black12),
+              Divider(color: isDark ? Colors.white30 : Colors.black38),
+
               const _ListTile("Configuracion", Icons.settings, true),
               const _ListTile("Historial", Icons.history_outlined, true),
-              const Divider(color: Colors.black12),
+
+              Divider(color: isDark ? Colors.white30 : Colors.black38),
+
               const _ListTile("Informacion", Icons.info_outline, true),
-              const _ListTile("Cerrar Sesion", Icons.logout_outlined, false),
+              ListTile(
+                onTap: _cerrarSesion,
+                leading: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: const Color.fromARGB(255, 196, 205, 209)),
+                  child: const Icon(
+                    Icons.logout_outlined,
+                    color: Colors.black45,
+                  ),
+                ),
+                title: const Text(
+                  "Cerrar Sesion",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              )
             ],
           ),
         ),
@@ -114,7 +138,10 @@ class _ListTile extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(100),
             color: const Color.fromARGB(255, 196, 205, 209)),
-        child: Icon(icon),
+        child: Icon(
+          icon,
+          color: Colors.black45,
+        ),
       ),
       title: Text(
         title,

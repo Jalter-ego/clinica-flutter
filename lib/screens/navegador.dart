@@ -3,7 +3,7 @@ import 'drawer.dart';
 import 'home.dart';
 import 'horarios.dart';
 import 'informacio.dart';
-import 'perfil.dart';
+import 'perfil/perfil.dart';
 
 class Nav_Rutas extends StatefulWidget {
   const Nav_Rutas({super.key});
