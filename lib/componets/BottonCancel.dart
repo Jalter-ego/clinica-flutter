@@ -26,9 +26,8 @@ class BottonCancel extends StatelessWidget {
           foregroundColor: isDark ? Colors.white : colorFont,
           backgroundColor:
               isDark ? Colors.white : Colors.transparent, // Color del texto
-          side: BorderSide(
-              color: colorFont), // Color del borde igual que el del texto
-          elevation: 0, // Si no quieres sombra, puedes poner esto en 0
+          side: BorderSide(color: colorFont),
+          elevation: 0,
         ),
         child: Text(
           textTile,

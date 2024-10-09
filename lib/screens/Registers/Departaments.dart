@@ -28,47 +28,43 @@ class _Departaments extends State<Departaments> {
       builder: (BuildContext context) {
         return Dialog(
           shape: RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(16.0), // Ajusta el radio de los bordes
+            borderRadius: BorderRadius.circular(16.0),
           ),
           child: Container(
-            width: 500, // Ajusta el ancho del modal aquí
-            padding: const EdgeInsets.all(16.0), // Agrega padding al contenido
+            width: 500,
+            padding: const EdgeInsets.all(16.0),
             child: Column(
-              mainAxisSize: MainAxisSize.min, // Ajusta el tamaño al contenido
+              mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
                   'Nuevo Departamento',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(
-                    height: 16), // Espacio entre el título y el campo
+                const SizedBox(height: 16),
                 TextField(
                   controller: _descriptionController,
                   decoration: const InputDecoration(
                     hintText: 'Descripción del departamento',
                   ),
                 ),
-                const SizedBox(height: 16), // Espacio antes de los botones
+                const SizedBox(height: 16),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment
-                      .spaceBetween, // Espacio entre los botones
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
                       child: CustomButton(
                         textColor: Colors.white,
                         backgroundColor: Colors.red,
-                        icon: Icons.cancel, // Cambié el icono a cancelar
+                        icon: Icons.cancel,
                         text: 'Cancelar',
                         fontSize: 12,
                         onPressed: () {
-                          _descriptionController
-                              .clear(); // Limpiar el campo de texto
-                          Navigator.of(context).pop(); // Cierra el modal
+                          _descriptionController.clear();
+                          Navigator.of(context).pop();
                         },
                       ),
                     ),
-                    const SizedBox(width: 8), // Espacio entre los botones
+                    const SizedBox(width: 8),
                     SizedBox(
                       child: CustomButton(
                         textColor: Colors.white,
@@ -79,7 +75,7 @@ class _Departaments extends State<Departaments> {
                         onPressed: () {
                           print(
                               'Descripción guardada: ${_descriptionController.text}');
-                          Navigator.of(context).pop(); // Cierra el modal
+                          Navigator.of(context).pop();
                         },
                       ),
                     ),
@@ -119,24 +115,23 @@ class _Departaments extends State<Departaments> {
                   icon: Icons.add,
                   text: 'Nuevo',
                   fontSize: 14,
-                  onPressed: _showModal, // Muestra el modal al presionar
+                  onPressed: _showModal,
                 ),
               ),
             ),
             Padding(
-              padding:
-                  const EdgeInsets.all(16.0), // Espacio alrededor de la tabla
+              padding: const EdgeInsets.all(16.0),
               child: Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey), // Borde de la tabla
+                  border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: DataTable(
-                  columnSpacing: 10.0, // Ajustar espacio entre columnas
+                  columnSpacing: 10.0,
                   columns: const <DataColumn>[
                     DataColumn(
                       label: SizedBox(
-                        width: 30, // Reducir el ancho de la columna N
+                        width: 30,
                         child: Text(
                           'N',
                           style: TextStyle(
@@ -169,7 +164,7 @@ class _Departaments extends State<Departaments> {
                       cells: <DataCell>[
                         DataCell(
                           SizedBox(
-                            width: 15, // Ancho más pequeño para N
+                            width: 15,
                             child: Text(
                               department['N'].toString(),
                               style: const TextStyle(fontSize: 12),
@@ -178,13 +173,12 @@ class _Departaments extends State<Departaments> {
                         ),
                         DataCell(
                           SizedBox(
-                            width: 150, // Limitar el ancho de la descripción
+                            width: 150,
                             child: Text(
                               department['description'],
                               style: const TextStyle(fontSize: 12),
-                              overflow:
-                                  TextOverflow.clip, // Clip si es necesario
-                              softWrap: true, // Permitir salto de línea
+                              overflow: TextOverflow.clip,
+                              softWrap: true,
                             ),
                           ),
                         ),
@@ -192,15 +186,11 @@ class _Departaments extends State<Departaments> {
                           children: [
                             IconButton(
                               icon: const Icon(Icons.edit, color: Colors.blue),
-                              onPressed: () {
-                                // Lógica para editar
-                              },
+                              onPressed: () {},
                             ),
                             IconButton(
                               icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
-                                // Lógica para eliminar
-                              },
+                              onPressed: () {},
                             ),
                           ],
                         )),

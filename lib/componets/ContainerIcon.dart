@@ -20,8 +20,8 @@ class ContainerIcon extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100), color: containerColor),
       child: Icon(
-        icon, // Icono recibido por parámetro
-        color: iconColor, // Color del ícono recibido por parámetro
+        icon,
+        color: iconColor,
       ),
     );
   }

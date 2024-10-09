@@ -6,7 +6,7 @@ class CustomButton extends StatelessWidget {
   final IconData icon;
   final String text;
   final VoidCallback onPressed;
-  final double fontSize; // Nuevo parámetro para el tamaño de la fuente
+  final double fontSize;
 
   const CustomButton({
     super.key,
@@ -15,7 +15,7 @@ class CustomButton extends StatelessWidget {
     required this.icon,
     required this.text,
     required this.onPressed,
-    this.fontSize = 14, // Tamaño de fuente por defecto
+    this.fontSize = 14,
   });
 
   @override

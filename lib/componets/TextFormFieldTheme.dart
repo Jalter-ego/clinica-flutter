@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/theme_Provider.dart'; // Ajusta la ruta según tu proyecto
+import '../providers/theme_Provider.dart';
 
 class TextFormFieldTheme {
   TextFormFieldTheme._();
@@ -11,7 +11,6 @@ class TextFormFieldTheme {
     required IconData? icon,
     required BuildContext context,
   }) {
-    // Obtén el estado de modo oscuro desde el ThemeProvider
     final themeProvider = Provider.of<ThemeProvider>(context);
     var isDark = themeProvider.isDarkMode;
 
@@ -24,25 +23,19 @@ class TextFormFieldTheme {
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(100),
         borderSide: BorderSide(
-          color: isDark
-              ? Colors.white38
-              : Colors.black38, // Ajusta el color para el estado no enfocado
+          color: isDark ? Colors.white38 : Colors.black38,
           width: 1.0,
         ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(100),
         borderSide: BorderSide(
-          color: isDark
-              ? Colors.white
-              : Colors.black, // Color del borde cuando está enfocado
+          color: isDark ? Colors.white : Colors.black,
           width: 1.0,
         ),
       ),
       floatingLabelStyle: TextStyle(
-        color: isDark
-            ? Colors.white
-            : Colors.black, // Color del label cuando está flotando
+        color: isDark ? Colors.white : Colors.black,
       ),
       prefixIconColor: isDark ? Colors.amber[300] : Colors.amber,
     );
