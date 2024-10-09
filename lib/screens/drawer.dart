@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../componets/WabeClipper.dart';
 import '../utils/assets.dart';
+import 'Registers/Departaments.dart';
+import 'home.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -24,30 +26,23 @@ class AppDrawer extends StatelessWidget {
                     color: Color(0xFF0057E5),
                   ),
                 ),
-                // Aquí insertamos la ondulación con `Stack` para que se superponga
-                const SizedBox(
-                    height: 40), // Espacio para que el contenido baje
-                _listTile("Inicio", Icons.home, context, '/home'),
-                _listTile(
-                    'Historial', Icons.description, context, '/historial'),
-                _listTile('Reservar Citas', Icons.calendar_today, context,
-                    '/reservar_citas'),
+                const SizedBox(height: 40),
+                _listTile("Inicio", Icons.home, context, const HomeScreen()),
                 ExpansionTile(
                   title: const Text(
-                    'Personal',
+                    'Registros',
                     style: TextStyle(fontSize: 14),
                   ),
-                  leading: const Icon(Icons.person),
+                  leading: const Icon(Icons.app_registration),
                   children: <Widget>[
                     _listTile(
-                        'Registro de Empleados',
-                        Icons.subdirectory_arrow_right,
-                        context,
-                        '/registro_empleados'),
+                      'Registro de Departamentos',
+                      Icons.subdirectory_arrow_right,
+                      context,
+                      const Departaments(),
+                    ),
                   ],
                 ),
-                _listTile(
-                    'Configuración', Icons.settings, context, '/configuracion'),
               ],
             ),
             // Ondulación superpuesta
@@ -69,8 +64,8 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  Widget _listTile(
-      String title, IconData icon, BuildContext context, String routeName) {
+  Widget _listTile(String title, IconData icon, BuildContext context,
+      Widget destinationScreen) {
     return ListTile(
       title: Text(
         title,
@@ -80,9 +75,11 @@ class AppDrawer extends StatelessWidget {
       ),
       leading: Icon(icon),
       onTap: () {
-        Navigator.pop(context); // Cierra el Drawer
-        Navigator.pushReplacementNamed(context,
-            routeName); // Reemplaza la ruta actual en lugar de apilarla
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => destinationScreen),
+        );
       },
     );
   }

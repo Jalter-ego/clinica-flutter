@@ -1,6 +1,5 @@
-import 'package:OptiVision/screens/perfil/NewPassword.dart';
+import 'package:OptiVision/screens/perfil/InformacionPersonal.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../componets/BottonChange.dart';
@@ -11,18 +10,18 @@ import '../../componets/WabeClipper.dart';
 import '../../providers/proveedor_usuario.dart';
 import '../../servicios/autenticacion_Services.dart';
 
-class ChangePassword extends StatefulWidget {
-  const ChangePassword({super.key});
+class NewPassword extends StatefulWidget {
+  const NewPassword({super.key});
 
   @override
-  _ChangePasswordState createState() => _ChangePasswordState();
+  _NewPasswordState createState() => _NewPasswordState();
 }
 
-class _ChangePasswordState extends State<ChangePassword> {
-  final TextEditingController _passwordController = TextEditingController();
+class _NewPasswordState extends State<NewPassword> {
+  final TextEditingController _newPasswordController = TextEditingController();
 
   Future<void> _cambiarContrasena() async {
-    String password = _passwordController.text;
+    String newPassword = _newPasswordController.text;
 
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     String ci = userProvider.ci ?? '';
@@ -36,23 +35,22 @@ class _ChangePasswordState extends State<ChangePassword> {
       },
     );
 
-    final result = await AutenticacionServices().verifyPassword(
+    final result = await AutenticacionServices().editUserPassword(
       context: context,
       ci: ci,
-      password: password,
+      newPassword: newPassword,
     );
 
-    // Cerrar el diálogo de carga
-    Navigator.of(context).pop(); // Cierra el LoadingScreen
+    // Cerrar la pantalla de carga
+    Navigator.of(context).pop();
 
     if (result != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Contraseña Verificada!')),
+        const SnackBar(content: Text('Cambios guardados exitosamente!')),
       );
 
-      // Navegar a NewPassword después de cerrar el diálogo
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const NewPassword()),
+      Navigator.of(context).popUntil(
+        (route) => route.isFirst, // Vuelve a la primera pantalla
       );
     }
   }
@@ -80,6 +78,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 containerColor: Colors.white10,
               ),
               onPressed: () {
+                // Este método lleva a la pantalla anterior
                 Navigator.of(context).pop();
               },
             ),
@@ -118,23 +117,19 @@ class _ChangePasswordState extends State<ChangePassword> {
         child: Center(
           child: Column(
             children: [
-              const SizedBox(
-                height: 25,
-              ),
+              const SizedBox(height: 25),
               const Text(
                 'Cambiar contraseña',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(
-                height: 0,
-              ),
+              const SizedBox(height: 0),
               const Padding(
                 padding: EdgeInsets.all(16),
                 child: Center(
                   child: Column(
                     children: [
                       Text(
-                        'Para cambiar tu contraseña debes ingresar la que usas actualmente',
+                        'Ingrese su nueva Contraseña',
                         style: TextStyle(fontSize: 16),
                         textAlign: TextAlign.center,
                       ),
@@ -142,22 +137,19 @@ class _ChangePasswordState extends State<ChangePassword> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 15,
-              ),
+              const SizedBox(height: 15),
               SizedBox(
                 width: 300,
                 child: TextFormField(
-                  controller: _passwordController,
+                  controller: _newPasswordController,
                   decoration: TextFormFieldTheme.customInputDecoration(
-                      labelText: 'Actual contraseña',
-                      icon: Icons.lock,
-                      context: context),
+                    labelText: 'Nueva contraseña',
+                    icon: Icons.lock,
+                    context: context,
+                  ),
                 ),
               ),
-              const SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 5),
               const SizedBox(height: 30),
               BottonChange(
                 colorBack: Colors.black,
@@ -165,9 +157,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 textTile: 'Cambiar contraseña',
                 onPressed: _cambiarContrasena,
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
