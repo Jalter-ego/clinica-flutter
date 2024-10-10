@@ -1,14 +1,11 @@
 //lib/servicios/autenticacion_Services.dart
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../utils/constantes.dart';
 
 class AutenticacionServices {
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
-
   Future<Map<String, dynamic>?> loginUsuario({
     required BuildContext context,
     required String ci,
@@ -22,8 +19,6 @@ class AutenticacionServices {
         },
         body: jsonEncode({'ci': ci, 'password': password}),
       );
-
-      print('Respuesta del servidor: ${response.body}'); // Depuración
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body) as Map<String, dynamic>;

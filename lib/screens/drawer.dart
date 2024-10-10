@@ -1,7 +1,10 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'Registers/Services.dart';
+import 'Registers/Specialties.dart';
 import 'package:flutter/material.dart';
 import '../componets/WabeClipper.dart';
 import '../utils/assets.dart';
-import 'Registers/Departaments.dart';
+import 'Registers/Departments.dart';
 import 'home.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -27,21 +30,23 @@ class AppDrawer extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 40),
-                _listTile("Inicio", Icons.home, context, const HomeScreen()),
-                ExpansionTile(
-                  title: const Text(
-                    'Registros',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  leading: const Icon(Icons.app_registration),
-                  children: <Widget>[
-                    _listTile(
-                      'Registro de Departamentos',
-                      Icons.subdirectory_arrow_right,
-                      context,
-                      const Departaments(),
-                    ),
-                  ],
+                _listTile(
+                  'Registro de Departamentos',
+                  Icons.apartment_outlined,
+                  context,
+                  const Departaments(),
+                ),
+                _listTile(
+                  'Registro de Especialidades',
+                  Icons.medical_services,
+                  context,
+                  const Specialties(),
+                ),
+                _listTile(
+                  'Registro de Servicios',
+                  Icons.medical_services_outlined,
+                  context,
+                  const Services(),
                 ),
               ],
             ),

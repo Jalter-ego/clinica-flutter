@@ -2,99 +2,29 @@ import 'package:flutter/material.dart';
 import '../../componets/CustomAppBar.dart';
 import '../../componets/CustomButtom.dart';
 
-class Departaments extends StatefulWidget {
-  const Departaments({super.key});
+class Specialties extends StatefulWidget {
+  const Specialties({super.key});
 
   @override
-  _Departaments createState() => _Departaments();
+  _Specialties createState() => _Specialties();
 }
 
-class _Departaments extends State<Departaments> {
-  // Lista simulada de datos para la tabla
-  final List<Map<String, dynamic>> departments = [
-    {'N': 1, 'description': 'Cirugia'},
+class _Specialties extends State<Specialties> {
+  final List<Map<String, dynamic>> specialties = [
+    {'N': 1, 'description': 'Cardiologia'},
     {
       'N': 2,
-      'description': 'Medicina',
-    },
-    {'N': 3, 'description': 'Pediatria'},
-    {'N': 4, 'description': 'Limpieza'},
+      'description': 'Medicina General',
+    }
   ];
   final TextEditingController _descriptionController = TextEditingController();
-
-  void _showModal() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          child: Container(
-            width: 500,
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'Nuevo Departamento',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _descriptionController,
-                  decoration: const InputDecoration(
-                    hintText: 'Descripción del departamento',
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      child: CustomButton(
-                        textColor: Colors.white,
-                        backgroundColor: Colors.red,
-                        icon: Icons.cancel,
-                        text: 'Cancelar',
-                        fontSize: 12,
-                        onPressed: () {
-                          _descriptionController.clear();
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    SizedBox(
-                      child: CustomButton(
-                        textColor: Colors.white,
-                        backgroundColor: Colors.green,
-                        icon: Icons.save,
-                        text: 'Guardar',
-                        fontSize: 12,
-                        onPressed: () {
-                          print(
-                              'Descripción guardada: ${_descriptionController.text}');
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
         title1: 'Registro de',
-        title2: 'Departamentos',
+        title2: 'Especialidades',
         icon: Icons.arrow_back_ios_rounded,
         onIconPressed: () {
           Navigator.of(context).pop();
@@ -127,7 +57,7 @@ class _Departaments extends State<Departaments> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: DataTable(
-                  columnSpacing: 10.0,
+                  columnSpacing: 10,
                   columns: const <DataColumn>[
                     DataColumn(
                       label: SizedBox(
@@ -151,22 +81,25 @@ class _Departaments extends State<Departaments> {
                       ),
                     ),
                     DataColumn(
-                      label: Text(
-                        'Acción',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                      label: Padding(
+                        padding: EdgeInsets.only(left: 20.0),
+                        child: Text(
+                          'Acción',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                   ],
-                  rows: departments.map((department) {
+                  rows: specialties.map((specialty) {
                     return DataRow(
                       cells: <DataCell>[
                         DataCell(
                           SizedBox(
                             width: 15,
                             child: Text(
-                              department['N'].toString(),
+                              specialty['N'].toString(),
                               style: const TextStyle(fontSize: 12),
                             ),
                           ),
@@ -175,7 +108,7 @@ class _Departaments extends State<Departaments> {
                           SizedBox(
                             width: 150,
                             child: Text(
-                              department['description'],
+                              specialty['description'],
                               style: const TextStyle(fontSize: 12),
                               overflow: TextOverflow.clip,
                               softWrap: true,
@@ -185,7 +118,8 @@ class _Departaments extends State<Departaments> {
                         DataCell(Row(
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.edit, color: Colors.blue),
+                              icon: const Icon(Icons.edit_square,
+                                  color: Colors.blue),
                               onPressed: () {},
                             ),
                             IconButton(
@@ -203,6 +137,48 @@ class _Departaments extends State<Departaments> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showModal() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          elevation: 5, // Sombra del diálogo
+          child: Container(
+            width: 650, // Establece el ancho deseado
+            height: 450, // Establece la altura deseada
+            decoration: BoxDecoration(
+              color: Colors.white, // Color de fondo
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Título del Diálogo',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                    'Contenido del diálogo con dimensiones personalizadas.'),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Cerrar'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
