@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:OptiVision/screens/Registers/CitasRegister.dart';
 import '../../componets/CustomAppBar.dart';
 import '../../componets/CustomButtom.dart';
 
@@ -47,7 +48,7 @@ class _Citas extends State<Citas> {
   @override
   void initState() {
     super.initState();
-    filteredCitas = List.from(citas); // Inicializa con todas las citas
+    filteredCitas = List.from(citas);
     _searchController.addListener(_filterCitas);
   }
 
@@ -95,7 +96,13 @@ class _Citas extends State<Citas> {
                       icon: Icons.add,
                       text: 'Nuevo',
                       fontSize: 14,
-                      onPressed: () {},
+                      onPressed: () { Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CitasRegister(),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(width: 16),
