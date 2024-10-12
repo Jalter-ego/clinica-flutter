@@ -3,7 +3,43 @@ import 'dart:convert';
 import '../utils/constantes.dart';
 
 class DepartmentsServices {
-  Future<List<Map<String, dynamic>>> fetchDepartments() async {
+  Future<void> createDepartment(String nombre) async {
+    final response = await http.post(
+      Uri.parse('${Constantes.uri}/departamentos/crear'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({'nombre': nombre}),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to create department');
+    }
+  }
+
+  Future<void> deleteDepartment(int id) async {
+    final response = await http.delete(
+      Uri.parse('${Constantes.uri}/departamentos/eliminar'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({'id': id}),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to delete department');
+    }
+  }
+
+  Future<void> editDepartment(int id, String nombre) async {
+    final response = await http.put(
+      Uri.parse('${Constantes.uri}/departamentos/editar'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({'id': id, 'nombre': nombre}),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to delete department');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getDepartments() async {
     final response =
         await http.get(Uri.parse('${Constantes.uri}/departamentos/listar'));
 

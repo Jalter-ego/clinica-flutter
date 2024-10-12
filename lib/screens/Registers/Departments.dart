@@ -14,7 +14,7 @@ class Departaments extends StatefulWidget {
 
 class _Departaments extends State<Departaments> {
   List<Map<String, dynamic>> departments = [];
-  final TextEditingController _nombreController = TextEditingController();
+  final TextEditingController _editController = TextEditingController();
   bool isLoading = true;
 
   @override
@@ -23,9 +23,31 @@ class _Departaments extends State<Departaments> {
     _fetchDepartments();
   }
 
+  void _createDepartment() async {
+    String nombre = _editController.text.trim();
+    if (nombre.isNotEmpty) {
+      try {
+        await DepartmentsServices().createDepartment(nombre);
+        _editController.clear();
+        _fetchDepartments();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Departamento creado exitosamente')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error al crear el departamento')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('El nombre no puede estar vacío')),
+      );
+    }
+  }
+
   Future<void> _fetchDepartments() async {
     try {
-      final fetchedDepartments = await DepartmentsServices().fetchDepartments();
+      final fetchedDepartments = await DepartmentsServices().getDepartments();
       setState(() {
         departments = fetchedDepartments;
         isLoading = false;
@@ -35,6 +57,40 @@ class _Departaments extends State<Departaments> {
         isLoading = false;
       });
       print("Error fetching departments: $e");
+    }
+  }
+
+  void _deleteDepartment(int departmentId) async {
+    try {
+      await DepartmentsServices().deleteDepartment(departmentId);
+      setState(() {
+        departments.removeWhere((dep) => dep['id'] == departmentId);
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error de conexión')),
+      );
+    }
+  }
+
+  Future<void> _editDepartment(int departmentId, String newName) async {
+    try {
+      final response =
+          await DepartmentsServices().editDepartment(departmentId, newName);
+      setState(() {
+        final index =
+            departments.indexWhere((dep) => dep['id'] == departmentId);
+        if (index != -1) {
+          departments[index]['nombre'] = newName;
+        }
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Departamento editado exitosamente')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error de conexión')),
+      );
     }
   }
 
@@ -69,7 +125,7 @@ class _Departaments extends State<Departaments> {
                         icon: Icons.add,
                         text: 'Nuevo',
                         fontSize: 14,
-                        onPressed: _showModal,
+                        onPressed: _showCreateModal,
                       ),
                     ),
                   ),
@@ -149,12 +205,18 @@ class _Departaments extends State<Departaments> {
                                   IconButton(
                                     icon: const Icon(Icons.edit_square,
                                         color: Colors.blue),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _showEditModal(context, department['id'],
+                                          department['nombre']);
+                                    },
                                   ),
                                   IconButton(
                                     icon: const Icon(Icons.delete,
                                         color: Colors.red),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _showDeleteConfirmationModal(
+                                          context, department['id']);
+                                    },
                                   ),
                                 ],
                               )),
@@ -170,7 +232,7 @@ class _Departaments extends State<Departaments> {
     );
   }
 
-  void _showModal() {
+  void _showCreateModal() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -204,7 +266,7 @@ class _Departaments extends State<Departaments> {
                         borderRadius: BorderRadius.circular(6.0),
                       ),
                       child: TextFormField(
-                        controller: _nombreController,
+                        controller: _editController,
                         decoration: const InputDecoration(
                           hintText: 'Escribe la descripción aquí',
                           hintStyle: TextStyle(color: Colors.black26),
@@ -227,7 +289,7 @@ class _Departaments extends State<Departaments> {
                         text: 'Cancelar',
                         fontSize: 12,
                         onPressed: () {
-                          _nombreController.clear();
+                          _editController.clear();
                           Navigator.of(context).pop();
                         },
                       ),
@@ -241,8 +303,7 @@ class _Departaments extends State<Departaments> {
                         text: 'Guardar',
                         fontSize: 12,
                         onPressed: () {
-                          print(
-                              'Descripción guardada: ${_nombreController.text}');
+                          _createDepartment();
                           Navigator.of(context).pop();
                         },
                       ),
@@ -252,6 +313,108 @@ class _Departaments extends State<Departaments> {
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+
+  void _showDeleteConfirmationModal(BuildContext context, int departmentId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Confirmar Eliminación',
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          content: const Text(
+              '¿Estás seguro de que deseas eliminar este departamento?'),
+          actions: <Widget>[
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              SizedBox(
+                child: CustomButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  textColor: Colors.white,
+                  backgroundColor: Colors.blue,
+                  text: 'Cancelar',
+                ),
+              ),
+              SizedBox(
+                child: CustomButton(
+                  onPressed: () {
+                    _deleteDepartment(departmentId);
+                    Navigator.of(context).pop();
+                  },
+                  backgroundColor: Colors.red,
+                  text: 'Eliminar',
+                  textColor: Colors.white,
+                ),
+              ),
+            ]),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showEditModal(
+      BuildContext context, int departmentId, String currentName) {
+    final TextEditingController editController =
+        TextEditingController(text: currentName);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Editar Departamento',
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: editController,
+                decoration:
+                    const InputDecoration(labelText: 'Nombre del departamento'),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              SizedBox(
+                child: CustomButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  textColor: Colors.white,
+                  backgroundColor: Colors.blue,
+                  text: 'Cancelar',
+                ),
+              ),
+              SizedBox(
+                child: CustomButton(
+                  onPressed: () async {
+                    String newName = editController.text.trim();
+                    if (newName.isNotEmpty) {
+                      await _editDepartment(departmentId, newName);
+                      Navigator.of(context).pop();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('El nombre no puede estar vacío')),
+                      );
+                    }
+                  },
+                  backgroundColor: Colors.green,
+                  text: 'Guardar',
+                  textColor: Colors.white,
+                ),
+              ),
+            ])
+          ],
         );
       },
     );

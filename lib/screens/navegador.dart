@@ -1,4 +1,6 @@
+import 'package:OptiVision/providers/theme_Provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'drawer.dart';
 import 'home.dart';
 import 'horarios.dart';
@@ -9,7 +11,6 @@ class Nav_Rutas extends StatefulWidget {
   const Nav_Rutas({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _Nav_Rutas_State createState() => _Nav_Rutas_State();
 }
 
@@ -17,7 +18,7 @@ class _Nav_Rutas_State extends State<Nav_Rutas> {
   int selectedIndex = 0;
 
   final List<Widget> screens = [
-    HomeScreen(),
+    const HomeScreen(),
     const HorariosScreen(),
     const InformacionScreen(),
     const PerfilScreen(),
@@ -25,6 +26,9 @@ class _Nav_Rutas_State extends State<Nav_Rutas> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDark = themeProvider.isDarkMode;
+
     return Scaffold(
       drawer: const AppDrawer(),
       body: IndexedStack(
@@ -35,10 +39,11 @@ class _Nav_Rutas_State extends State<Nav_Rutas> {
         height: 60,
         child: BottomNavigationBar(
           elevation: 5,
-          backgroundColor: Colors.white,
+          backgroundColor: isDark ? const Color(0xff0e1415) : Colors.white,
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: const Color(0xFF0057E5),
-          unselectedItemColor: Colors.black54,
+          selectedItemColor:
+              isDark ? Colors.blueAccent : const Color(0xFF0057E5),
+          unselectedItemColor: isDark ? Colors.grey : Colors.black54,
           currentIndex: selectedIndex,
           onTap: (index) {
             setState(() {

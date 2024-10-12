@@ -13,7 +13,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Función para obtener el saludo dependiendo de la hora
   String obtenerSaludo() {
     final horaActual = DateTime.now().hour;
     if (horaActual >= 6 && horaActual < 12) {
@@ -28,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final saludo = obtenerSaludo(); // Obtener el saludo basado en la hora
+    final saludo = obtenerSaludo();
     final bienvenidaText = '$saludo ${userProvider.nombre ?? 'Usuario'}';
 
     return Scaffold(
@@ -37,15 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
               const Text('Optivisión', style: TextStyle(color: Colors.white)),
           backgroundColor: const Color(0xFF0057E5),
           iconTheme: const IconThemeData(
-            color: Colors.white, // Color de las 3 barras del Drawer
+            color: Colors.white,
           )),
       drawer: const AppDrawer(),
       body: Stack(
         children: [
-          // Dibuja el círculo en la mitad superior de la pantalla
           CustomPaint(
-            size: Size(
-                MediaQuery.of(context).size.width, 250), // Tamaño del círculo
+            size: Size(MediaQuery.of(context).size.width, 250),
             painter: CirclePainter(),
           ),
           SingleChildScrollView(
@@ -104,7 +101,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// Widget para crear accesos rápidos
 Widget _buildQuickAction(BuildContext context,
     {required IconData icon, required String label, required String route}) {
   return Column(
@@ -124,7 +120,6 @@ Widget _buildQuickAction(BuildContext context,
   );
 }
 
-// Clase que dibuja un círculo en la parte superior de la pantalla
 class CirclePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -132,14 +127,13 @@ class CirclePainter extends CustomPainter {
       ..color = const Color(0xFF0057E5)
       ..style = PaintingStyle.fill;
 
-    // Dibujar un círculo parcial
     canvas.drawArc(
       Rect.fromCircle(
           center: Offset(size.width / 2, -size.height / 1.3),
           radius: size.height * 1.5),
       0.0, // Ángulo inicial
       3.14, // Ángulo barrido (radianes para medio círculo)
-      true, // Si debe pintar desde el centro
+      true,
       paint,
     );
   }
