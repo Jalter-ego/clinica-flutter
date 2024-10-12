@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 
 import 'package:google_fonts/google_fonts.dart';
-=======
->>>>>>> 1d38aa3c09f23e6a0bbf8d9885f534a3c2211568
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
