@@ -15,33 +15,59 @@ class _Citas extends State<Citas> {
       'N': 1,
       "Fecha": "20/10/2024",
       "Hora": "14:00",
-      "Paciente": "",
-      "Empleado": "Consulta Externa"
+      "Paciente": "Roberto Deniro",
+      "Empleado": "Dr. Marcelo Camacho"
     },
     {
       'N': 2,
       "Fecha": "19/10/2024",
       "Hora": "6:00",
-      "Paciente": "Consulta Externa",
-      "Empleado": "Consulta Externa"
+      "Paciente": "Alpa Chino",
+      "Empleado": "Dra Antonieta "
     },
     {
       'N': 3, 
       "Fecha": "10/11/2024",
       "Hora": "13:30",
-      "Paciente": "Consulta Externa",
-      "Empleado": "Consulta Externa"
+      "Paciente": "Brad Pitt Quispe",
+      "Empleado": "Dr. Michael Jackson"
     
     },
     {
       'N': 4,
       "Fecha": "11/11/2089",
       "Hora": "10:25",
-      "Paciente": "Consulta Externa",
-      "Empleado": "Consulta Externa"
+      "Paciente": "Cristiano Ronaldo",
+      "Empleado": "Dra. Leonela Messi"
     },
   ];
-  final TextEditingController _descriptionController = TextEditingController();
+    List<Map<String, dynamic>> filteredCitas = [];
+
+      final TextEditingController _searchController = TextEditingController();
+    
+      @override
+      void initState() {
+        super.initState();
+        // Inicializa filteredCitas con todas las citas
+        filteredCitas = List.from(citas);
+        _searchController.addListener(_filterCitas);
+      }
+
+      void _filterCitas() {
+  setState(() {
+    String query = _searchController.text.toLowerCase();
+    if (query.isEmpty) {
+      // Si el campo de búsqueda está vacío, muestra todas las citas
+      filteredCitas = citas;
+    } else {
+      // Filtra la lista de citas según el nombre del paciente
+      filteredCitas = citas
+          .where((cita) =>
+              cita['Paciente'].toLowerCase().contains(query))
+          .toList();
+    }
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -60,17 +86,35 @@ class _Citas extends State<Citas> {
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: SizedBox(
-                width: 120,
-                height: 40,
-                child: CustomButton(
-                  textColor: Colors.white,
-                  backgroundColor: Colors.green,
-                  icon: Icons.add,
-                  text: 'Nuevo',
-                  fontSize: 14,
-                  onPressed: () {},
-                ),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 120,
+                    height: 40,
+                    child: CustomButton(
+                      textColor: Colors.white,
+                      backgroundColor: Colors.green,
+                      icon: Icons.add,
+                      text: 'Nuevo',
+                      fontSize: 14,
+                      onPressed: () {},
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  // Barra de búsqueda
+                  Expanded(
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        labelText: 'Buscar por paciente',
+                        prefixIcon: Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(
@@ -81,7 +125,7 @@ class _Citas extends State<Citas> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: DataTable(
-                  columnSpacing: 8.0,
+                  columnSpacing: 0.0,
                   columns: const <DataColumn>[
                     DataColumn(
                       label: SizedBox(
@@ -106,7 +150,7 @@ class _Citas extends State<Citas> {
                     ),
                     DataColumn(
                       label: Padding(
-                        padding: EdgeInsets.only(left: 20.0),
+                        padding: EdgeInsets.only(),
                         child: Text(
                           'Hora',
                           style: TextStyle(
@@ -117,7 +161,7 @@ class _Citas extends State<Citas> {
                     ),
                     DataColumn(
                       label: Padding(
-                        padding: EdgeInsets.only(left: 20.0),
+                        padding: EdgeInsets.only(),
                         child: Text(
                           'Paciente',
                           style: TextStyle(
@@ -128,20 +172,9 @@ class _Citas extends State<Citas> {
                     ),
                     DataColumn(
                       label: Padding(
-                        padding: EdgeInsets.only(left: 20.0),
+                        padding: EdgeInsets.only(),
                         child: Text(
                           'Empleado',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Padding(
-                        padding: EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          'Accion',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -174,7 +207,7 @@ class _Citas extends State<Citas> {
                         ),
                         DataCell(
                           SizedBox(
-                            width: 90,
+                            width: 40,
                             child: Text(
                               cita['Hora'],
                               style: const TextStyle(fontSize: 12),
@@ -205,19 +238,6 @@ class _Citas extends State<Citas> {
                             ),
                           ),
                         ),
-                        DataCell(Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit_square,
-                                  color: Colors.blue),
-                              onPressed: () {},
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {},
-                            ),
-                          ],
-                        )),
                       ],
                     );
                   }).toList(),
