@@ -1,11 +1,11 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'Registers/Services.dart';
+import 'Registers/Citas.dart';
 import 'Registers/Specialties.dart';
 import 'package:flutter/material.dart';
 import '../componets/WabeClipper.dart';
 import '../utils/assets.dart';
 import 'Registers/Departments.dart';
-import 'home.dart';
+
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -47,6 +47,12 @@ class AppDrawer extends StatelessWidget {
                   Icons.medical_services_outlined,
                   context,
                   const Services(),
+                ),
+                _listTile(
+                  'Registro de Citas',
+                  Icons.note_alt_outlined,
+                  context,
+                  const Citas(),
                 ),
               ],
             ),
