@@ -14,7 +14,7 @@ class Departaments extends StatefulWidget {
 
 class _Departaments extends State<Departaments> {
   List<Map<String, dynamic>> departments = [];
-  final TextEditingController _editController = TextEditingController();
+  final TextEditingController _departmentController = TextEditingController();
   bool isLoading = true;
 
   @override
@@ -24,11 +24,11 @@ class _Departaments extends State<Departaments> {
   }
 
   void _createDepartment() async {
-    String nombre = _editController.text.trim();
+    String nombre = _departmentController.text.trim();
     if (nombre.isNotEmpty) {
       try {
         await DepartmentsServices().createDepartment(nombre);
-        _editController.clear();
+        _departmentController.clear();
         _fetchDepartments();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Departamento creado exitosamente')),
@@ -237,83 +237,85 @@ class _Departaments extends State<Departaments> {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'Nuevo Departamento',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 16),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     const Text(
-                      'Descripción del departamento',
-                      style: TextStyle(fontSize: 14),
+                      'Nuevo Departamento',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 2),
-                    Container(
-                      width: 500,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(6.0),
-                      ),
-                      child: TextFormField(
-                        controller: _editController,
-                        decoration: const InputDecoration(
-                          hintText: 'Escribe la descripción aquí',
-                          hintStyle: TextStyle(color: Colors.black26),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.all(8.0),
+                    const SizedBox(height: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Descripción del departamento',
+                          style: TextStyle(fontSize: 14),
                         ),
-                      ),
+                        const SizedBox(height: 2),
+                        Container(
+                          width: 500,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(6.0),
+                          ),
+                          child: TextFormField(
+                            controller: _departmentController,
+                            decoration: const InputDecoration(
+                              hintText: 'Escribe la descripción aquí',
+                              hintStyle: TextStyle(color: Colors.black26),
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.all(8.0),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          child: CustomButton(
+                            textColor: Colors.white,
+                            backgroundColor: Colors.red,
+                            icon: Icons.cancel,
+                            text: 'Cancelar',
+                            fontSize: 12,
+                            onPressed: () {
+                              _departmentController.clear();
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        SizedBox(
+                          child: CustomButton(
+                            textColor: Colors.white,
+                            backgroundColor: Colors.green,
+                            icon: Icons.save,
+                            text: 'Guardar',
+                            fontSize: 12,
+                            onPressed: () {
+                              _createDepartment();
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      child: CustomButton(
-                        textColor: Colors.white,
-                        backgroundColor: Colors.red,
-                        icon: Icons.cancel,
-                        text: 'Cancelar',
-                        fontSize: 12,
-                        onPressed: () {
-                          _editController.clear();
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    SizedBox(
-                      child: CustomButton(
-                        textColor: Colors.white,
-                        backgroundColor: Colors.green,
-                        icon: Icons.save,
-                        text: 'Guardar',
-                        fontSize: 12,
-                        onPressed: () {
-                          _createDepartment();
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
+              ),
+            ));
       },
     );
   }

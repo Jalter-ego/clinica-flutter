@@ -39,7 +39,8 @@ class _Nav_Rutas_State extends State<Nav_Rutas> {
         height: 60,
         child: BottomNavigationBar(
           elevation: 5,
-          backgroundColor: isDark ? const Color(0xff0e1415) : Colors.white,
+          backgroundColor:
+              isDark ? const Color(0xff0e1415) : const Color(0xfff9f9ff),
           type: BottomNavigationBarType.fixed,
           selectedItemColor:
               isDark ? Colors.blueAccent : const Color(0xFF0057E5),
