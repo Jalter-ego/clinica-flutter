@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+import 'package:OptiVision/screens/Registers/ProgramingMedicals.dart';
+
+>>>>>>> 1d38aa3c09f23e6a0bbf8d9885f534a3c2211568
 import 'Registers/Services.dart';
 import 'Registers/Citas.dart';
 import 'Registers/Specialties.dart';
@@ -5,7 +10,10 @@ import 'package:flutter/material.dart';
 import '../componets/WabeClipper.dart';
 import '../utils/assets.dart';
 import 'Registers/Departments.dart';
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1d38aa3c09f23e6a0bbf8d9885f534a3c2211568
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -49,10 +57,17 @@ class AppDrawer extends StatelessWidget {
                   const Services(),
                 ),
                 _listTile(
+<<<<<<< HEAD
                   'Registro de Citas',
                   Icons.note_alt_outlined,
                   context,
                   const Citas(),
+=======
+                  'Programacion de Medicos',
+                  Icons.supervised_user_circle_rounded,
+                  context,
+                  const ProgramingMedicals(),
+>>>>>>> 1d38aa3c09f23e6a0bbf8d9885f534a3c2211568
                 ),
               ],
             ),

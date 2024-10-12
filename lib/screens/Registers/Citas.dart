@@ -15,28 +15,44 @@ class _Citas extends State<Citas> {
       'N': 1,
       "Fecha": "20/10/2024",
       "Hora": "14:00",
+<<<<<<< HEAD
       "Paciente": "Roberto Deniro",
       "Empleado": "Dr. Marcelo Camacho"
+=======
+      "Paciente": "",
+      "Empleado": "Consulta Externa"
+>>>>>>> 1d38aa3c09f23e6a0bbf8d9885f534a3c2211568
     },
     {
       'N': 2,
       "Fecha": "19/10/2024",
       "Hora": "6:00",
+<<<<<<< HEAD
       "Paciente": "Alpa Chino",
       "Empleado": "Dra Antonieta "
+=======
+      "Paciente": "Consulta Externa",
+      "Empleado": "Consulta Externa"
+>>>>>>> 1d38aa3c09f23e6a0bbf8d9885f534a3c2211568
     },
     {
       'N': 3, 
       "Fecha": "10/11/2024",
       "Hora": "13:30",
+<<<<<<< HEAD
       "Paciente": "Brad Pitt Quispe",
       "Empleado": "Dr. Michael Jackson"
+=======
+      "Paciente": "Consulta Externa",
+      "Empleado": "Consulta Externa"
+>>>>>>> 1d38aa3c09f23e6a0bbf8d9885f534a3c2211568
     
     },
     {
       'N': 4,
       "Fecha": "11/11/2089",
       "Hora": "10:25",
+<<<<<<< HEAD
       "Paciente": "Cristiano Ronaldo",
       "Empleado": "Dra. Leonela Messi"
     },
@@ -68,6 +84,13 @@ class _Citas extends State<Citas> {
     }
   });
 }
+=======
+      "Paciente": "Consulta Externa",
+      "Empleado": "Consulta Externa"
+    },
+  ];
+  final TextEditingController _descriptionController = TextEditingController();
+>>>>>>> 1d38aa3c09f23e6a0bbf8d9885f534a3c2211568
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +109,7 @@ class _Citas extends State<Citas> {
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
+<<<<<<< HEAD
               child: Row(
                 children: [
                   SizedBox(
@@ -115,6 +139,19 @@ class _Citas extends State<Citas> {
                     ),
                   ),
                 ],
+=======
+              child: SizedBox(
+                width: 120,
+                height: 40,
+                child: CustomButton(
+                  textColor: Colors.white,
+                  backgroundColor: Colors.green,
+                  icon: Icons.add,
+                  text: 'Nuevo',
+                  fontSize: 14,
+                  onPressed: () {},
+                ),
+>>>>>>> 1d38aa3c09f23e6a0bbf8d9885f534a3c2211568
               ),
             ),
             Padding(
@@ -125,7 +162,11 @@ class _Citas extends State<Citas> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: DataTable(
+<<<<<<< HEAD
                   columnSpacing: 0.0,
+=======
+                  columnSpacing: 8.0,
+>>>>>>> 1d38aa3c09f23e6a0bbf8d9885f534a3c2211568
                   columns: const <DataColumn>[
                     DataColumn(
                       label: SizedBox(
@@ -150,7 +191,11 @@ class _Citas extends State<Citas> {
                     ),
                     DataColumn(
                       label: Padding(
+<<<<<<< HEAD
                         padding: EdgeInsets.only(),
+=======
+                        padding: EdgeInsets.only(left: 20.0),
+>>>>>>> 1d38aa3c09f23e6a0bbf8d9885f534a3c2211568
                         child: Text(
                           'Hora',
                           style: TextStyle(
@@ -161,7 +206,11 @@ class _Citas extends State<Citas> {
                     ),
                     DataColumn(
                       label: Padding(
+<<<<<<< HEAD
                         padding: EdgeInsets.only(),
+=======
+                        padding: EdgeInsets.only(left: 20.0),
+>>>>>>> 1d38aa3c09f23e6a0bbf8d9885f534a3c2211568
                         child: Text(
                           'Paciente',
                           style: TextStyle(
@@ -172,7 +221,11 @@ class _Citas extends State<Citas> {
                     ),
                     DataColumn(
                       label: Padding(
+<<<<<<< HEAD
                         padding: EdgeInsets.only(),
+=======
+                        padding: EdgeInsets.only(left: 20.0),
+>>>>>>> 1d38aa3c09f23e6a0bbf8d9885f534a3c2211568
                         child: Text(
                           'Empleado',
                           style: TextStyle(
@@ -181,6 +234,20 @@ class _Citas extends State<Citas> {
                         ),
                       ),
                     ),
+<<<<<<< HEAD
+=======
+                    DataColumn(
+                      label: Padding(
+                        padding: EdgeInsets.only(left: 20.0),
+                        child: Text(
+                          'Accion',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+>>>>>>> 1d38aa3c09f23e6a0bbf8d9885f534a3c2211568
                   ],
                   rows: citas.map((cita) {
                     return DataRow(
@@ -207,7 +274,11 @@ class _Citas extends State<Citas> {
                         ),
                         DataCell(
                           SizedBox(
+<<<<<<< HEAD
                             width: 40,
+=======
+                            width: 90,
+>>>>>>> 1d38aa3c09f23e6a0bbf8d9885f534a3c2211568
                             child: Text(
                               cita['Hora'],
                               style: const TextStyle(fontSize: 12),
@@ -238,6 +309,22 @@ class _Citas extends State<Citas> {
                             ),
                           ),
                         ),
+<<<<<<< HEAD
+=======
+                        DataCell(Row(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit_square,
+                                  color: Colors.blue),
+                              onPressed: () {},
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () {},
+                            ),
+                          ],
+                        )),
+>>>>>>> 1d38aa3c09f23e6a0bbf8d9885f534a3c2211568
                       ],
                     );
                   }).toList(),

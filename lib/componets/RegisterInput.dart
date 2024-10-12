@@ -24,7 +24,6 @@ class RegisterInput extends StatelessWidget {
         controller: _nombreController,
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: const TextStyle(color: Colors.black26),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.all(8.0),
         ),
