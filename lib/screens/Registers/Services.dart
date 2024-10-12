@@ -78,6 +78,27 @@ class _Services extends State<Services> {
     }
   }
 
+  Future<void> _editService(
+      int serviceId, String newName, String newDescription) async {
+    try {
+      await ServicesEndPoints().editService(serviceId, newName, newDescription);
+      setState(() {
+        final index = services.indexWhere((dep) => dep['id'] == serviceId);
+        if (index != -1) {
+          services[index]['nombre'] = newName;
+          services[index]['descripcion'] = newDescription;
+        }
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Servicio editado exitosamente')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error de conexión')),
+      );
+    }
+  }
+
   void _deleteService(int serviceId) async {
     try {
       await ServicesEndPoints().deleteService(serviceId);
@@ -217,7 +238,13 @@ class _Services extends State<Services> {
                                   IconButton(
                                     icon: const Icon(Icons.edit_square,
                                         color: Colors.blue),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _showEditModal(
+                                          context,
+                                          service['id'],
+                                          service['nombre'],
+                                          service['descripcion']);
+                                    },
                                   ),
                                   IconButton(
                                     icon: const Icon(Icons.delete,
@@ -369,6 +396,87 @@ class _Services extends State<Services> {
                 ),
               ),
             ));
+      },
+    );
+  }
+
+  void _showEditModal(BuildContext context, int serviceId, String currentName,
+      String currentDescription) {
+    final TextEditingController editNameController =
+        TextEditingController(text: currentName);
+    final TextEditingController editDescriptionController =
+        TextEditingController(text: currentDescription);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Editar Servicio',
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Nombre del Servicio',
+                  style: TextStyle(fontSize: 14),
+                ),
+                const SizedBox(height: 2),
+                RegisterInput(
+                  nombreController: editNameController,
+                  hintText: 'Escribe el nombre aquí',
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Descripción del Servicio',
+                  style: TextStyle(fontSize: 14),
+                ),
+                const SizedBox(height: 2),
+                RegisterInput(
+                    nombreController: editDescriptionController,
+                    hintText: 'Escribe la descripción aquí'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              SizedBox(
+                child: CustomButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  textColor: Colors.white,
+                  backgroundColor: Colors.blue,
+                  text: 'Cancelar',
+                ),
+              ),
+              SizedBox(
+                child: CustomButton(
+                  onPressed: () async {
+                    String newName = editNameController.text.trim();
+                    String newDescription =
+                        editDescriptionController.text.trim();
+                    if (newName.isNotEmpty) {
+                      await _editService(serviceId, newName, newDescription);
+                      Navigator.of(context).pop();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('El nombre no puede estar vacío')),
+                      );
+                    }
+                  },
+                  backgroundColor: Colors.green,
+                  text: 'Guardar',
+                  textColor: Colors.white,
+                ),
+              ),
+            ])
+          ],
+        );
       },
     );
   }

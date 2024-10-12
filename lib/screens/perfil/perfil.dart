@@ -89,12 +89,12 @@ class _PerfilScreenState extends State<PerfilScreen> {
               const SizedBox(height: 20),
               Divider(color: isDark ? Colors.white30 : Colors.black38),
 
-              const _ListTile("Configuracion", Icons.settings, true),
+              const _ListTile("Configuración", Icons.settings, true),
               const _ListTile("Historial", Icons.history_outlined, true),
 
               Divider(color: isDark ? Colors.white30 : Colors.black38),
 
-              const _ListTile("Informacion", Icons.info_outline, true),
+              const _ListTile("Información", Icons.info_outline, true),
               ListTile(
                 onTap: _cerrarSesion,
                 leading: Container(
@@ -109,7 +109,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                   ),
                 ),
                 title: const Text(
-                  "Cerrar Sesion",
+                  "Cerrar Sesión",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               )

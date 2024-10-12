@@ -1,11 +1,11 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:OptiVision/screens/Registers/ProgramingMedicals.dart';
+
 import 'Registers/Services.dart';
 import 'Registers/Specialties.dart';
 import 'package:flutter/material.dart';
 import '../componets/WabeClipper.dart';
 import '../utils/assets.dart';
 import 'Registers/Departments.dart';
-import 'home.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -47,6 +47,12 @@ class AppDrawer extends StatelessWidget {
                   Icons.medical_services_outlined,
                   context,
                   const Services(),
+                ),
+                _listTile(
+                  'Programacion de Medicos',
+                  Icons.supervised_user_circle_rounded,
+                  context,
+                  const ProgramingMedicals(),
                 ),
               ],
             ),

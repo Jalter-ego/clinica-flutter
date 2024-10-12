@@ -1,8 +1,10 @@
-import 'package:OptiVision/screens/perfil/editPerfil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 import 'providers/proveedor_usuario.dart';
 import 'providers/theme_Provider.dart';
 import 'screens/login.dart';
@@ -11,11 +13,13 @@ import 'screens/navegador.dart';
 import 'screens/registro_de_empleados.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('es_ES', null);
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp();
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +51,7 @@ class MyApp extends StatelessWidget {
                 ThemeData(brightness: Brightness.dark).textTheme,
               ),
             ),
-            themeMode: themeProvider.themeMode, // Escucha el tema activo
+            themeMode: themeProvider.themeMode,
             initialRoute: '/',
             getPages: [
               GetPage(name: '/', page: () => const SplashScreen()),
@@ -57,6 +61,14 @@ class MyApp extends StatelessWidget {
                 name: '/registro_empleados',
                 page: () => const EmployeeRegistrationPage(),
               ),
+            ],
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('es', ''),
             ],
             debugShowCheckedModeBanner: false,
           );
