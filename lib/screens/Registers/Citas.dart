@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:OptiVision/screens/Registers/CitasRegister.dart';
 import '../../componets/CustomAppBar.dart';
 import '../../componets/CustomButtom.dart';
+import '../../servicios/citasServices.dart';  // Importa tu servicio
 
 class Citas extends StatefulWidget {
   const Citas({super.key});
@@ -11,46 +12,35 @@ class Citas extends StatefulWidget {
 }
 
 class _Citas extends State<Citas> {
-  
-  final List<Map<String, dynamic>> citas = [
-    {
-      'N': 1,
-      "Fecha": "20/10/2024",
-      "Hora": "14:00",
-      "Paciente": "Roberto Deniro",
-      "Empleado": "Dr. Marcelo Camacho"
-    },
-    {
-      'N': 2,
-      "Fecha": "19/10/2024",
-      "Hora": "6:00",
-      "Paciente": "Alpa Chino",
-      "Empleado": "Dra Antonieta"
-    },
-    {
-      'N': 3,
-      "Fecha": "10/11/2024",
-      "Hora": "13:30",
-      "Paciente": "Brad Pitt Quispe",
-      "Empleado": "Dr. Michael Jackson"
-    },
-    {
-      'N': 4,
-      "Fecha": "11/11/2089",
-      "Hora": "10:25",
-      "Paciente": "Cristiano Ronaldo",
-      "Empleado": "Dra. Leonela Messi"
-    },
-  ];
-
+  List<Map<String, dynamic>> citas = [];
   List<Map<String, dynamic>> filteredCitas = [];
   final TextEditingController _searchController = TextEditingController();
+  bool isLoading = true; // Indicador de carga
 
   @override
   void initState() {
     super.initState();
-    filteredCitas = List.from(citas);
+    _fetchCitas(); // Llama a la API para obtener las citas
     _searchController.addListener(_filterCitas);
+  }
+
+  // Método para obtener citas desde el servicio
+  Future<void> _fetchCitas() async {
+    try {
+      List<Map<String, dynamic>>? citasFromApi = await CitasServices().listarCitas(context: context);
+
+      if (citasFromApi != null) {
+        setState(() {
+          citas = citasFromApi; // Asignamos los datos de la API
+          filteredCitas = List.from(citas); // Inicializamos la lista filtrada
+          isLoading = false; // Dejamos de cargar
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false; // Si hay error, dejamos de cargar
+      });
+    }
   }
 
   void _filterCitas() {
@@ -60,10 +50,10 @@ class _Citas extends State<Citas> {
         filteredCitas = List.from(citas);
       } else {
         filteredCitas = citas.where((cita) {
-          return cita['Paciente'].toLowerCase().contains(query) ||
-              cita['Fecha'].toLowerCase().contains(query) ||
-              cita['Hora'].toLowerCase().contains(query) ||
-              cita['Empleado'].toLowerCase().contains(query);
+          return cita['paciente'].toLowerCase().contains(query) ||
+              cita['fecha'].toLowerCase().contains(query) ||
+              cita['hora'].toLowerCase().contains(query) ||
+              cita['especialista'].toLowerCase().contains(query);
         }).toList();
       }
     });
@@ -80,112 +70,107 @@ class _Citas extends State<Citas> {
           Navigator.of(context).pop();
         },
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
+      body: isLoading
+          ? Center(child: CircularProgressIndicator()) // Indicador de carga mientras obtenemos datos
+          : SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: 120,
-                    height: 40,
-                    child: CustomButton(
-                      textColor: Colors.white,
-                      backgroundColor: Colors.green,
-                      icon: Icons.add,
-                      text: 'Nuevo',
-                      fontSize: 14,
-                      onPressed: () { Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CitasRegister(),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 120,
+                          height: 40,
+                          child: CustomButton(
+                            textColor: Colors.white,
+                            backgroundColor: Colors.green,
+                            icon: Icons.add,
+                            text: 'Nuevo',
+                            fontSize: 14,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CitasRegister(),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
+                        ),
+                        const SizedBox(width: 16),
+                        // Barra de búsqueda
+                        Expanded(
+                          child: TextField(
+                            controller: _searchController,
+                            decoration: InputDecoration(
+                              labelText: 'Buscar por paciente, fecha, hora...',
+                              prefixIcon: Icon(Icons.search),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  // Barra de búsqueda
-                  Expanded(
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        labelText: 'Buscar por paciente, fecha, hora...',
-                        prefixIcon: Icon(Icons.search),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: DataTable(
+                        columnSpacing: 0.0,
+                        columns: const <DataColumn>[
+                          DataColumn(
+                            label: Expanded(
+                              child: Text(
+                                'Fecha',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              'Hora',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              'Paciente',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              'Especialista',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                        rows: filteredCitas.map((cita) {
+                          DateTime fecha = DateTime.parse(cita['fecha']);
+                           String formattedDate = '${fecha.year}-${fecha.month.toString().padLeft(2, '0')}-${fecha.day.toString().padLeft(2, '0')}';
+                          return DataRow(
+                            cells: <DataCell>[
+                              DataCell(Text(formattedDate)),
+                              DataCell(Text(cita['hora'])),
+                              DataCell(Text(cita['paciente'])),
+                              DataCell(Text(cita['especialista'])),
+                            ],
+                          );
+                        }).toList(),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: DataTable(
-                  columnSpacing: 0.0,
-                  columns: const <DataColumn>[
-                    DataColumn(
-                      label: SizedBox(
-                        width: 10,
-                        child: Text(
-                          'N',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Expanded(
-                        child: Text(
-                          'Fecha',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        'Hora',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        'Paciente',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        'Empleado',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                  rows: filteredCitas.map((cita) {
-                    return DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text(cita['N'].toString())),
-                        DataCell(Text(cita['Fecha'])),
-                        DataCell(Text(cita['Hora'])),
-                        DataCell(Text(cita['Paciente'])),
-                        DataCell(Text(cita['Empleado'])),
-                      ],
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
