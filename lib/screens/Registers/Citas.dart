@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:OptiVision/screens/Registers/CitasRegister.dart';
 import '../../componets/CustomAppBar.dart';
 import '../../componets/CustomButtom.dart';
 
@@ -15,33 +16,57 @@ class _Citas extends State<Citas> {
       'N': 1,
       "Fecha": "20/10/2024",
       "Hora": "14:00",
-      "Paciente": "",
-      "Empleado": "Consulta Externa"
+      "Paciente": "Roberto Deniro",
+      "Empleado": "Dr. Marcelo Camacho"
     },
     {
       'N': 2,
       "Fecha": "19/10/2024",
       "Hora": "6:00",
-      "Paciente": "Consulta Externa",
-      "Empleado": "Consulta Externa"
+      "Paciente": "Alpa Chino",
+      "Empleado": "Dra Antonieta"
     },
     {
-      'N': 3, 
+      'N': 3,
       "Fecha": "10/11/2024",
       "Hora": "13:30",
-      "Paciente": "Consulta Externa",
-      "Empleado": "Consulta Externa"
-    
+      "Paciente": "Brad Pitt Quispe",
+      "Empleado": "Dr. Michael Jackson"
     },
     {
       'N': 4,
       "Fecha": "11/11/2089",
       "Hora": "10:25",
-      "Paciente": "Consulta Externa",
-      "Empleado": "Consulta Externa"
+      "Paciente": "Cristiano Ronaldo",
+      "Empleado": "Dra. Leonela Messi"
     },
   ];
-  final TextEditingController _descriptionController = TextEditingController();
+
+  List<Map<String, dynamic>> filteredCitas = [];
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    filteredCitas = List.from(citas);
+    _searchController.addListener(_filterCitas);
+  }
+
+  void _filterCitas() {
+    setState(() {
+      String query = _searchController.text.toLowerCase();
+      if (query.isEmpty) {
+        filteredCitas = List.from(citas);
+      } else {
+        filteredCitas = citas.where((cita) {
+          return cita['Paciente'].toLowerCase().contains(query) ||
+              cita['Fecha'].toLowerCase().contains(query) ||
+              cita['Hora'].toLowerCase().contains(query) ||
+              cita['Empleado'].toLowerCase().contains(query);
+        }).toList();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,17 +85,41 @@ class _Citas extends State<Citas> {
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: SizedBox(
-                width: 120,
-                height: 40,
-                child: CustomButton(
-                  textColor: Colors.white,
-                  backgroundColor: Colors.green,
-                  icon: Icons.add,
-                  text: 'Nuevo',
-                  fontSize: 14,
-                  onPressed: () {},
-                ),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 120,
+                    height: 40,
+                    child: CustomButton(
+                      textColor: Colors.white,
+                      backgroundColor: Colors.green,
+                      icon: Icons.add,
+                      text: 'Nuevo',
+                      fontSize: 14,
+                      onPressed: () { Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CitasRegister(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  // Barra de búsqueda
+                  Expanded(
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        labelText: 'Buscar por paciente, fecha, hora...',
+                        prefixIcon: Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(
@@ -81,16 +130,14 @@ class _Citas extends State<Citas> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: DataTable(
-                  columnSpacing: 8.0,
+                  columnSpacing: 0.0,
                   columns: const <DataColumn>[
                     DataColumn(
                       label: SizedBox(
                         width: 10,
                         child: Text(
                           'N',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -98,126 +145,37 @@ class _Citas extends State<Citas> {
                       label: Expanded(
                         child: Text(
                           'Fecha',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
                     DataColumn(
-                      label: Padding(
-                        padding: EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          'Hora',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                      label: Text(
+                        'Hora',
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
                     DataColumn(
-                      label: Padding(
-                        padding: EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          'Paciente',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                      label: Text(
+                        'Paciente',
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
                     DataColumn(
-                      label: Padding(
-                        padding: EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          'Empleado',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Padding(
-                        padding: EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          'Accion',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                      label: Text(
+                        'Empleado',
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],
-                  rows: citas.map((cita) {
+                  rows: filteredCitas.map((cita) {
                     return DataRow(
                       cells: <DataCell>[
-                        DataCell(
-                          SizedBox(
-                            width: 15,
-                            child: Text(
-                              cita['N'].toString(),
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ),
-                        ),
-                        DataCell(
-                          SizedBox(
-                            width: 90,
-                            child: Text(
-                              cita['Fecha'],
-                              style: const TextStyle(fontSize: 12),
-                              overflow: TextOverflow.clip,
-                              softWrap: true,
-                            ),
-                          ),
-                        ),
-                        DataCell(
-                          SizedBox(
-                            width: 90,
-                            child: Text(
-                              cita['Hora'],
-                              style: const TextStyle(fontSize: 12),
-                              overflow: TextOverflow.clip,
-                              softWrap: true,
-                            ),
-                          ),
-                        ),
-                        DataCell(
-                          SizedBox(
-                            width: 90,
-                            child: Text(
-                              cita['Paciente'],
-                              style: const TextStyle(fontSize: 12),
-                              overflow: TextOverflow.clip,
-                              softWrap: true,
-                            ),
-                          ),
-                        ),
-                        DataCell(
-                          SizedBox(
-                            width: 90,
-                            child: Text(
-                              cita['Empleado'],
-                              style: const TextStyle(fontSize: 12),
-                              overflow: TextOverflow.clip,
-                              softWrap: true,
-                            ),
-                          ),
-                        ),
-                        DataCell(Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit_square,
-                                  color: Colors.blue),
-                              onPressed: () {},
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {},
-                            ),
-                          ],
-                        )),
+                        DataCell(Text(cita['N'].toString())),
+                        DataCell(Text(cita['Fecha'])),
+                        DataCell(Text(cita['Hora'])),
+                        DataCell(Text(cita['Paciente'])),
+                        DataCell(Text(cita['Empleado'])),
                       ],
                     );
                   }).toList(),

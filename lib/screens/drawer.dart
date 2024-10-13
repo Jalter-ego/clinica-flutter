@@ -1,6 +1,5 @@
-import 'package:OptiVision/screens/Registers/ProgramingMedicals.dart';
-
 import 'Registers/Services.dart';
+import 'Registers/Citas.dart';
 import 'Registers/Specialties.dart';
 import 'package:flutter/material.dart';
 import '../componets/WabeClipper.dart';
@@ -49,10 +48,10 @@ class AppDrawer extends StatelessWidget {
                   const Services(),
                 ),
                 _listTile(
-                  'Programacion de Medicos',
-                  Icons.supervised_user_circle_rounded,
+                  'Registro de Citas',
+                  Icons.note_alt_outlined,
                   context,
-                  const ProgramingMedicals(),
+                  const Citas(),
                 ),
               ],
             ),
