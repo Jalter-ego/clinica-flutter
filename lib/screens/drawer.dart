@@ -1,3 +1,5 @@
+import 'package:OptiVision/screens/Registers/ProgramingMedicals.dart';
+
 import 'Registers/Services.dart';
 import 'Registers/Citas.dart';
 import 'Registers/Specialties.dart';
@@ -46,6 +48,12 @@ class AppDrawer extends StatelessWidget {
                   Icons.medical_services_outlined,
                   context,
                   const Services(),
+                ),
+                _listTile(
+                  'Programacion de Medicos',
+                  Icons.medical_services_outlined,
+                  context,
+                  const ProgramingMedicals(),
                 ),
                 _listTile(
                   'Registro de Citas',
