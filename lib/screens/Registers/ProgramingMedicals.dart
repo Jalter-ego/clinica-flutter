@@ -17,9 +17,14 @@ class ProgramingMedicals extends StatefulWidget {
 
 class _ProgramingMedicals extends State<ProgramingMedicals> {
   List<Map<String, dynamic>> specialists = [];
+  List<Map<String, dynamic>> services = [];
   bool isLoading = true;
   int? selectedSpecialistId;
+  int? selectedServiceId;
+  int? selectedSpecialtyId;
   Set<DateTime> selectedDates = {};
+  TimeOfDay? selectedStartTime;
+  TimeOfDay? selectedEndTime;
 
   @override
   void initState() {
@@ -31,8 +36,10 @@ class _ProgramingMedicals extends State<ProgramingMedicals> {
     try {
       final fetchedSpecialists =
           await ProgramingMedicalsServices().getSpecialists();
+      final fetchedServices = await ProgramingMedicalsServices().getServices();
       setState(() {
         specialists = fetchedSpecialists;
+        services = fetchedServices;
         isLoading = false;
       });
     } catch (e) {
@@ -40,6 +47,53 @@ class _ProgramingMedicals extends State<ProgramingMedicals> {
         isLoading = false;
       });
       print("Error fetching departments: $e");
+    }
+  }
+
+  void _createProgramacion() async {
+    if (selectedSpecialistId == null ||
+        selectedServiceId == null ||
+        selectedSpecialtyId == null ||
+        selectedStartTime == null ||
+        selectedEndTime == null ||
+        selectedDates.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Por favor complete todos los campos')),
+      );
+      return;
+    }
+
+    String horaInicio = selectedStartTime!.format(context);
+    String horaFin = selectedEndTime!.format(context);
+
+    List<String> fechas =
+        selectedDates.map((date) => "${date.toLocal()}".split(' ')[0]).toList();
+    print(fechas);
+    try {
+      await ProgramingMedicalsServices().createProgramacion(
+        horaInicio: horaInicio,
+        horaFin: horaFin,
+        empleadoId: selectedSpecialistId!,
+        especialidadId: selectedSpecialtyId!,
+        servicioId: selectedServiceId!,
+        fechas: fechas,
+      );
+
+      selectedServiceId = null;
+      selectedSpecialtyId = null;
+      selectedStartTime = null;
+      selectedEndTime = null;
+      selectedDates.clear();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Programación creada exitosamente')),
+      );
+
+      Navigator.of(context).pop();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error al crear la programación')),
+      );
     }
   }
 
@@ -81,6 +135,7 @@ class _ProgramingMedicals extends State<ProgramingMedicals> {
                           text: 'Agregar Programacion',
                           fontSize: 14,
                           onPressed: () {
+                            _showCreateModal();
                             print("Especialista ID: $selectedSpecialistId");
                             print("Fechas seleccionadas: $selectedDates");
                           },
@@ -196,6 +251,212 @@ class _ProgramingMedicals extends State<ProgramingMedicals> {
                 ),
               ),
             ),
+    );
+  }
+
+  void _showCreateModal() {
+    if (selectedSpecialistId == null) {
+      _showAlert('Especialista no seleccionado',
+          'Por favor, selecciona un especialista antes de continuar.');
+      return;
+    }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        List<Map<String, dynamic>> filteredSpecialties = specialists.firstWhere(
+          (specialist) => specialist['id'] == selectedSpecialistId,
+          orElse: () => {'especialidades': []},
+        )['especialidades'];
+
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setModalState) {
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'Nuevo Servicio',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Seleccionar Especialidad',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          DropdownButton<int>(
+                            value: selectedSpecialtyId,
+                            items: filteredSpecialties.map((specialty) {
+                              return DropdownMenuItem<int>(
+                                value: specialty['id'],
+                                child: Text(specialty['nombre']),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setModalState(() {
+                                selectedSpecialtyId = value;
+                              });
+                            },
+                            hint: const Text('Selecciona una especialidad'),
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            'Seleccionar Servicio',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          DropdownButton<int>(
+                            value: selectedServiceId,
+                            items: services.map((service) {
+                              return DropdownMenuItem<int>(
+                                value: service['id'],
+                                child: Text(service['nombre']),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setModalState(() {
+                                selectedServiceId = value;
+                              });
+                            },
+                            hint: const Text('Selecciona un servicio'),
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            'Desde',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          GestureDetector(
+                            onTap: () =>
+                                _selectTime(context, true, setModalState),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 12.0),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: Text(
+                                selectedStartTime != null
+                                    ? selectedStartTime!.format(context)
+                                    : 'Selecciona una hora',
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            'Hasta',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          GestureDetector(
+                            onTap: () =>
+                                _selectTime(context, false, setModalState),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 12.0),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: Text(
+                                selectedEndTime != null
+                                    ? selectedEndTime!.format(context)
+                                    : 'Selecciona una hora',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            child: CustomButton(
+                              textColor: Colors.white,
+                              backgroundColor: Colors.red,
+                              icon: Icons.cancel,
+                              text: 'Cancelar',
+                              fontSize: 12,
+                              onPressed: () {
+                                selectedServiceId = null;
+                                selectedSpecialtyId = null;
+                                selectedStartTime = null;
+                                selectedEndTime = null;
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          SizedBox(
+                            child: CustomButton(
+                              textColor: Colors.white,
+                              backgroundColor: Colors.green,
+                              icon: Icons.save,
+                              text: 'Guardar',
+                              fontSize: 12,
+                              onPressed: () async {
+                                _createProgramacion();
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  void _selectTime(
+      BuildContext context, bool isStartTime, StateSetter setModalState) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (picked != null) {
+      setModalState(() {
+        if (isStartTime) {
+          selectedStartTime = picked;
+        } else {
+          selectedEndTime = picked;
+        }
+      });
+    }
+  }
+
+  void _showAlert(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            title,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: const Text('Aceptar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
