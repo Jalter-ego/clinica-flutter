@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import '../utils/constantes.dart';
 
 class CitasServices {
+
   Future<List<Map<String, dynamic>>?> listarCitas({
     required BuildContext context,
   }) async {
@@ -48,4 +49,48 @@ class CitasServices {
       return null;
     }
   }
+  Future<bool> crearCita({
+    required BuildContext context,
+    required int pacienteId,
+    required int especialistaId,
+    required int servicioId,
+    required String fecha,
+    required String hora,
+    required String comentario,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${Constantes.uri}/citas/crear'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'paciente_id': pacienteId,
+          'especialista_id': especialistaId,
+          'servicio_id': servicioId,
+          'fecha': fecha,
+          'hora': hora,
+          'comentario': comentario,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Cita registrada exitosamente')),
+        );
+        return true;
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${response.reasonPhrase}')),
+        );
+        return false;
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al crear cita: $e')),
+      );
+      return false;
+    }
+  }
+
 }

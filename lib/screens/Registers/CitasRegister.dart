@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../componets/CustomAppBar.dart';
 import '../../componets/CustomButtom.dart';
+import '../../servicios/citasServices.dart';
 
 class CitasRegister extends StatefulWidget {
   const CitasRegister({super.key});
@@ -16,6 +17,16 @@ class _CitasRegisterState extends State<CitasRegister> {
   final TextEditingController _fechaController = TextEditingController();
   final TextEditingController _horaController = TextEditingController();
   final TextEditingController _comentariosController = TextEditingController();
+
+
+  String formatFecha(String fecha) {
+  List<String> partes = fecha.split('/');
+  if (partes.length == 3) {
+    // Reordenar partes para formar YYYY-MM-DD
+    return '${partes[2]}-${partes[1]}-${partes[0]}';
+  }
+  return fecha; // Retornar fecha sin cambio si no cumple el formato esperado
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,20 +47,20 @@ class _CitasRegisterState extends State<CitasRegister> {
             children: [
               _buildInputField(
                 controller: _pacienteController,
-                labelText: 'Nombre del Paciente',
-                hintText: 'Ingrese el nombre del paciente',
+                labelText: 'Id del Paciente',
+                hintText: 'Ingrese el Id del paciente',
               ),
               const SizedBox(height: 16),
               _buildInputField(
                 controller: _especialistaController,
-                labelText: 'Nombre del Especialista',
-                hintText: 'Ingrese el nombre del especialista',
+                labelText: 'Id del Especialista',
+                hintText: 'Ingrese el Id del especialista',
               ),
               const SizedBox(height: 16),
               _buildInputField(
                 controller: _servicioController,
-                labelText: 'Servicio',
-                hintText: 'Ingrese el servicio',
+                labelText: 'Id delServicio',
+                hintText: 'Ingrese el Id del servicio',
               ),
               const SizedBox(height: 16),
               _buildInputField(
@@ -82,8 +93,21 @@ class _CitasRegisterState extends State<CitasRegister> {
                   icon: Icons.save,
                   text: 'Registrar Cita',
                   fontSize: 16,
-                  onPressed: () {
-                    // Lógica para guardar la cita
+                  onPressed: () async {
+                     String fechaFormateada = formatFecha(_fechaController.text);
+                    bool success = await CitasServices().crearCita(
+                      context: context,
+                      pacienteId: int.parse(_pacienteController.text),
+                      especialistaId: int.parse(_especialistaController.text),
+                      servicioId: int.parse(_servicioController.text),
+                      fecha: fechaFormateada,
+                      hora: _horaController.text,
+                      comentario: _comentariosController.text,
+                    );
+
+                    if (success) {
+                      Navigator.of(context).pop(); // Volver a la pantalla anterior
+                    }
                   },
                 ),
               ),

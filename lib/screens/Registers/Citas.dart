@@ -117,8 +117,9 @@ class _Citas extends State<Citas> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Container(
+                      width: double.infinity,
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(8),
@@ -165,6 +166,27 @@ class _Citas extends State<Citas> {
                             ],
                           );
                         }).toList(),
+                      ),
+                    ),
+                  ),
+                  // Botón para generar reportes
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          // Sin funcionalidad por ahora
+                        },
+                        icon: Icon(Icons.picture_as_pdf, color: Colors.white),
+                        label: Text(
+                          'Generar Reporte',
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white, backgroundColor: Colors.red,
+                        ),
                       ),
                     ),
                   ),
