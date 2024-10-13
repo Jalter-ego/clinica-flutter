@@ -239,34 +239,42 @@ class _Services extends State<Services> {
                                     ),
                                   ),
                                 ),
-                                DataCell(Row(
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.edit_square,
-                                          color: Colors.blue),
-                                      onPressed: () {
-                                        _showEditModal(
-                                            context,
-                                            service['id'],
-                                            service['nombre'],
-                                            service['descripcion']);
-                                      },
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.delete,
-                                          color: Colors.red),
-                                      onPressed: () {
-                                        showDeleteConfirmationModal(
-                                          context: context,
-                                          itemName: 'servicio',
-                                          onDelete: () {
-                                            _deleteService(service['id']);
+                                DataCell(
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            _showEditModal(
+                                                context,
+                                                service['id'],
+                                                service['nombre'],
+                                                service['descripcion']);
                                           },
-                                        );
-                                      },
+                                          child: const Icon(Icons.edit_square,
+                                              color: Colors.blue, size: 22),
+                                        ),
+                                        const SizedBox(
+                                            width:
+                                                4), // Ajustar si es necesario
+                                        GestureDetector(
+                                          onTap: () {
+                                            showDeleteConfirmationModal(
+                                              context: context,
+                                              itemName: 'servicio',
+                                              onDelete: () {
+                                                _deleteService(service['id']);
+                                              },
+                                            );
+                                          },
+                                          child: const Icon(Icons.delete,
+                                              color: Colors.red, size: 22),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                )),
+                                  ),
+                                ),
                               ],
                             );
                           }).toList(),

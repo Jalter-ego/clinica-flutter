@@ -111,122 +111,127 @@ class _Departaments extends State<Departaments> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SizedBox(
-                      width: 120,
-                      height: 40,
-                      child: CustomButton(
-                        textColor: Colors.white,
-                        backgroundColor: Colors.green,
-                        icon: Icons.add,
-                        text: 'Nuevo',
-                        fontSize: 14,
-                        onPressed: _showCreateModal,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? const Color(0xFF1E1E1E)
-                            : const Color(0xFFF8F9FA),
-                        border: Border.all(
-                          color: isDark ? Colors.white54 : Colors.black12,
+              padding: const EdgeInsets.all(8),
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(31, 184, 169, 169),
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: SizedBox(
+                        width: 120,
+                        height: 40,
+                        child: CustomButton(
+                          textColor: Colors.white,
+                          backgroundColor: Colors.green,
+                          icon: Icons.add,
+                          text: 'Nuevo',
+                          fontSize: 14,
+                          onPressed: _showCreateModal,
                         ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: DataTable(
-                        columnSpacing: 10.0,
-                        columns: const <DataColumn>[
-                          DataColumn(
-                            label: SizedBox(
-                              width: 30,
-                              child: Text(
-                                'ID',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Expanded(
-                              child: Text(
-                                'Nombre',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Padding(
-                              padding: EdgeInsets.only(left: 16.0),
-                              child: Text(
-                                'Acción',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                        rows: departments.map((department) {
-                          return DataRow(
-                            cells: <DataCell>[
-                              DataCell(
-                                SizedBox(
-                                  width: 15,
-                                  child: Text(
-                                    department['id'].toString(),
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                SizedBox(
-                                  width: 150,
-                                  child: Text(
-                                    department['nombre'],
-                                    style: const TextStyle(fontSize: 12),
-                                    overflow: TextOverflow.clip,
-                                    softWrap: true,
-                                  ),
-                                ),
-                              ),
-                              DataCell(Row(
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.edit_square,
-                                        color: Colors.blue),
-                                    onPressed: () {
-                                      _showEditModal(context, department['id'],
-                                          department['nombre']);
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete,
-                                        color: Colors.red),
-                                    onPressed: () {
-                                      _showDeleteConfirmationModal(
-                                          context, department['id']);
-                                    },
-                                  ),
-                                ],
-                              )),
-                            ],
-                          );
-                        }).toList(),
                       ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: DataTable(
+                          columnSpacing: 10.0,
+                          columns: const <DataColumn>[
+                            DataColumn(
+                              label: SizedBox(
+                                width: 30,
+                                child: Text(
+                                  'ID',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Nombre',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Padding(
+                                padding: EdgeInsets.only(left: 16.0),
+                                child: Text(
+                                  'Acción',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                          rows: departments.map((department) {
+                            return DataRow(
+                              cells: <DataCell>[
+                                DataCell(
+                                  SizedBox(
+                                    width: 15,
+                                    child: Text(
+                                      department['id'].toString(),
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  SizedBox(
+                                    width: 120,
+                                    child: Text(
+                                      department['nombre'],
+                                      style: const TextStyle(fontSize: 12),
+                                      overflow: TextOverflow.clip,
+                                      softWrap: true,
+                                    ),
+                                  ),
+                                ),
+                                DataCell(Row(
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.edit_square,
+                                          color: Colors.blue),
+                                      onPressed: () {
+                                        _showEditModal(
+                                            context,
+                                            department['id'],
+                                            department['nombre']);
+                                      },
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete,
+                                          color: Colors.red),
+                                      onPressed: () {
+                                        _showDeleteConfirmationModal(
+                                            context, department['id']);
+                                      },
+                                    ),
+                                  ],
+                                )),
+                              ],
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
     );

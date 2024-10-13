@@ -16,15 +16,15 @@ class ProgramingMedicals extends StatefulWidget {
 }
 
 class _ProgramingMedicals extends State<ProgramingMedicals> {
-  List<Map<String, dynamic>> specialists = [];
-  List<Map<String, dynamic>> services = [];
+  List<Map<String, dynamic>> specialists = []; //arreglo de especialistas
+  List<Map<String, dynamic>> services = []; //arreglo de servicios
   bool isLoading = true;
-  int? selectedSpecialistId;
-  int? selectedServiceId;
-  int? selectedSpecialtyId;
-  Set<DateTime> selectedDates = {};
-  TimeOfDay? selectedStartTime;
-  TimeOfDay? selectedEndTime;
+  int? selectedSpecialistId; //id de especialista seleccionado
+  int? selectedServiceId; //id de servicio seleccionado
+  int? selectedSpecialtyId; //id de especialidad seleccionado
+  Set<DateTime> selectedDates = {}; //arreglo de dias
+  TimeOfDay? selectedStartTime; //hora de inicio
+  TimeOfDay? selectedEndTime; //hora de finalizacion
 
   @override
   void initState() {
@@ -260,6 +260,11 @@ class _ProgramingMedicals extends State<ProgramingMedicals> {
           'Por favor, selecciona un especialista antes de continuar.');
       return;
     }
+    if (selectedDates.isEmpty) {
+      _showAlert('Dias no seleccionados',
+          'Por favor, selecciona al menos un dia antes de continuar.');
+      return;
+    }
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -281,7 +286,7 @@ class _ProgramingMedicals extends State<ProgramingMedicals> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Text(
-                        'Nuevo Servicio',
+                        'Nueva Programacion',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),

@@ -1,11 +1,11 @@
-
+import 'package:OptiVision/utils/constantes.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 import 'providers/proveedor_usuario.dart';
 import 'providers/theme_Provider.dart';
@@ -16,7 +16,13 @@ import 'screens/registro_de_empleados.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  Stripe.publishableKey = Constantes.publicKey;
+  Stripe.merchantIdentifier = Constantes.merchantIdentifier;
+
   await initializeDateFormatting('es_ES', null);
+  await Stripe.instance.applySettings();
+
   runApp(const MyApp());
 }
 
