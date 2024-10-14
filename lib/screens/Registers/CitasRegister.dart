@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../componets/CustomAppBar.dart';
 import '../../componets/CustomButtom.dart';
 import '../../servicios/citasServices.dart';
+import '../pagoPrueba.dart';
 
 class CitasRegister extends StatefulWidget {
   const CitasRegister({super.key});
@@ -94,20 +95,30 @@ class _CitasRegisterState extends State<CitasRegister> {
                   text: 'Registrar Cita',
                   fontSize: 16,
                   onPressed: () async {
-                     String fechaFormateada = formatFecha(_fechaController.text);
-                    bool success = await CitasServices().crearCita(
-                      context: context,
-                      pacienteId: int.parse(_pacienteController.text),
-                      especialistaId: int.parse(_especialistaController.text),
-                      servicioId: int.parse(_servicioController.text),
-                      fecha: fechaFormateada,
-                      hora: _horaController.text,
-                      comentario: _comentariosController.text,
-                    );
+                     Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PruebaPago(
+                          onPaymentSuccess: () async {
+                            // Si el pago es exitoso, crear la cita
+                            String fechaFormateada = formatFecha(_fechaController.text);
+                            bool success = await CitasServices().crearCita(
+                              context: context,
+                              pacienteId: int.parse(_pacienteController.text),
+                              especialistaId: int.parse(_especialistaController.text),
+                              servicioId: int.parse(_servicioController.text),
+                              fecha: fechaFormateada,
+                              hora: _horaController.text,
+                              comentario: _comentariosController.text,
+                            );
 
-                    if (success) {
-                      Navigator.of(context).pop(); // Volver a la pantalla anterior
-                    }
+                            if (success) {
+                              Navigator.of(context).pop(); // Volver a la pantalla anterior
+                            }
+                          },
+                        ),
+                      ),
+                    );
                   },
                 ),
               ),

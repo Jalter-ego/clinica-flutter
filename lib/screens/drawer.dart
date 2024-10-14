@@ -66,7 +66,14 @@ class AppDrawer extends StatelessWidget {
                   'Prueba de pago',
                   Icons.money,
                   context,
-                  const PruebaPago(),
+                  PruebaPago(
+                    onPaymentSuccess: () {
+                      // Aquí puedes definir cualquier acción a tomar tras el éxito del pago
+                      print('Pago exitoso, cita registrada');
+                      // O también podrías redirigir a alguna otra pantalla
+                      // Navigator.push(context, MaterialPageRoute(builder: (context) => OtraPantalla()));
+                    },
+                  ),
                 ),
               ],
             ),
