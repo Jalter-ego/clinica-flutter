@@ -5,8 +5,7 @@ import '../componets/CustomButtom.dart';
 import '../servicios/paymentServices.dart';
 
 class PruebaPago extends StatefulWidget {
-   final Function onPaymentSuccess;  // Callback cuando el pago sea exitoso
-  const PruebaPago({super.key, required this.onPaymentSuccess});
+  const PruebaPago({super.key});
 
   @override
   _PruebaPago createState() => _PruebaPago();
@@ -23,9 +22,6 @@ class _PruebaPago extends State<PruebaPago> {
 
       // 2. Presentar la hoja de pago
       await _paymentServices.presentPaymentSheet(clientSecret);
-
-      // 3. Llamar al callback después del pago exitoso
-      widget.onPaymentSuccess();
       // 4. Mostrar un mensaje de éxito
       showDialog(
         context: context,

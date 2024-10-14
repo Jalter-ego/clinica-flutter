@@ -51,7 +51,7 @@ class CitasServices {
   }
   Future<bool> crearCita({
     required BuildContext context,
-    required int pacienteId,
+    required int usuarioId,
     required int especialistaId,
     required int servicioId,
     required String fecha,
@@ -65,7 +65,7 @@ class CitasServices {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode({
-          'paciente_id': pacienteId,
+          'usuario_id': usuarioId,
           'especialista_id': especialistaId,
           'servicio_id': servicioId,
           'fecha': fecha,
