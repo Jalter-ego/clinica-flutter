@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:OptiVision/screens/Registers/CitasRegister.dart';
 import '../../componets/CustomAppBar.dart';
 import '../../componets/CustomButtom.dart';
-import '../../servicios/citasServices.dart';  // Importa tu servicio
+import '../../servicios/citasServices.dart'; // Importa tu servicio
 
 class Citas extends StatefulWidget {
   const Citas({super.key});
@@ -27,7 +27,8 @@ class _Citas extends State<Citas> {
   // Método para obtener citas desde el servicio
   Future<void> _fetchCitas() async {
     try {
-      List<Map<String, dynamic>>? citasFromApi = await CitasServices().listarCitas(context: context);
+      List<Map<String, dynamic>>? citasFromApi =
+          await CitasServices().listarCitas(context: context);
 
       if (citasFromApi != null) {
         setState(() {
@@ -71,15 +72,20 @@ class _Citas extends State<Citas> {
         },
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator()) // Indicador de carga mientras obtenemos datos
+          ? const Center(
+              child:
+                  CircularProgressIndicator()) // Indicador de carga mientras obtenemos datos
           : SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Barra de búsqueda
+                        // Espacio entre la búsqueda y el botón
                         SizedBox(
                           width: 120,
                           height: 40,
@@ -99,18 +105,18 @@ class _Citas extends State<Citas> {
                             },
                           ),
                         ),
-                        const SizedBox(width: 16),
-                        // Barra de búsqueda
-                        Expanded(
-                          child: TextField(
-                            controller: _searchController,
-                            decoration: InputDecoration(
-                              labelText: 'Buscar por paciente, fecha, hora...',
-                              prefixIcon: Icon(Icons.search),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            labelText: 'Buscar por paciente, fecha, hora...',
+                            prefixIcon: const Icon(Icons.search),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
                             ),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 16), // Ajusta el padding vertical
                           ),
                         ),
                       ],
@@ -156,7 +162,8 @@ class _Citas extends State<Citas> {
                         ],
                         rows: filteredCitas.map((cita) {
                           DateTime fecha = DateTime.parse(cita['fecha']);
-                           String formattedDate = '${fecha.year}-${fecha.month.toString().padLeft(2, '0')}-${fecha.day.toString().padLeft(2, '0')}';
+                          String formattedDate =
+                              '${fecha.year}-${fecha.month.toString().padLeft(2, '0')}-${fecha.day.toString().padLeft(2, '0')}';
                           return DataRow(
                             cells: <DataCell>[
                               DataCell(Text(formattedDate)),
@@ -179,13 +186,15 @@ class _Citas extends State<Citas> {
                         onPressed: () {
                           // Sin funcionalidad por ahora
                         },
-                        icon: Icon(Icons.picture_as_pdf, color: Colors.white),
-                        label: Text(
+                        icon: const Icon(Icons.picture_as_pdf,
+                            color: Colors.white),
+                        label: const Text(
                           'Generar Reporte',
                           style: TextStyle(fontSize: 16, color: Colors.white),
                         ),
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white, backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.red,
                         ),
                       ),
                     ),

@@ -1,3 +1,4 @@
+import 'package:OptiVision/componets/RegisterInput.dart';
 import 'package:flutter/material.dart';
 import '../../componets/CustomAppBar.dart';
 import '../../componets/CustomButtom.dart';
@@ -20,7 +21,8 @@ class _CitasRegisterState extends State<CitasRegister> {
   final TextEditingController _horaController = TextEditingController();
   final TextEditingController _comentariosController = TextEditingController();
 
-  final PaymentServices _paymentServices = PaymentServices(); // Inicializamos el servicio de pago
+  final PaymentServices _paymentServices =
+      PaymentServices(); // Inicializamos el servicio de pago
 
   String formatFecha(String fecha) {
     List<String> partes = fecha.split('/');
@@ -34,7 +36,8 @@ class _CitasRegisterState extends State<CitasRegister> {
   Future<void> _handlePaymentAndCita() async {
     try {
       // 1. Crear el PaymentIntent en tu backend
-      String clientSecret = await _paymentServices.createPaymentIntent(5000, 'usd');
+      String clientSecret =
+          await _paymentServices.createPaymentIntent(5000, 'usd');
 
       // 2. Presentar la hoja de pago
       await _paymentServices.presentPaymentSheet(clientSecret);
@@ -55,7 +58,9 @@ class _CitasRegisterState extends State<CitasRegister> {
         // Redirigir a la pantalla de citas y mostrar un mensaje de éxito
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const Citas()), // Redirige a la pantalla de Citas
+          MaterialPageRoute(
+              builder: (context) =>
+                  const Citas()), // Redirige a la pantalla de Citas
         );
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Cita registrada exitosamente.")),
@@ -63,7 +68,9 @@ class _CitasRegisterState extends State<CitasRegister> {
       } else {
         // Mostrar mensaje de error si la cita no se pudo registrar
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("No se pudo registrar la cita. Inténtalo de nuevo.")),
+          const SnackBar(
+              content:
+                  Text("No se pudo registrar la cita. Inténtalo de nuevo.")),
         );
       }
     } catch (e) {
@@ -91,43 +98,58 @@ class _CitasRegisterState extends State<CitasRegister> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildInputField(
-                controller: _usuarioController,
-                labelText: 'Id del Usuario (Paciente)',
+              const Text(
+                'Id del Usuario',
+                style: TextStyle(fontSize: 14),
+              ),
+              RegisterInput(
+                nombreController: _usuarioController,
                 hintText: 'Ingrese el Id del Usuario (Paciente)',
               ),
               const SizedBox(height: 16),
-              _buildInputField(
-                controller: _especialistaController,
-                labelText: 'Id del Especialista',
+              const Text(
+                'Id del Especialista',
+                style: TextStyle(fontSize: 14),
+              ),
+              RegisterInput(
+                nombreController: _especialistaController,
                 hintText: 'Ingrese el Id del especialista',
               ),
               const SizedBox(height: 16),
-              _buildInputField(
-                controller: _servicioController,
-                labelText: 'Id del Servicio',
+              const Text(
+                'Id del Servicio',
+                style: TextStyle(fontSize: 14),
+              ),
+              RegisterInput(
+                nombreController: _servicioController,
                 hintText: 'Ingrese el Id del servicio',
               ),
               const SizedBox(height: 16),
-              _buildInputField(
-                controller: _fechaController,
-                labelText: 'Fecha',
+              const Text(
+                'Fecha',
+                style: TextStyle(fontSize: 14),
+              ),
+              RegisterInput(
+                nombreController: _fechaController,
                 hintText: 'DD/MM/YYYY',
-                keyboardType: TextInputType.datetime,
               ),
               const SizedBox(height: 16),
-              _buildInputField(
-                controller: _horaController,
-                labelText: 'Hora',
+              const Text(
+                'Hora',
+                style: TextStyle(fontSize: 14),
+              ),
+              RegisterInput(
+                nombreController: _horaController,
                 hintText: 'HH:MM',
-                keyboardType: TextInputType.datetime,
               ),
               const SizedBox(height: 16),
-              _buildInputField(
-                controller: _comentariosController,
-                labelText: 'Comentarios',
+              const Text(
+                'Comentarios',
+                style: TextStyle(fontSize: 14),
+              ),
+              RegisterInput(
+                nombreController: _comentariosController,
                 hintText: 'Ingrese detalles de la Consulta que Realizará',
-                maxLines: 3,
               ),
               const SizedBox(height: 20),
               SizedBox(
@@ -139,7 +161,8 @@ class _CitasRegisterState extends State<CitasRegister> {
                   icon: Icons.save,
                   text: 'Registrar Cita',
                   fontSize: 16,
-                  onPressed: _handlePaymentAndCita, // Ahora el botón manejará el pago y la creación de la cita
+                  onPressed:
+                      _handlePaymentAndCita, // Ahora el botón manejará el pago y la creación de la cita
                 ),
               ),
             ],
