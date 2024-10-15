@@ -92,5 +92,45 @@ class CitasServices {
       return false;
     }
   }
+  // Nuevo método para listar especialistas con horarios
+ Future<List<Map<String, dynamic>>> listarEspecialistasConHorarios() async {
+  final response = await http.get(Uri.parse('${Constantes.uri}/programaciones_medical/listar'));
+
+  if (response.statusCode == 200) {
+    List<dynamic> especialistasList = jsonDecode(response.body);
+
+    // Mapeo de la respuesta para ajustarlo al formato requerido
+    return especialistasList.map((especialista) {
+      return {
+        'id': especialista['id'],
+        'nombre': especialista['nombre'],
+        'apellido_paterno': especialista['apellido_paterno'],
+        'apellido_materno': especialista['apellido_materno'],
+        'horarios': especialista['horarios'] != null
+            ? especialista['horarios'].map((horario) {
+                return {
+                  'fechas': List<String>.from(horario['fechas']),
+                  'servicio': {
+                    'id': horario['servicio']['id'],
+                    'nombre': horario['servicio']['nombre'],
+                    'precio': horario['servicio']['precio'],
+                    'descripcion': horario['servicio']['descripcion'],
+                    'especialidad': {
+                      'id': horario['servicio']['especialidad']['id'],
+                      'nombre': horario['servicio']['especialidad']['nombre'],
+                      'tiempo_estimado': horario['servicio']['especialidad']['tiempo_estimado'],
+                    },
+                  },
+                  'horaFinal': horario['horaFinal'],
+                  'horaInicio': horario['horaInicio'],
+                };
+              }).toList()
+            : [],
+      };
+    }).toList();
+  } else {
+    throw Exception('Failed to load specialists');
+  }
+}
 
 }
