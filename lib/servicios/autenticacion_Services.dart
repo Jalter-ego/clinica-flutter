@@ -144,4 +144,30 @@ class AutenticacionServices {
       return null;
     }
   }
+  Future<List<Map<String, dynamic>>?> obtenerUsuarios(BuildContext context) async {
+    try {
+      final response = await http.get(
+        Uri.parse('${Constantes.uri}/usuarios/obtenerUsuarios'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Decodificar el cuerpo de la respuesta como una lista de mapas
+        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${response.reasonPhrase}')),
+        );
+        return null;
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+      return null;
+    }
+  }
+
 }
