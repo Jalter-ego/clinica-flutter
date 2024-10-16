@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../componets/CustomAppBar.dart';  // Importar el AppBar personalizado
-import '../componets/CustomButtom.dart';  // Importar el botón personalizado
-import '../servicios/citasServices.dart';  // Importar tu servicio para obtener las citas
+import '../componets/CustomAppBar.dart';
+import '../componets/CustomButtom.dart';
+import '../servicios/citasServices.dart';
 
 class Cupos extends StatefulWidget {
   const Cupos({Key? key}) : super(key: key);
@@ -35,8 +35,8 @@ class _CuposState extends State<Cupos> {
       cupos.add({
         'hora_inicio': '${actual.hour.toString().padLeft(2, '0')}:${actual.minute.toString().padLeft(2, '0')}',
         'hora_fin': '${fin.hour.toString().padLeft(2, '0')}:${fin.minute.toString().padLeft(2, '0')}',
-        'paciente': '',  // Se inicializa vacío
-        'estado': ''  // El estado lo determinamos más adelante
+        'paciente': '',
+        'estado': ''
       });
       actual = fin;
     }
@@ -50,21 +50,85 @@ class _CuposState extends State<Cupos> {
 
       if (citasFromApi != null) {
         setState(() {
-          citas = citasFromApi; // Guardamos las citas obtenidas
-          isLoading = false; // Dejamos de cargar
+          citas = citasFromApi;
+          isLoading = false;
         });
       }
     } catch (e) {
       setState(() {
-        isLoading = false; // Si hay error, dejamos de cargar
+        isLoading = false;
       });
     }
+  }
+
+  void _showModalRegistroCita(String horaInicio, String horaFin, String fecha) {
+    final TextEditingController _idUsuarioController = TextEditingController();
+    final TextEditingController _idEspecialistaController = TextEditingController();
+    final TextEditingController _idServicioController = TextEditingController();
+    final TextEditingController _comentariosController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Registrar Cita'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: _idUsuarioController,
+                  decoration: InputDecoration(labelText: 'ID Usuario'),
+                ),
+                TextField(
+                  controller: _idEspecialistaController,
+                  decoration: InputDecoration(labelText: 'ID Especialista'),
+                ),
+                TextField(
+                  controller: _idServicioController,
+                  decoration: InputDecoration(labelText: 'ID Servicio'),
+                ),
+                TextField(
+                  enabled: false,
+                  decoration: InputDecoration(labelText: fecha, hintText: fecha),
+                ),
+                TextField(
+                  enabled: false,
+                  decoration: InputDecoration(labelText: horaInicio, hintText: horaInicio),
+                ),
+                TextField(
+                  controller: _comentariosController,
+                  decoration: InputDecoration(labelText: 'Comentarios'),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Aquí puedes llamar a la función para registrar la cita
+                // Puedes acceder a los datos de los controladores
+                // y hacer la lógica necesaria para registrar la cita
+                Navigator.of(context).pop(); // Cierra el modal
+              },
+              child: Text('Registrar Cita'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cierra el modal
+              },
+              child: Text('Cancelar'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   void initState() {
     super.initState();
-    _fetchCitas(); // Obtenemos las citas al iniciar la pantalla
+    _fetchCitas();
   }
 
   @override
@@ -73,7 +137,7 @@ class _CuposState extends State<Cupos> {
       appBar: CustomAppBar(
         title1: 'Detalles de',
         title2: 'Cupos',
-        icon: Icons.arrow_back_ios_rounded,  // Puedes personalizar este ícono
+        icon: Icons.arrow_back_ios_rounded,
         onIconPressed: () {
           Navigator.of(context).pop();
         },
@@ -87,27 +151,26 @@ class _CuposState extends State<Cupos> {
             return const Center(child: Text('Error al cargar los datos.'));
           } else if (snapshot.hasData) {
             final datos = snapshot.data!;
-            // Convertir las horas de los datos en DateTime
             DateTime horaInicio = DateTime.parse('${datos['fecha']} ${datos['hora_inicio']}');
             DateTime horaFin = DateTime.parse('${datos['fecha']} ${datos['hora_fin']}');
             int tiempoEstimado = 20;
             
             List<Map<String, String>> cupos = generarCupos(horaInicio, horaFin, tiempoEstimado);
-              for (var cupo in cupos) {
-                var citaCoincidente = citas.firstWhere(
-                  (cita) =>
-                      cita['fecha'].split('T')[0] == datos['fecha']  &&
-                      cita['hora'].substring(0, 5) == cupo['hora_inicio'] &&
-                      cita['especialista'] == datos['nombre'],
-                  orElse: () => {}, 
-                );
+            for (var cupo in cupos) {
+              var citaCoincidente = citas.firstWhere(
+                (cita) =>
+                    cita['fecha'].split('T')[0] == datos['fecha']  &&
+                    cita['hora'].substring(0, 5) == cupo['hora_inicio'] &&
+                    cita['especialista'] == datos['nombre'],
+                orElse: () => {},
+              );
 
-                if (citaCoincidente.isNotEmpty) {
-                  cupo['paciente'] = citaCoincidente['paciente'] ?? '';
-                  cupo['estado'] = 'Reservado';
-                } else {
-                  cupo['estado'] = 'Libre';
-                }
+              if (citaCoincidente.isNotEmpty) {
+                cupo['paciente'] = citaCoincidente['paciente'] ?? '';
+                cupo['estado'] = 'Reservado';
+              } else {
+                cupo['estado'] = 'Libre';
+              }
             }
 
             return SingleChildScrollView(
@@ -141,7 +204,6 @@ class _CuposState extends State<Cupos> {
                       style: const TextStyle(fontSize: 16),
                     ),
                     const SizedBox(height: 20),
-                    // Envuelve la tabla en un scroll horizontal para evitar overflow
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: DataTable(
@@ -155,13 +217,19 @@ class _CuposState extends State<Cupos> {
                           Color estadoColor = (cupo['estado'] == 'Libre') ? Colors.green : Colors.red;
 
                           return DataRow(cells: [
-                            DataCell(Text(cupo['hora_inicio']!)),
+                            DataCell(
+                              Text(cupo['hora_inicio']!),
+                              onTap: () {
+                                // Abre el modal al presionar la celda
+                                _showModalRegistroCita(cupo['hora_inicio']!, cupo['hora_fin']!, datos['fecha']!);
+                              },
+                            ),
                             DataCell(Text(cupo['hora_fin']!)),
                             DataCell(Text(cupo['paciente']!)),
                             DataCell(
                               Text(
                                 cupo['estado']!,
-                                style: TextStyle(color: estadoColor),  // Aplica el color dinámico
+                                style: TextStyle(color: estadoColor),
                               ),
                             ),
                           ]);
