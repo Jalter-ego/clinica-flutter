@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:OptiVision/servicios/programingMedicalsServices.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../componets/CustomAppBar.dart';
@@ -61,12 +64,17 @@ class _CuposState extends State<Cupos> {
     }
   }
 
-  void _showModalRegistroCita(String horaInicio, String horaFin, String fecha) {
+  Future<void> _showModalRegistroCita(String horaInicio, String horaFin, String fecha) async {
     final TextEditingController _idUsuarioController = TextEditingController();
     final TextEditingController _idEspecialistaController = TextEditingController();
     final TextEditingController _idServicioController = TextEditingController();
     final TextEditingController _comentariosController = TextEditingController();
-
+     final SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? nombreServicio = prefs.getString('servicio');
+      String? nombreEspecialista= prefs.getString('nombre');
+  // Obtener el ID del servicio usando la función de ProgramingMedicalsServices
+     int? idServicio = await ProgramingMedicalsServices.getServiceIdByName(nombreServicio ?? '');
+     int? idEspecialista = await ProgramingMedicalsServices.getSpecialistIdByName(nombreEspecialista ?? '');
     showDialog(
       context: context,
       builder: (context) {
@@ -81,20 +89,20 @@ class _CuposState extends State<Cupos> {
                   decoration: InputDecoration(labelText: 'ID Usuario'),
                 ),
                 TextField(
-                  controller: _idEspecialistaController,
-                  decoration: InputDecoration(labelText: 'ID Especialista'),
-                ),
-                TextField(
-                  controller: _idServicioController,
-                  decoration: InputDecoration(labelText: 'ID Servicio'),
+                  enabled:false,
+                  decoration: InputDecoration(labelText: idEspecialista.toString()),
                 ),
                 TextField(
                   enabled: false,
-                  decoration: InputDecoration(labelText: fecha, hintText: fecha),
+                  decoration: InputDecoration(labelText: idServicio.toString()),
                 ),
                 TextField(
                   enabled: false,
-                  decoration: InputDecoration(labelText: horaInicio, hintText: horaInicio),
+                  decoration: InputDecoration(labelText: fecha),
+                ),
+                TextField(
+                  enabled: false,
+                  decoration: InputDecoration(labelText: horaInicio),
                 ),
                 TextField(
                   controller: _comentariosController,
@@ -104,22 +112,33 @@ class _CuposState extends State<Cupos> {
             ),
           ),
           actions: [
-            TextButton(
-              onPressed: () {
-                // Aquí puedes llamar a la función para registrar la cita
-                // Puedes acceder a los datos de los controladores
-                // y hacer la lógica necesaria para registrar la cita
-                Navigator.of(context).pop(); // Cierra el modal
-              },
-              child: Text('Registrar Cita'),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.green, // Color de fondo verde
+                borderRadius: BorderRadius.circular(8), // Bordes redondeados
+              ),
+              child: TextButton(
+                onPressed: () {
+                  // Aquí puedes llamar a la función para registrar la cita
+                  Navigator.of(context).pop(); // Cierra el modal
+                },
+                child: const Text('Registrar Cita', style: TextStyle(color: Colors.white)), // Texto en blanco
+              ),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Cierra el modal
-              },
-              child: Text('Cancelar'),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.red, // Color de fondo rojo
+                borderRadius: BorderRadius.circular(8), // Bordes redondeados
+              ),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Cierra el modal
+                },
+                child: const Text('Cancelar', style: TextStyle(color: Colors.white)), // Texto en blanco
+              ),
             ),
           ],
+
         );
       },
     );

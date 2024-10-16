@@ -129,18 +129,24 @@ class _CitasRegisterState extends State<CitasRegister> {
                 'Fecha',
                 style: TextStyle(fontSize: 14),
               ),
-              RegisterInput(
-                nombreController: _fechaController,
+              const SizedBox(height: 16),
+              _buildInputField(
+                controller: _fechaController,
+                labelText: '',
                 hintText: 'DD/MM/YYYY',
+                keyboardType: TextInputType.datetime,
               ),
               const SizedBox(height: 16),
               const Text(
                 'Hora',
                 style: TextStyle(fontSize: 14),
               ),
-              RegisterInput(
-                nombreController: _horaController,
+              const SizedBox(height: 16),
+              _buildInputField(
+                controller: _horaController,
+                labelText: '',
                 hintText: 'HH:MM',
+                keyboardType: TextInputType.datetime,
               ),
               const SizedBox(height: 16),
               const Text(
