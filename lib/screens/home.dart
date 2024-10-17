@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
           iconTheme: const IconThemeData(
             color: Colors.white,
           )),
-      drawer: const AppDrawer(),
+      drawer: userProvider.rol != 'cliente' ? const AppDrawer() : null,
       body: Stack(
         children: [
           CustomPaint(
@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 const Text(
                   'Contacto:',
                   style: TextStyle(
@@ -122,6 +122,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 // Sección de servicios
+                const SizedBox(
+                  height: 20,
+                ),
                 const Text(
                   'Nuestros Servicios:',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
