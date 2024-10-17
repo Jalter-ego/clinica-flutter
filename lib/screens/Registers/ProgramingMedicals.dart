@@ -146,7 +146,7 @@ class _ProgramingMedicals extends State<ProgramingMedicals> {
                       padding: const EdgeInsets.all(16.0),
                       child: Container(
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
+                          border: Border.all(color: Colors.black12),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: DataTable(
@@ -175,15 +175,10 @@ class _ProgramingMedicals extends State<ProgramingMedicals> {
                             ),
                           ],
                           rows: specialists.map((specialist) {
+                            bool isSelected =
+                                selectedSpecialistId == specialist['id'];
+
                             return DataRow(
-                              selected:
-                                  selectedSpecialistId == specialist['id'],
-                              onSelectChanged: (selected) {
-                                setState(() {
-                                  selectedSpecialistId =
-                                      selected! ? specialist['id'] : null;
-                                });
-                              },
                               cells: <DataCell>[
                                 DataCell(
                                   SizedBox(
@@ -195,17 +190,29 @@ class _ProgramingMedicals extends State<ProgramingMedicals> {
                                   ),
                                 ),
                                 DataCell(
-                                  SizedBox(
-                                    width: 150,
-                                    child: Text(
-                                      (specialist['apellido_paterno'] +
-                                          ' ' +
-                                          specialist['apellido_materno'] +
-                                          ' ' +
-                                          specialist['nombre']),
-                                      style: const TextStyle(fontSize: 12),
-                                      overflow: TextOverflow.clip,
-                                      softWrap: true,
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        selectedSpecialistId = isSelected
+                                            ? null
+                                            : specialist['id'];
+                                      });
+                                    },
+                                    child: Container(
+                                      color: isSelected
+                                          ? Colors.green[200]
+                                          : Colors.transparent,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        (specialist['apellido_paterno'] +
+                                            ' ' +
+                                            specialist['apellido_materno'] +
+                                            ' ' +
+                                            specialist['nombre']),
+                                        style: const TextStyle(fontSize: 12),
+                                        overflow: TextOverflow.clip,
+                                        softWrap: true,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -217,32 +224,38 @@ class _ProgramingMedicals extends State<ProgramingMedicals> {
                     ),
                     const SizedBox(height: 10),
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: TableCalendar(
-                        firstDay: DateTime.utc(2020, 1, 1),
-                        lastDay: DateTime.utc(2030, 12, 31),
-                        focusedDay: DateTime.now(),
-                        locale: 'es_ES',
-                        selectedDayPredicate: (day) {
-                          return selectedDates.contains(day);
-                        },
-                        onDaySelected: (selectedDay, focusedDay) {
-                          setState(() {
-                            if (selectedDates.contains(selectedDay)) {
-                              selectedDates.remove(selectedDay);
-                            } else {
-                              selectedDates.add(selectedDay);
-                            }
-                          });
-                        },
-                        calendarStyle: const CalendarStyle(
-                          todayDecoration: BoxDecoration(
-                            color: Colors.blue,
-                            shape: BoxShape.circle,
-                          ),
-                          selectedDecoration: BoxDecoration(
-                            color: Colors.green,
-                            shape: BoxShape.circle,
+                      padding: const EdgeInsets.all(12.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black12),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: TableCalendar(
+                          firstDay: DateTime.utc(2020, 1, 1),
+                          lastDay: DateTime.utc(2030, 12, 31),
+                          focusedDay: DateTime.now(),
+                          locale: 'es_ES',
+                          selectedDayPredicate: (day) {
+                            return selectedDates.contains(day);
+                          },
+                          onDaySelected: (selectedDay, focusedDay) {
+                            setState(() {
+                              if (selectedDates.contains(selectedDay)) {
+                                selectedDates.remove(selectedDay);
+                              } else {
+                                selectedDates.add(selectedDay);
+                              }
+                            });
+                          },
+                          calendarStyle: const CalendarStyle(
+                            todayDecoration: BoxDecoration(
+                              color: Colors.blue,
+                              shape: BoxShape.circle,
+                            ),
+                            selectedDecoration: BoxDecoration(
+                              color: Colors.green,
+                              shape: BoxShape.circle,
+                            ),
                           ),
                         ),
                       ),

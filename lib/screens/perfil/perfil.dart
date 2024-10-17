@@ -78,7 +78,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                       side: BorderSide.none,
                       shape: const StadiumBorder()),
                   child: const Text(
-                    'Editar Perfil',
+                    'Informacion Personal',
                     style: TextStyle(
                         fontSize: 14,
                         color: Colors.white,

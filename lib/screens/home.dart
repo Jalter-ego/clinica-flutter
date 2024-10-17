@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/proveedor_usuario.dart';
+import '../utils/assets.dart';
 import 'drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,6 +30,24 @@ class _HomeScreenState extends State<HomeScreen> {
     final userProvider = Provider.of<UserProvider>(context);
     final saludo = obtenerSaludo();
     final bienvenidaText = '$saludo ${userProvider.nombre ?? 'Usuario'}';
+
+    final List<Map<String, String>> servicios = [
+      {
+        'imagePath': Assets.home1,
+        'title': 'Cirugía LASIK',
+        'description': 'Corrección visual mediante cirugía láser avanzada.',
+      },
+      {
+        'imagePath': Assets.home2,
+        'title': 'Diagnóstico completo',
+        'description': 'Exámenes de visión precisos y personalizados para ti.',
+      },
+      {
+        'imagePath': Assets.home3,
+        'title': 'Tratamiento de cataratas',
+        'description': 'Recupera tu visión con nuestras técnicas quirúrgicas.',
+      },
+    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -57,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.white)),
                 const SizedBox(height: 20),
                 // Accesos rápidos
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -80,17 +100,47 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 60),
+                const SizedBox(height: 30),
                 const Text(
                   'Contacto:',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.phone),
-                  title: const Text('Llamar a la clínica'),
+                  leading: const Icon(
+                    Icons.phone,
+                    color: Colors.white,
+                  ),
+                  title: const Text(
+                    'Llamar a la clínica',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   onTap: () {
                     // Acción para hacer la llamada
                   },
+                ),
+                // Sección de servicios
+                const Text(
+                  'Nuestros Servicios:',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 340,
+                  child: PageView.builder(
+                    itemCount: servicios.length,
+                    itemBuilder: (context, index) {
+                      final servicio = servicios[index];
+                      return _buildServiceCard(
+                        context,
+                        imagePath: servicio['imagePath']!,
+                        title: servicio['title']!,
+                        description: servicio['description']!,
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
@@ -99,6 +149,47 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+Widget _buildServiceCard(BuildContext context,
+    {required String imagePath,
+    required String title,
+    required String description}) {
+  return Card(
+    margin: const EdgeInsets.symmetric(vertical: 10),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(8.0)),
+          child: Image.asset(
+            imagePath,
+            fit: BoxFit.cover,
+            height: 220,
+            width: double.infinity,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            title,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Text(
+            description,
+            style: const TextStyle(fontSize: 14),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 Widget _buildQuickAction(BuildContext context,
@@ -127,15 +218,20 @@ class CirclePainter extends CustomPainter {
       ..color = const Color(0xFF0057E5)
       ..style = PaintingStyle.fill;
 
-    canvas.drawArc(
-      Rect.fromCircle(
-          center: Offset(size.width / 2, -size.height / 1.3),
-          radius: size.height * 1.5),
-      0.0, // Ángulo inicial
-      3.14, // Ángulo barrido (radianes para medio círculo)
-      true,
-      paint,
+    final rRect = RRect.fromLTRBAndCorners(
+      0, // Izquierda
+      0, // Arriba
+      size.width, // Derecha
+      size.height, // Abajo
+      topLeft: Radius.zero, // Esquinas superiores rectas
+      topRight: Radius.zero, // Esquinas superiores rectas
+      bottomLeft:
+          const Radius.circular(30.0), // Esquina inferior izquierda redondeada
+      bottomRight:
+          const Radius.circular(30.0), // Esquina inferior derecha redondeada
     );
+
+    canvas.drawRRect(rRect, paint);
   }
 
   @override
