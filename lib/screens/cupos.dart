@@ -199,7 +199,13 @@ class _CuposState extends State<Cupos> {
       },
     );
   }
-
+  String cortarHastaPrimerEspacio(String input) {
+  int index = input.indexOf(' '); // Encuentra el índice del primer espacio
+  if (index == -1) {
+    return input; // Si no hay espacios, devuelve el string completo
+  }
+  return input.substring(0, index); // Devuelve la parte antes del primer espacio
+}
   @override
   void initState() {
     super.initState();
@@ -236,7 +242,7 @@ class _CuposState extends State<Cupos> {
                 (cita) =>
                     cita['fecha'].split('T')[0] == datos['fecha']  &&
                     cita['hora'].substring(0, 5) == cupo['hora_inicio'] &&
-                    cita['especialista'] == datos['nombre'],
+                    cortarHastaPrimerEspacio(cita['especialista']) == datos['nombre'],
                 orElse: () => {},
               );
 

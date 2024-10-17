@@ -5,9 +5,11 @@ import '../../componets/CustomButtom.dart';
 import '../../servicios/citasServices.dart'; // Importa tu servicio
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
-
+import 'package:file_picker/file_picker.dart';
 class Citas extends StatefulWidget {
   const Citas({super.key});
 
@@ -48,11 +50,11 @@ class _Citas extends State<Citas> {
       });
     }
   }
-  
+
+
   Future<void> _generatePDF() async {
   final pdf = pw.Document();
-  
-  // Añadir contenido al PDF
+
   pdf.addPage(
     pw.Page(
       build: (pw.Context context) {
@@ -61,7 +63,7 @@ class _Citas extends State<Citas> {
           children: [
             pw.Text('Reporte de Citas', style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
             pw.SizedBox(height: 16),
-            pw.TableHelper.fromTextArray(
+            pw.Table.fromTextArray(
               headers: ['Fecha', 'Hora', 'Paciente', 'Especialista'],
               data: filteredCitas.map((cita) {
                 return [
@@ -79,13 +81,14 @@ class _Citas extends State<Citas> {
   );
 
   try {
-    // Guardar el PDF en el dispositivo
-    final directory = await getApplicationDocumentsDirectory();
-    final file = File('${directory.path}/reporte_citas.pdf');
+    final directory = await getExternalStorageDirectory();
+    final filePath = path.join(directory!.path, 'reporte_citas.pdf');
+    final file = File(filePath);
+
     await file.writeAsBytes(await pdf.save());
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('PDF generado en ${file.path}')),
+      SnackBar(content: Text('PDF generado en $filePath')),
     );
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -93,8 +96,6 @@ class _Citas extends State<Citas> {
     );
   }
 }
-
-
 
   void _filterCitas() {
     setState(() {
