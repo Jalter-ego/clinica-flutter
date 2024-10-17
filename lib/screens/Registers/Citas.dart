@@ -3,6 +3,10 @@ import 'package:OptiVision/screens/Registers/CitasRegister.dart';
 import '../../componets/CustomAppBar.dart';
 import '../../componets/CustomButtom.dart';
 import '../../servicios/citasServices.dart'; // Importa tu servicio
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 class Citas extends StatefulWidget {
   const Citas({super.key});
@@ -24,6 +28,7 @@ class _Citas extends State<Citas> {
     _searchController.addListener(_filterCitas);
   }
 
+  
   // Método para obtener citas desde el servicio
   Future<void> _fetchCitas() async {
     try {
@@ -43,6 +48,53 @@ class _Citas extends State<Citas> {
       });
     }
   }
+  
+  Future<void> _generatePDF() async {
+  final pdf = pw.Document();
+  
+  // Añadir contenido al PDF
+  pdf.addPage(
+    pw.Page(
+      build: (pw.Context context) {
+        return pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            pw.Text('Reporte de Citas', style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
+            pw.SizedBox(height: 16),
+            pw.TableHelper.fromTextArray(
+              headers: ['Fecha', 'Hora', 'Paciente', 'Especialista'],
+              data: filteredCitas.map((cita) {
+                return [
+                  cita['fecha'],
+                  cita['hora'],
+                  cita['paciente'],
+                  cita['especialista'],
+                ];
+              }).toList(),
+            ),
+          ],
+        );
+      },
+    ),
+  );
+
+  try {
+    // Guardar el PDF en el dispositivo
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/reporte_citas.pdf');
+    await file.writeAsBytes(await pdf.save());
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('PDF generado en ${file.path}')),
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error al generar el PDF: $e')),
+    );
+  }
+}
+
+
 
   void _filterCitas() {
     setState(() {
@@ -183,8 +235,8 @@ class _Citas extends State<Citas> {
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton.icon(
-                        onPressed: () {
-                          // Sin funcionalidad por ahora
+                        onPressed: () async {
+                           await _generatePDF(); 
                         },
                         icon: const Icon(Icons.picture_as_pdf,
                             color: Colors.white),
