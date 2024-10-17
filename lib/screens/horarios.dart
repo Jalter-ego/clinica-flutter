@@ -68,9 +68,6 @@ class _HorariosState extends State<Horarios> {
     await prefs.setString('hora_inicio', datosFila['hora_inicio']);
     await prefs.setString('hora_fin', datosFila['hora_fin']);
     await prefs.setString('fecha', _diaController.text);
-
-      print('Fecha guardada: ${_diaController.text}'); // Para verificar si se guarda
-
   }
 
   // Función para mostrar el calendario y seleccionar la fecha
@@ -90,12 +87,11 @@ class _HorariosState extends State<Horarios> {
     }
   }
 
-  // Navegar a la pantalla de cupos
   void _irACupos(Map<String, dynamic> datosFila) async {
     await _guardarDatosEnLocal(datosFila); // Guardar datos de la fila en SharedPreferences
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Cupos()), // Redirigir a la pantalla de cupos
+      MaterialPageRoute(builder: (context) => Cupos()),
     );
   }
 

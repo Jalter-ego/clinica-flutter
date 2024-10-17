@@ -34,7 +34,7 @@ class ProgramingMedicalsServices {
     }
   }
 
- Future<List<Map<String, dynamic>>> getSpecialists() async {
+  static Future<List<Map<String, dynamic>>> getSpecialists() async {
   final response =
       await http.get(Uri.parse('${Constantes.uri}/especialistas/listar'));
 
@@ -62,9 +62,24 @@ class ProgramingMedicalsServices {
     throw Exception('Failed to load specialists');
   }
 }
-
-
-  Future<List<Map<String, dynamic>>> getServices() async {
+  
+  static Future<int?> getSpecialistIdByName(String specialistName) async {
+    try {
+      List<Map<String, dynamic>> specialists = await getSpecialists();
+      
+      // Buscar el especialista por nombre
+      final specialist = specialists.firstWhere(
+        (s) => '${s['nombre']}'.toLowerCase() == specialistName.toLowerCase(),
+        orElse: () => {}, // Devuelve null si no se encuentra
+      );
+      return specialist?['id']; // Devuelve el ID o null si no se encontró
+    } catch (e) {
+      print('Error: $e'); // Manejo de errores
+      return null; // Retorna null en caso de error
+    }
+  }
+  
+   static Future<List<Map<String, dynamic>>> getServices() async {
     final response =
         await http.get(Uri.parse('${Constantes.uri}/servicios/listar'));
 
@@ -77,4 +92,22 @@ class ProgramingMedicalsServices {
       throw Exception('Failed to load service');
     }
   }
+
+  static Future<int?> getServiceIdByName(String serviceName) async {
+  try {
+    List<Map<String, dynamic>> services = await getServices();
+    
+    // Buscar el servicio por nombre
+    final service = services.firstWhere(
+      (s) => s['nombre'].toLowerCase() == serviceName.toLowerCase(),
+      orElse: () => {}, // Devuelve null si no se encuentra
+    );
+
+    return service?['id']; // Devuelve el ID o null si no se encontró
+  } catch (e) {
+    print('Error: $e'); // Manejo de errores
+    return null; // Retorna null en caso de error
+  }
+}
+
 }

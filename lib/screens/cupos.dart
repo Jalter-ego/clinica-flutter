@@ -1,8 +1,12 @@
+import 'dart:ffi';
+
+import 'package:OptiVision/screens/home.dart';
+import 'package:OptiVision/servicios/programingMedicalsServices.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../componets/CustomAppBar.dart';
-import '../componets/CustomButtom.dart';
 import '../servicios/citasServices.dart';
+import '../../servicios/paymentServices.dart';
 
 class Cupos extends StatefulWidget {
   const Cupos({Key? key}) : super(key: key);
@@ -15,6 +19,10 @@ class _CuposState extends State<Cupos> {
   List<Map<String, dynamic>> citas = [];
   bool isLoading = true;
 
+  final PaymentServices _paymentServices =
+      PaymentServices(); 
+
+
   Future<Map<String, String?>> _obtenerDatos() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return {
@@ -24,6 +32,51 @@ class _CuposState extends State<Cupos> {
       'hora_fin': prefs.getString('hora_fin'),
       'fecha': prefs.getString('fecha'),
     };
+  }
+
+
+   Future<void> _handlePaymentAndCita(int usuario, int especialista,int servicio, String fechap, String horap,String comentariop) async {
+    try {
+      // 1. Crear el PaymentIntent en tu backend
+      String clientSecret =
+          await _paymentServices.createPaymentIntent(5000, 'usd');
+      // 2. Presentar la hoja de pago
+      await _paymentServices.presentPaymentSheet(clientSecret);
+      // 3. Si el pago es exitoso, proceder con la creación de la cita
+      bool success = await CitasServices().crearCita(
+        context: context,
+        usuarioId: usuario,
+        especialistaId: especialista,
+        servicioId: servicio,
+        fecha: fechap,
+        hora: horap,
+        comentario: comentariop,
+      );
+      if (success) {
+        // Redirigir a la pantalla de citas y mostrar un mensaje de éxito
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  const Cupos()),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Cita registrada exitosamente.")),
+        );
+      } else {
+        // Mostrar mensaje de error si la cita no se pudo registrar
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content:
+                  Text("No se pudo registrar la cita. Inténtalo de nuevo.")),
+        );
+      }
+    } catch (e) {
+      // Manejar errores en el pago o la creación de la cita
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error en el proceso: $e")),
+      );
+    }
   }
 
   List<Map<String, String>> generarCupos(DateTime horaInicio, DateTime horaFin, int tiempoEstimado) {
@@ -61,12 +114,17 @@ class _CuposState extends State<Cupos> {
     }
   }
 
-  void _showModalRegistroCita(String horaInicio, String horaFin, String fecha) {
+  Future<void> _showModalRegistroCita(String horaInicio, String horaFin, String fecha) async {
     final TextEditingController _idUsuarioController = TextEditingController();
     final TextEditingController _idEspecialistaController = TextEditingController();
     final TextEditingController _idServicioController = TextEditingController();
     final TextEditingController _comentariosController = TextEditingController();
-
+     final SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? nombreServicio = prefs.getString('servicio');
+      String? nombreEspecialista= prefs.getString('nombre');
+  // Obtener el ID del servicio usando la función de ProgramingMedicalsServices
+     int? idServicio = await ProgramingMedicalsServices.getServiceIdByName(nombreServicio ?? '');
+     int? idEspecialista = await ProgramingMedicalsServices.getSpecialistIdByName(nombreEspecialista ?? '');
     showDialog(
       context: context,
       builder: (context) {
@@ -81,20 +139,20 @@ class _CuposState extends State<Cupos> {
                   decoration: InputDecoration(labelText: 'ID Usuario'),
                 ),
                 TextField(
-                  controller: _idEspecialistaController,
-                  decoration: InputDecoration(labelText: 'ID Especialista'),
-                ),
-                TextField(
-                  controller: _idServicioController,
-                  decoration: InputDecoration(labelText: 'ID Servicio'),
+                  enabled:false,
+                  decoration: InputDecoration(labelText: idEspecialista.toString()),
                 ),
                 TextField(
                   enabled: false,
-                  decoration: InputDecoration(labelText: fecha, hintText: fecha),
+                  decoration: InputDecoration(labelText: idServicio.toString()),
                 ),
                 TextField(
                   enabled: false,
-                  decoration: InputDecoration(labelText: horaInicio, hintText: horaInicio),
+                  decoration: InputDecoration(labelText: fecha),
+                ),
+                TextField(
+                  enabled: false,
+                  decoration: InputDecoration(labelText: horaInicio),
                 ),
                 TextField(
                   controller: _comentariosController,
@@ -104,22 +162,39 @@ class _CuposState extends State<Cupos> {
             ),
           ),
           actions: [
-            TextButton(
-              onPressed: () {
-                // Aquí puedes llamar a la función para registrar la cita
-                // Puedes acceder a los datos de los controladores
-                // y hacer la lógica necesaria para registrar la cita
-                Navigator.of(context).pop(); // Cierra el modal
-              },
-              child: Text('Registrar Cita'),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.green, // Color de fondo verde
+                borderRadius: BorderRadius.circular(8), // Bordes redondeados
+              ),
+              child: TextButton(
+                onPressed: () {
+                  _handlePaymentAndCita(
+                    _idUsuarioController.text.isNotEmpty ? int.parse(_idUsuarioController.text) : 0, // ID Usuario
+                    idEspecialista ?? 0, // ID Especialista
+                    idServicio ?? 0, // ID Servicio
+                    fecha, // fecha
+                    horaInicio, // horaInicio
+                    _comentariosController.text, // comentario
+                  );
+                },
+                child: const Text('Registrar Cita', style: TextStyle(color: Colors.white)), // Texto en blanco
+              ),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Cierra el modal
-              },
-              child: Text('Cancelar'),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.red, // Color de fondo rojo
+                borderRadius: BorderRadius.circular(8), // Bordes redondeados
+              ),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Cierra el modal
+                },
+                child: const Text('Cancelar', style: TextStyle(color: Colors.white)), // Texto en blanco
+              ),
             ),
           ],
+
         );
       },
     );
@@ -220,12 +295,19 @@ class _CuposState extends State<Cupos> {
                             DataCell(
                               Text(cupo['hora_inicio']!),
                               onTap: () {
-                                // Abre el modal al presionar la celda
                                 _showModalRegistroCita(cupo['hora_inicio']!, cupo['hora_fin']!, datos['fecha']!);
                               },
                             ),
-                            DataCell(Text(cupo['hora_fin']!)),
-                            DataCell(Text(cupo['paciente']!)),
+                            DataCell(Text(cupo['hora_fin']!),
+                              onTap: () {
+                                _showModalRegistroCita(cupo['hora_inicio']!, cupo['hora_fin']!, datos['fecha']!);
+                              },
+                            ),
+                            DataCell(Text(cupo['paciente']!),
+                              onTap: () {
+                                _showModalRegistroCita(cupo['hora_inicio']!, cupo['hora_fin']!, datos['fecha']!);
+                              },
+                            ),
                             DataCell(
                               Text(
                                 cupo['estado']!,

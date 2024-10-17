@@ -35,8 +35,8 @@ class _ProgramingMedicals extends State<ProgramingMedicals> {
   Future<void> _fetchPrograming() async {
     try {
       final fetchedSpecialists =
-          await ProgramingMedicalsServices().getSpecialists();
-      final fetchedServices = await ProgramingMedicalsServices().getServices();
+          await ProgramingMedicalsServices.getSpecialists();
+      final fetchedServices = await ProgramingMedicalsServices.getServices();
       setState(() {
         specialists = fetchedSpecialists;
         services = fetchedServices;
