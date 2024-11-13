@@ -6,7 +6,9 @@ import 'package:intl/intl.dart';
 
 import '../../componets/CustomAppBar.dart';
 import '../../componets/CustomButtom.dart';
+import '../../providers/proveedor_usuario.dart';
 import '../../providers/theme_Provider.dart';
+import '../../servicios/autenticacion_Services.dart';
 
 class ProgramingMedicals extends StatefulWidget {
   const ProgramingMedicals({super.key});
@@ -16,6 +18,9 @@ class ProgramingMedicals extends StatefulWidget {
 }
 
 class _ProgramingMedicals extends State<ProgramingMedicals> {
+  final AutenticacionServices authService = AutenticacionServices();
+  String ci = '';
+
   List<Map<String, dynamic>> specialists = []; //arreglo de especialistas
   List<Map<String, dynamic>> services = []; //arreglo de servicios
   bool isLoading = true;
@@ -79,6 +84,16 @@ class _ProgramingMedicals extends State<ProgramingMedicals> {
         fechas: fechas,
       );
 
+      final ip = await authService.obtenerIP();
+      await authService.insertarBitacora(
+        ip: ip,
+        ci: ci,
+        fecha: DateTime.now(),
+        hora: DateTime.now(),
+        accion: 'Se creo una nueva programacion',
+        tabla_afectada: 'programaciones_medico',
+      );
+
       selectedServiceId = null;
       selectedSpecialtyId = null;
       selectedStartTime = null;
@@ -99,6 +114,8 @@ class _ProgramingMedicals extends State<ProgramingMedicals> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    ci = userProvider.ci!;
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDark = themeProvider.isDarkMode;
     return Scaffold(

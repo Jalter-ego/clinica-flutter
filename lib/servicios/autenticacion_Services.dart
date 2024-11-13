@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:network_info_plus/network_info_plus.dart';
 
 import '../utils/constantes.dart';
 
@@ -144,7 +145,9 @@ class AutenticacionServices {
       return null;
     }
   }
-  Future<List<Map<String, dynamic>>?> obtenerUsuarios(BuildContext context) async {
+
+  Future<List<Map<String, dynamic>>?> obtenerUsuarios(
+      BuildContext context) async {
     try {
       final response = await http.get(
         Uri.parse('${Constantes.uri}/usuarios/obtenerUsuarios'),
@@ -170,4 +173,45 @@ class AutenticacionServices {
     }
   }
 
+  Future<void> insertarBitacora({
+    required String ip,
+    required String ci,
+    required DateTime fecha,
+    required DateTime hora,
+    required String accion,
+    required String tabla_afectada,
+  }) async {
+    final String formattedFecha =
+        '${fecha.year}-${fecha.month.toString().padLeft(2, '0')}-${fecha.day.toString().padLeft(2, '0')}';
+    final String formattedHora =
+        '${hora.hour.toString().padLeft(2, '0')}:${hora.minute.toString().padLeft(2, '0')}:${hora.second.toString().padLeft(2, '0')}';
+
+    final response = await http.post(
+      Uri.parse('${Constantes.uri}/bitacora/insertar'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'ip': ip,
+        'ci': ci,
+        'fecha': formattedFecha,
+        'hora': formattedHora,
+        'accion': accion,
+        'tabla_afectada': tabla_afectada,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('Bitacora insertada: ${response.body}');
+    } else {
+      print('Error al insertar la bitacora: ${response.body}');
+      throw Exception('Error al insertar la bitacora');
+    }
+  }
+
+  Future<String> obtenerIP() async {
+    final info = NetworkInfo();
+    var wifiIP = await info.getWifiIP();
+    return wifiIP ?? 'IP no disponible';
+  }
 }

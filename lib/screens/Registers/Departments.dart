@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../componets/CustomAppBar.dart';
 import '../../componets/CustomButtom.dart';
+import '../../providers/proveedor_usuario.dart';
+import '../../servicios/autenticacion_Services.dart';
 import '../../servicios/departmentsServices.dart';
 
 class Departaments extends StatefulWidget {
@@ -15,6 +17,9 @@ class Departaments extends StatefulWidget {
 class _Departaments extends State<Departaments> {
   List<Map<String, dynamic>> departments = [];
   final TextEditingController _departmentController = TextEditingController();
+  final AutenticacionServices authService = AutenticacionServices();
+
+  String ci = '';
   bool isLoading = true;
 
   @override
@@ -28,6 +33,15 @@ class _Departaments extends State<Departaments> {
     if (nombre.isNotEmpty) {
       try {
         await DepartmentsServices().createDepartment(nombre);
+        final ip = await authService.obtenerIP();
+        await authService.insertarBitacora(
+          ip: ip,
+          ci: ci,
+          fecha: DateTime.now(),
+          hora: DateTime.now(),
+          accion: 'Se creo un departamento',
+          tabla_afectada: 'departamentos',
+        );
         _departmentController.clear();
         _fetchDepartments();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -63,6 +77,15 @@ class _Departaments extends State<Departaments> {
   void _deleteDepartment(int departmentId) async {
     try {
       await DepartmentsServices().deleteDepartment(departmentId);
+      final ip = await authService.obtenerIP();
+      await authService.insertarBitacora(
+        ip: ip,
+        ci: ci,
+        fecha: DateTime.now(),
+        hora: DateTime.now(),
+        accion: 'Se elimino un departamento',
+        tabla_afectada: 'departamentos',
+      );
       setState(() {
         departments.removeWhere((dep) => dep['id'] == departmentId);
       });
@@ -75,8 +98,16 @@ class _Departaments extends State<Departaments> {
 
   Future<void> _editDepartment(int departmentId, String newName) async {
     try {
-      final response =
-          await DepartmentsServices().editDepartment(departmentId, newName);
+      await DepartmentsServices().editDepartment(departmentId, newName);
+      final ip = await authService.obtenerIP();
+      await authService.insertarBitacora(
+        ip: ip,
+        ci: ci,
+        fecha: DateTime.now(),
+        hora: DateTime.now(),
+        accion: 'Se edito un departamento',
+        tabla_afectada: 'departamentos',
+      );
       setState(() {
         final index =
             departments.indexWhere((dep) => dep['id'] == departmentId);
@@ -96,6 +127,8 @@ class _Departaments extends State<Departaments> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    ci = userProvider.ci!;
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDark = themeProvider.isDarkMode;
 
@@ -261,7 +294,7 @@ class _Departaments extends State<Departaments> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Descripción del departamento',
+                          'Nombre del departamento',
                           style: TextStyle(fontSize: 14),
                         ),
                         const SizedBox(height: 2),
@@ -275,7 +308,7 @@ class _Departaments extends State<Departaments> {
                           child: TextFormField(
                             controller: _departmentController,
                             decoration: const InputDecoration(
-                              hintText: 'Escribe la descripción aquí',
+                              hintText: 'Escribe el nombre aquí',
                               hintStyle: TextStyle(color: Colors.black26),
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.all(8.0),

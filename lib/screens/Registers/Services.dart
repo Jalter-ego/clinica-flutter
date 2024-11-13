@@ -1,9 +1,12 @@
 import 'package:OptiVision/servicios/serviciosEndPoints.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../componets/CustomAppBar.dart';
 import '../../componets/CustomButtom.dart';
 import '../../componets/RegisterInput.dart';
 import '../../componets/ModalDelete.dart';
+import '../../providers/proveedor_usuario.dart';
+import '../../servicios/autenticacion_Services.dart';
 
 class Services extends StatefulWidget {
   const Services({super.key});
@@ -18,7 +21,9 @@ class _Services extends State<Services> {
   List<Map<String, dynamic>> specialties = [];
   final TextEditingController _nombreController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final AutenticacionServices authService = AutenticacionServices();
   bool isLoading = true;
+  String ci = '';
 
   int? selectedDepartmentId;
   int? selectedSpecialtyId;
@@ -58,6 +63,17 @@ class _Services extends State<Services> {
       try {
         await ServicesEndPoints().createService(
             nombre, descripcion, selectedDepartmentId!, selectedSpecialtyId!);
+
+        final ip = await authService.obtenerIP();
+        await authService.insertarBitacora(
+          ip: ip,
+          ci: ci,
+          fecha: DateTime.now(),
+          hora: DateTime.now(),
+          accion: 'Se creo un nuevo servicio',
+          tabla_afectada: 'servicios',
+        );
+
         _nombreController.clear();
         _descriptionController.clear();
         selectedDepartmentId = null;
@@ -82,6 +98,15 @@ class _Services extends State<Services> {
       int serviceId, String newName, String newDescription) async {
     try {
       await ServicesEndPoints().editService(serviceId, newName, newDescription);
+      final ip = await authService.obtenerIP();
+      await authService.insertarBitacora(
+        ip: ip,
+        ci: ci,
+        fecha: DateTime.now(),
+        hora: DateTime.now(),
+        accion: 'Se edito un nuevo servicio',
+        tabla_afectada: 'servicios',
+      );
       setState(() {
         final index = services.indexWhere((dep) => dep['id'] == serviceId);
         if (index != -1) {
@@ -102,6 +127,15 @@ class _Services extends State<Services> {
   void _deleteService(int serviceId) async {
     try {
       await ServicesEndPoints().deleteService(serviceId);
+      final ip = await authService.obtenerIP();
+      await authService.insertarBitacora(
+        ip: ip,
+        ci: ci,
+        fecha: DateTime.now(),
+        hora: DateTime.now(),
+        accion: 'Se elimino un nuevo servicio',
+        tabla_afectada: 'servicios',
+      );
       setState(() {
         services.removeWhere((dep) => dep['id'] == serviceId);
       });
@@ -114,6 +148,8 @@ class _Services extends State<Services> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    ci = userProvider.ci!;
     return Scaffold(
       appBar: CustomAppBar(
         title1: 'Registro de',

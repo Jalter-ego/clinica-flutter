@@ -1,5 +1,7 @@
+import 'package:OptiVision/componets/HomeCardService.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/proveedor_usuario.dart';
@@ -30,24 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final userProvider = Provider.of<UserProvider>(context);
     final saludo = obtenerSaludo();
     final bienvenidaText = '$saludo ${userProvider.nombre ?? 'Usuario'}';
-
-    final List<Map<String, String>> servicios = [
-      {
-        'imagePath': Assets.home1,
-        'title': 'Cirugía LASIK',
-        'description': 'Corrección visual mediante cirugía láser avanzada.',
-      },
-      {
-        'imagePath': Assets.home2,
-        'title': 'Diagnóstico completo',
-        'description': 'Exámenes de visión precisos y personalizados para ti.',
-      },
-      {
-        'imagePath': Assets.home3,
-        'title': 'Tratamiento de cataratas',
-        'description': 'Recupera tu visión con nuestras técnicas quirúrgicas.',
-      },
-    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -130,20 +114,32 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
-                SizedBox(
-                  height: 340,
-                  child: PageView.builder(
-                    itemCount: servicios.length,
-                    itemBuilder: (context, index) {
-                      final servicio = servicios[index];
-                      return _buildServiceCard(
-                        context,
-                        imagePath: servicio['imagePath']!,
-                        title: servicio['title']!,
-                        description: servicio['description']!,
-                      );
-                    },
-                  ),
+                const Column(
+                  children: [
+                    HomeCardService(
+                      width: 320,
+                      height: 90,
+                      icon1: LineAwesomeIcons.user_md_solid,
+                      text1: 'Consulta Médica',
+                      text2: 'Agende su consulta general',
+                    ),
+                    SizedBox(height: 20),
+                    HomeCardService(
+                      width: 320,
+                      height: 90,
+                      icon1: LineAwesomeIcons.capsules_solid,
+                      text1: 'Farmacia',
+                      text2: 'Encuentre medicinas y más',
+                    ),
+                    SizedBox(height: 20),
+                    HomeCardService(
+                      width: 320,
+                      height: 90,
+                      icon1: LineAwesomeIcons.vial_solid,
+                      text1: 'Chequeos',
+                      text2: 'Chequeos de salud preventiva',
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -152,47 +148,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-}
-
-Widget _buildServiceCard(BuildContext context,
-    {required String imagePath,
-    required String title,
-    required String description}) {
-  return Card(
-    margin: const EdgeInsets.symmetric(vertical: 10),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClipRRect(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(8.0)),
-          child: Image.asset(
-            imagePath,
-            fit: BoxFit.cover,
-            height: 220,
-            width: double.infinity,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(
-            description,
-            style: const TextStyle(fontSize: 14),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 2,
-          ),
-        ),
-      ],
-    ),
-  );
 }
 
 Widget _buildQuickAction(BuildContext context,

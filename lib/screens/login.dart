@@ -59,11 +59,19 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
       if (response != null) {
         final token = response['token'];
-
-        // Guarda el token en el UserProvider
         await userProvider.setToken(token);
 
-        // Navega a la página de inicio
+        final ip = await authService.obtenerIP();
+        await authService.insertarBitacora(
+          ip: ip,
+          ci: ci,
+          fecha: DateTime.now(),
+          hora: DateTime.now(),
+          accion: 'Inicio de sesión',
+          tabla_afectada: 'usuarios',
+        );
+
+        // Navegar a la página de inicio
         Get.offAll(() => const Nav_Rutas());
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -87,7 +95,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         body: Stack(
           fit: StackFit.expand,
           children: [
-            // Imagen de fondo más pequeña y más transparente
             Center(
               child: Opacity(
                 opacity: 0.2, // Ajusta la opacidad aquí (0.0 - 1.0)

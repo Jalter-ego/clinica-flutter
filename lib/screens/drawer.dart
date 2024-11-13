@@ -1,4 +1,7 @@
+import 'package:OptiVision/screens/Registers/AntecedentesPage.dart';
+import 'package:OptiVision/screens/Registers/Pathologies.dart';
 import 'package:OptiVision/screens/Registers/ProgramingMedicals.dart';
+import 'package:OptiVision/screens/Registers/Triaje.dart';
 import 'package:OptiVision/screens/pagoPrueba.dart';
 
 import 'Registers/Services.dart';
@@ -63,10 +66,16 @@ class AppDrawer extends StatelessWidget {
                   const Citas(),
                 ),
                 _listTile(
-                  'Prueba de pago',
-                  Icons.money,
+                  'Patologias',
+                  Icons.abc,
                   context,
-                  PruebaPago(),
+                  Pathologies(),
+                ),
+                _listTile(
+                  'Antecedentes',
+                  Icons.abc,
+                  context,
+                  AntecedentesPage(),
                 ),
               ],
             ),
