@@ -5,6 +5,7 @@ import '../../componets/CustomAppBar.dart';
 import '../../componets/CustomButtom.dart';
 import '../../servicios/triajeServices.dart'; // Asegúrate de importar el servicio
 import '../../providers/proveedor_usuario.dart';
+import 'TriajeDetalles.dart';
 
 class GestionarTriaje extends StatefulWidget {
   @override
@@ -364,10 +365,105 @@ void _showCreateTriajeModal() {
                           rows: triajes.map((triaje) {
                             return DataRow(
                               cells: <DataCell>[
-                                DataCell(Text(triaje['id'].toString())),
-                                DataCell(Text(triaje['usuario_id'].toString())),
-                                DataCell(Text(triaje['nivel_prioridad'])),
-                                DataCell(Text(_formatDate(triaje['fecha']))), // Formateo de la fecha
+                                DataCell(Text(triaje['id'].toString()), 
+                                onTap: () {
+        // Aquí vamos a navegar a la pantalla de detalles
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TriajeDetailsScreen(
+              id: triaje['id'],
+              usuarioId: triaje['usuario_id'],
+              nivelPrioridad: triaje['nivel_prioridad'],
+              fecha: _formatDate(triaje['fecha']),
+              hora: triaje['hora'],
+              frecuenciaCardiaca: triaje['frecuencia_cardiaca'].toDouble(),
+              frecuenciaRespiratoria: triaje['frecuencia_respiratoria'].toDouble(),
+              temperatura: double.tryParse(triaje['temperatura'].toString()) ?? 0.0,
+              saturacionOxigeno: double.tryParse(triaje['saturacion_oxigeno'].toString()) ?? 0.0,
+              presionArterial: triaje['presion_arterial'],
+              descripcion: triaje['descripcion'],
+              visionInicialOd: double.tryParse(triaje['vision_inicial_od'].toString()) ?? 0.0,
+              visionInicialOi: double.tryParse(triaje['vision_inicial_oi'].toString()) ?? 0.0,
+            ),
+          ),
+        );
+      },
+       ),
+                                DataCell(Text(triaje['usuario_id'].toString()),
+                                 onTap: () {
+        // Aquí vamos a navegar a la pantalla de detalles
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TriajeDetailsScreen(
+              id: triaje['id'],
+              usuarioId: triaje['usuario_id'],
+              nivelPrioridad: triaje['nivel_prioridad'],
+              fecha: _formatDate(triaje['fecha']),
+              hora: triaje['hora'],
+              frecuenciaCardiaca: triaje['frecuencia_cardiaca'].toDouble(),
+              frecuenciaRespiratoria: triaje['frecuencia_respiratoria'].toDouble(),
+              temperatura: double.tryParse(triaje['temperatura'].toString()) ?? 0.0,
+              saturacionOxigeno: double.tryParse(triaje['saturacion_oxigeno'].toString()) ?? 0.0,
+              presionArterial: triaje['presion_arterial'],
+              descripcion: triaje['descripcion'],
+              visionInicialOd: double.tryParse(triaje['vision_inicial_od'].toString()) ?? 0.0,
+              visionInicialOi: double.tryParse(triaje['vision_inicial_oi'].toString()) ?? 0.0,
+            ),
+          ),
+        );
+      },
+                                ),
+                                DataCell(Text(triaje['nivel_prioridad']),
+                                 onTap: () {
+        // Aquí vamos a navegar a la pantalla de detalles
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TriajeDetailsScreen(
+              id: triaje['id'],
+              usuarioId: triaje['usuario_id'],
+              nivelPrioridad: triaje['nivel_prioridad'],
+              fecha: _formatDate(triaje['fecha']),
+              hora: triaje['hora'],
+              frecuenciaCardiaca: triaje['frecuencia_cardiaca'].toDouble(),
+              frecuenciaRespiratoria: triaje['frecuencia_respiratoria'].toDouble(),
+              temperatura: double.tryParse(triaje['temperatura'].toString()) ?? 0.0,
+              saturacionOxigeno: double.tryParse(triaje['saturacion_oxigeno'].toString()) ?? 0.0,
+              presionArterial: triaje['presion_arterial'],
+              descripcion: triaje['descripcion'],
+              visionInicialOd: double.tryParse(triaje['vision_inicial_od'].toString()) ?? 0.0,
+              visionInicialOi: double.tryParse(triaje['vision_inicial_oi'].toString()) ?? 0.0,
+            ),
+          ),
+        );
+      },
+                                ),
+                                DataCell(Text(_formatDate(triaje['fecha'])),
+                                 onTap: () {
+        // Aquí vamos a navegar a la pantalla de detalles
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TriajeDetailsScreen(
+              id: triaje['id'],
+              usuarioId: triaje['usuario_id'],
+              nivelPrioridad: triaje['nivel_prioridad'],
+              fecha: _formatDate(triaje['fecha']),
+              hora: triaje['hora'],
+              frecuenciaCardiaca: triaje['frecuencia_cardiaca'].toDouble(),
+              frecuenciaRespiratoria: triaje['frecuencia_respiratoria'].toDouble(),
+              temperatura: double.tryParse(triaje['temperatura'].toString()) ?? 0.0,
+              saturacionOxigeno: double.tryParse(triaje['saturacion_oxigeno'].toString()) ?? 0.0,
+              presionArterial: triaje['presion_arterial'],
+              descripcion: triaje['descripcion'],
+              visionInicialOd: double.tryParse(triaje['vision_inicial_od'].toString()) ?? 0.0,
+              visionInicialOi: double.tryParse(triaje['vision_inicial_oi'].toString()) ?? 0.0,
+            ),
+          ),
+        );
+      },), // Formateo de la fecha
                                 DataCell(
                                   Row(
                                     children: [
