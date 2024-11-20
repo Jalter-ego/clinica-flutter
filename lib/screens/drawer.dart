@@ -66,7 +66,7 @@ class AppDrawer extends StatelessWidget {
                   const Citas(),
                 ),
                 _listTile(
-                  'Registro de Triaje',
+                  'Gestion de Triaje',
                   Icons.my_library_books_sharp,
                   context,
                  GestionarTriaje(),

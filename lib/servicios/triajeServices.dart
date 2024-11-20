@@ -22,6 +22,8 @@ class TriajeServices {
             'saturacion_oxigeno': t['saturacion_oxigeno'],
             'presion_arterial': t['presion_arterial'],
             'descripcion': t['descripcion'],
+            'vision_inicial_od': t['vision_inicial_od'],
+            'vision_inicial_oi': t['vision_inicial_oi'],
           }).toList();
     } else {
       throw Exception('Failed to load triajes');
@@ -38,6 +40,8 @@ class TriajeServices {
     required double saturacionOxigeno,
     required String presionArterial,
     required String descripcion,
+    required double vision_inicial_od,
+    required double vision_inicial_oi,
   }) async {
     try {
       final response = await http.post(
@@ -56,6 +60,8 @@ class TriajeServices {
           'saturacion_oxigeno': saturacionOxigeno,
           'presion_arterial': presionArterial,
           'descripcion': descripcion,
+          'vision_inicial_od':vision_inicial_od,
+          'vision_inicial_oi':vision_inicial_od,
         }),
       );
 

@@ -26,7 +26,8 @@ class _GestionarTriajeState extends State<GestionarTriaje> {
   final TextEditingController _saturacionOxigenoController = TextEditingController();
   final TextEditingController _presionArterialController = TextEditingController();
   final TextEditingController _descripcionController = TextEditingController();
-
+  final TextEditingController _vision_inicial_odController = TextEditingController();
+  final TextEditingController _vision_inicial_oiController= TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -173,6 +174,26 @@ void _showCreateTriajeModal() {
                     return null;
                   },
                 ),
+                 TextFormField(
+                  controller: _vision_inicial_odController,
+                  decoration: InputDecoration(labelText: 'Vision inicial od'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor ingrese un valor';
+                    }
+                    return null;
+                  },
+                ),
+                 TextFormField(
+                  controller: _vision_inicial_oiController,
+                  decoration: InputDecoration(labelText: 'Vision incial oi'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor ingrese un valor';
+                    }
+                    return null;
+                  },
+                ),
                 const SizedBox(height: 20), // Espacio adicional antes de los botones
               ],
             ),
@@ -199,6 +220,8 @@ void _showCreateTriajeModal() {
                         saturacionOxigeno: double.parse(_saturacionOxigenoController.text),
                         presionArterial: _presionArterialController.text,
                         descripcion: _descripcionController.text,
+                        vision_inicial_od:double.parse(_vision_inicial_odController.text),
+                        vision_inicial_oi:double.parse(_vision_inicial_oiController.text),
                       ).then((success) {
                         if (success) {
                           ScaffoldMessenger.of(context).showSnackBar(
