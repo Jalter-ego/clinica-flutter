@@ -1,14 +1,88 @@
 import 'package:flutter/material.dart';
+import '../componets/CustomAppBar.dart';
+import '../servicios/patologiasServices.dart';
 
-class InformacionScreen extends StatelessWidget {
-  const InformacionScreen({super.key});
+class InformacionScreen extends StatefulWidget {
+  @override
+  _InformacionScreenState createState() => _InformacionScreenState();
+}
+
+class _InformacionScreenState extends State<InformacionScreen> {
+  late Future<List<Map<String, dynamic>>> _patologiasFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _patologiasFuture = PatologiasServices().getPatologias(); 
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Pantalla de Información',
-        style: TextStyle(fontSize: 24),
+    return Scaffold(
+      appBar:  CustomAppBar(
+        title1: 'Informacion',
+        title2: 'Sobre Patologias',
+        icon: Icons.medical_information,
+        onIconPressed: () {
+        },
+      ),
+      body: FutureBuilder<List<Map<String, dynamic>>>( 
+        future: _patologiasFuture, 
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No hay patologías disponibles.'));
+          } else {
+            List<Map<String, dynamic>> patologias = snapshot.data!;
+
+            return ListView.builder(
+              itemCount: patologias.length,
+              itemBuilder: (context, index) {
+                final patologia = patologias[index];
+                return Card(
+                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  elevation: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        
+                         Text(
+                          patologia['nombre'],
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 10), 
+                        Image.network(
+                          patologia['imagen'],
+                          width: 150, 
+                          height: 150,
+                          fit: BoxFit.cover,
+                        ),
+                        const SizedBox(height: 10),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Text(
+                            patologia['descripcion'],
+                            style: TextStyle(fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+        },
       ),
     );
   }
