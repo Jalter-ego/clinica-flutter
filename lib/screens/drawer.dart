@@ -71,12 +71,6 @@ class AppDrawer extends StatelessWidget {
                   context,
                   Pathologies(),
                 ),
-                _listTile(
-                  'Antecedentes',
-                  Icons.abc,
-                  context,
-                  AntecedentesPage(),
-                ),
               ],
             ),
             // Ondulación superpuesta

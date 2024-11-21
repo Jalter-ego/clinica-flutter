@@ -1,3 +1,4 @@
+import 'package:OptiVision/screens/Registers/AntecedentesPage.dart';
 import 'package:OptiVision/utils/constantes.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +66,8 @@ class MyApp extends StatelessWidget {
               GetPage(name: '/', page: () => const SplashScreen()),
               GetPage(name: '/login', page: () => const LoginPage()),
               GetPage(name: '/home', page: () => const Nav_Rutas()),
+              GetPage(
+                  name: '/antecedentes', page: () => const AntecedentesPage()),
               GetPage(
                 name: '/registro_empleados',
                 page: () => const EmployeeRegistrationPage(),

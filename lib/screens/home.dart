@@ -1,4 +1,5 @@
 import 'package:OptiVision/componets/HomeCardService.dart';
+import 'package:OptiVision/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/proveedor_usuario.dart';
 import '../utils/assets.dart';
+import 'Registers/AntecedentesPage.dart';
 import 'drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -68,19 +70,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       context,
                       icon: Icons.event_available,
                       label: 'Agendar Cita',
-                      route: '/agendar_cita',
+                      page: const SplashScreen(),
                     ),
                     _buildQuickAction(
                       context,
                       icon: Icons.history,
                       label: 'Historial',
-                      route: '/historial',
+                      page: const AntecedentesPage(),
                     ),
                     _buildQuickAction(
                       context,
                       icon: Icons.remove_red_eye,
                       label: 'Exámenes',
-                      route: '/examenes',
+                      page: const SplashScreen(),
                     ),
                   ],
                 ),
@@ -151,14 +153,16 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 Widget _buildQuickAction(BuildContext context,
-    {required IconData icon, required String label, required String route}) {
+    {required IconData icon, required String label, required Widget page}) {
   return Column(
     children: [
       IconButton(
         icon: Icon(icon, size: 40),
         color: const Color.fromARGB(255, 255, 255, 255),
         onPressed: () {
-          Navigator.pushNamed(context, route);
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => page),
+          );
         },
       ),
       Text(
