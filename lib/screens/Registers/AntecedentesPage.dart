@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../componets/CustomAppBar.dart';
+import '../../componets/CustomButtom.dart';
 import '../../servicios/antecedentesServices.dart';
 import 'AntecedentesPaciente.dart';
+import 'CitasRegister.dart';
 
 class AntecedentesScreen extends StatefulWidget {
   @override
@@ -12,7 +14,18 @@ class AntecedentesScreen extends StatefulWidget {
 class _AntecedentesScreenState extends State<AntecedentesScreen> {
   List<Map<String, dynamic>> antecedentes = [];
   List<Map<String, dynamic>> filteredAntecedentes = []; // Lista filtrada
-  final TextEditingController _searchController = TextEditingController(); // Controlador de búsqueda
+  final TextEditingController _searchController = TextEditingController(); 
+
+
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _idUsuarioController = TextEditingController();
+  final TextEditingController _tipoAntecedenteController = TextEditingController();
+  final TextEditingController _descripcionController= TextEditingController();
+  final TextEditingController _especifico1Controller = TextEditingController();
+  final TextEditingController _especifico2Controller = TextEditingController();
+  final TextEditingController _fechaController = TextEditingController();
+  final TextEditingController _importanteController = TextEditingController();
+  bool _isImportant=false;
   bool isLoading = true;
 
   @override
@@ -59,7 +72,155 @@ class _AntecedentesScreenState extends State<AntecedentesScreen> {
       }
     });
   }
-
+   void _showCreateTriajeModal() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Nuevo Triaje'),
+        content: SingleChildScrollView( // Agregamos el SingleChildScrollView
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: _idUsuarioController,
+                  decoration: InputDecoration(labelText: 'ID Usuario'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor ingrese un ID de usuario';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _tipoAntecedenteController,
+                  decoration: InputDecoration(labelText: 'Tipo Antecedente'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor ingrese una tipo';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _descripcionController,
+                  decoration: InputDecoration(labelText: 'Descripcion'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor ingrese una descripcion';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _especifico1Controller,
+                  decoration: InputDecoration(labelText: 'Especifico 1'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor ingrese especifico 1';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _especifico2Controller,
+                  decoration: InputDecoration(labelText: 'Especifico 2'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor ingrese especifico 2';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _fechaController,
+                  decoration: InputDecoration(labelText: 'Fecha (yyyy-MM-dd)'),
+                  keyboardType: TextInputType.datetime,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor ingrese una fecha';
+                    }
+                    return null;
+                  },
+                ),
+                DropdownButtonFormField<bool>(
+  value: _isImportant ?? false,  // Valor por defecto, puedes poner `null` si prefieres inicializarlo en nulo.
+  decoration: InputDecoration(
+    labelText: 'Es Importante',
+    border: OutlineInputBorder(),
+  ),
+  items: [
+    DropdownMenuItem<bool>(
+      value: true,
+      child: Text('Sí'),
+    ),
+    DropdownMenuItem<bool>(
+      value: false,
+      child: Text('No'),
+    ),
+  ],
+  onChanged: (bool? value) {
+    setState(() {
+      _isImportant = value!;
+    });
+  },
+),
+                const SizedBox(height: 20), // Espacio adicional antes de los botones
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0), // Espacio extra en la parte inferior
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end, // Alineamos los botones al final
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Cerrar el modal
+                  },
+                  child: Text('Cancelar'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      // Si el formulario es válido, proceder a crear el triaje
+                      AntecedentesServices().crearAntecedente(
+                        usuarioId: int.parse(_idUsuarioController.text),
+                        tipoAntecedente: _tipoAntecedenteController.text,
+                        descripcion: _descripcionController.text,
+                        especifico1: _especifico1Controller.text,
+                        especifico2: _especifico2Controller.text,
+                        fechaEvento: _fechaController.text,
+                        esImportante: _isImportant,
+                      ).then((success) {
+                        if (success) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Antecedente creado exitosamente')),
+                          );
+                          _fetchAntecedentes(); // Recargar la lista de triajes
+                          Navigator.of(context).pop(); // Cerrar el modal
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error al crear el antecedente')),
+                          );
+                        }
+                      });
+                    }
+                  },
+                  child: Text('Guardar'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,6 +250,19 @@ class _AntecedentesScreenState extends State<AntecedentesScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Barra de búsqueda
+                          SizedBox(
+                          width: 120,
+                          height: 40,
+                          child: CustomButton(
+                            textColor: Colors.white,
+                            backgroundColor: Colors.green,
+                            icon: Icons.add,
+                            text: 'Nuevo',
+                            fontSize: 14,
+                            onPressed:_showCreateTriajeModal,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
                           TextField(
                             controller: _searchController,
                             decoration: InputDecoration(
@@ -100,7 +274,7 @@ class _AntecedentesScreenState extends State<AntecedentesScreen> {
                               contentPadding: const EdgeInsets.symmetric(
                                 vertical: 10,
                                 horizontal: 16,
-                              ), // Ajusta el padding
+                              ), 
                             ),
                           ),
                         ],

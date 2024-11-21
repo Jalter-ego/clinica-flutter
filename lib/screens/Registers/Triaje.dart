@@ -208,6 +208,12 @@ void _showCreateTriajeModal() {
               children: [
                 TextButton(
                   onPressed: () {
+                    Navigator.of(context).pop(); // Cerrar el modal
+                  },
+                  child: Text('Cancelar'),
+                ),
+                TextButton(
+                  onPressed: () {
                     if (_formKey.currentState?.validate() ?? false) {
                       // Si el formulario es válido, proceder a crear el triaje
                       TriajeServices().crearTriaje(
@@ -239,12 +245,6 @@ void _showCreateTriajeModal() {
                     }
                   },
                   child: Text('Guardar'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Cerrar el modal
-                  },
-                  child: Text('Cancelar'),
                 ),
               ],
             ),

@@ -71,4 +71,45 @@ class AntecedentesServices {
       throw Exception('Failed to load antecedente by id');
     }
   }
+
+  Future<bool> crearAntecedente({
+    required int usuarioId,
+    required String tipoAntecedente,
+    required String descripcion,
+    required String especifico1,
+    required String especifico2,
+    required String fechaEvento,
+    required bool esImportante,
+  }) async {
+    try {
+    // El cuerpo de la solicitud que se enviará
+    final Map<String, dynamic> data = {
+      'usuario_id': usuarioId,
+      'tipo_antecedente': tipoAntecedente,
+      'descripcion': descripcion,
+      'especifico1': especifico1,
+      'especifico2': especifico2,
+      'fecha_evento': fechaEvento,
+      'es_importante': esImportante,
+    };
+
+    // Realizamos la solicitud POST
+    final response = await http.post(
+      Uri.parse('${Constantes.uri}/antecedentes/crear'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(data),
+    );
+    if (response.statusCode == 200 || response.statusCode ==201) {
+     return true;
+    } else {
+      // Si no es exitosa, lanzamos una excepción
+      throw Exception('Failed to create antecedente');
+    }
+  }catch (e) {
+      print('Error al crear el triaje: $e');
+      return false; // Si ocurre un error, devolvemos false
+    }
+  }
 }
