@@ -31,9 +31,8 @@ class AntecedenteService {
 
     if (response.statusCode == 200) {
       final bytes = response.bodyBytes;
-      final dir =
-          await getApplicationDocumentsDirectory(); // Obtenemos el directorio de documentos
-      final file = File('${dir.path}/reporte_antecedentes_$userId.pdf');
+      final dir = await getExternalStorageDirectory();
+      final file = File('${dir!.path}/reporte_antecedentes_$userId.pdf');
       await file.writeAsBytes(bytes); // Guardamos el archivo
 
       print('Reporte descargado en ${file.path}');

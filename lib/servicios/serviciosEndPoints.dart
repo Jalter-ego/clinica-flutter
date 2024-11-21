@@ -12,7 +12,9 @@ class ServicesEndPoints {
         'nombre': nombre,
         'descripcion': descripcion,
         'id_departamento': idDepartamento,
-        'id_especialidad': idEspecialidad
+        'id_especialidad': idEspecialidad,
+        'precio': 20,
+        'imagen_url': '.....'
       }),
     );
 
