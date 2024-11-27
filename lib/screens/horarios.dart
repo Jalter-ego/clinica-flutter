@@ -91,7 +91,7 @@ class _HorariosState extends State<Horarios> {
     await _guardarDatosEnLocal(datosFila); // Guardar datos de la fila en SharedPreferences
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Cupos()),
+      MaterialPageRoute(builder: (context) => const Cupos()),
     );
   }
 

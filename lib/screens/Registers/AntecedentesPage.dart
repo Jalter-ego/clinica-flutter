@@ -89,7 +89,7 @@ class _AntecedentesScreenState extends State<AntecedentesScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Nuevo Triaje'),
+          title: const Text('Nuevo Triaje'),
           content: SingleChildScrollView(
             // Agregamos el SingleChildScrollView
             child: Form(
@@ -99,7 +99,7 @@ class _AntecedentesScreenState extends State<AntecedentesScreen> {
                 children: [
                   TextFormField(
                     controller: _idUsuarioController,
-                    decoration: InputDecoration(labelText: 'ID Usuario'),
+                    decoration: const InputDecoration(labelText: 'ID Usuario'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor ingrese un ID de usuario';
@@ -109,7 +109,7 @@ class _AntecedentesScreenState extends State<AntecedentesScreen> {
                   ),
                   TextFormField(
                     controller: _tipoAntecedenteController,
-                    decoration: InputDecoration(labelText: 'Tipo Antecedente'),
+                    decoration: const InputDecoration(labelText: 'Tipo Antecedente'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor ingrese una tipo';
@@ -119,7 +119,7 @@ class _AntecedentesScreenState extends State<AntecedentesScreen> {
                   ),
                   TextFormField(
                     controller: _descripcionController,
-                    decoration: InputDecoration(labelText: 'Descripcion'),
+                    decoration: const InputDecoration(labelText: 'Descripcion'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor ingrese una descripcion';
@@ -129,7 +129,7 @@ class _AntecedentesScreenState extends State<AntecedentesScreen> {
                   ),
                   TextFormField(
                     controller: _especifico1Controller,
-                    decoration: InputDecoration(labelText: 'Especifico 1'),
+                    decoration: const InputDecoration(labelText: 'Especifico 1'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor ingrese especifico 1';
@@ -139,7 +139,7 @@ class _AntecedentesScreenState extends State<AntecedentesScreen> {
                   ),
                   TextFormField(
                     controller: _especifico2Controller,
-                    decoration: InputDecoration(labelText: 'Especifico 2'),
+                    decoration: const InputDecoration(labelText: 'Especifico 2'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor ingrese especifico 2';
@@ -150,7 +150,7 @@ class _AntecedentesScreenState extends State<AntecedentesScreen> {
                   TextFormField(
                     controller: _fechaController,
                     decoration:
-                        InputDecoration(labelText: 'Fecha (yyyy-MM-dd)'),
+                        const InputDecoration(labelText: 'Fecha (yyyy-MM-dd)'),
                     keyboardType: TextInputType.datetime,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -162,11 +162,11 @@ class _AntecedentesScreenState extends State<AntecedentesScreen> {
                   DropdownButtonFormField<bool>(
                     value: _isImportant ??
                         false, // Valor por defecto, puedes poner `null` si prefieres inicializarlo en nulo.
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Es Importante',
                       border: OutlineInputBorder(),
                     ),
-                    items: [
+                    items: const [
                       DropdownMenuItem<bool>(
                         value: true,
                         child: Text('Sí'),
@@ -200,7 +200,7 @@ class _AntecedentesScreenState extends State<AntecedentesScreen> {
                     onPressed: () {
                       Navigator.of(context).pop(); // Cerrar el modal
                     },
-                    child: Text('Cancelar'),
+                    child: const Text('Cancelar'),
                   ),
                   TextButton(
                     onPressed: () {
@@ -219,7 +219,7 @@ class _AntecedentesScreenState extends State<AntecedentesScreen> {
                             .then((success) {
                           if (success) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                   content:
                                       Text('Antecedente creado exitosamente')),
                             );
@@ -227,7 +227,7 @@ class _AntecedentesScreenState extends State<AntecedentesScreen> {
                             Navigator.of(context).pop(); // Cerrar el modal
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                   content:
                                       Text('Error al crear el antecedente')),
                             );
@@ -235,7 +235,7 @@ class _AntecedentesScreenState extends State<AntecedentesScreen> {
                         });
                       }
                     },
-                    child: Text('Guardar'),
+                    child: const Text('Guardar'),
                   ),
                 ],
               ),

@@ -8,7 +8,7 @@ class AntecedentesPaciente extends StatefulWidget {
   final int id; // Recibimos el id del paciente
 
   // Constructor para recibir el id como parámetro
-  AntecedentesPaciente({required this.id});
+  const AntecedentesPaciente({super.key, required this.id});
 
   @override
   _AntecedentesPacienteState createState() => _AntecedentesPacienteState();
@@ -52,7 +52,7 @@ class _AntecedentesPacienteState extends State<AntecedentesPaciente> {
         },
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -60,12 +60,12 @@ class _AntecedentesPacienteState extends State<AntecedentesPaciente> {
                 children: [
                   Text(
                     'Paciente: ${pacienteData['paciente']['nombre']} ${pacienteData['paciente']['apellido_paterno']} ${pacienteData['paciente']['apellido_materno']}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  Text('Email: ${pacienteData['paciente']['email']}',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                  SizedBox(height: 20),
-                  Text('Fecha de apertura: ${_formatDate(pacienteData['fecha_apertura'])}',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                  SizedBox(height: 20),
+                  Text('Email: ${pacienteData['paciente']['email']}',style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                  const SizedBox(height: 20),
+                  Text('Fecha de apertura: ${_formatDate(pacienteData['fecha_apertura'])}',style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                  const SizedBox(height: 20),
                   const Text(
                     'Antecedentes:',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -78,11 +78,11 @@ class _AntecedentesPacienteState extends State<AntecedentesPaciente> {
                         return ListTile(
                           title: Text(
                             '${ant['tipo_antecedente']}: ${ant['descripcion']}',
-                            style: TextStyle(fontSize: 16),
+                            style: const TextStyle(fontSize: 16),
                           ),
                           subtitle: Text(
                             'Evento: ${_formatDate(ant['fecha_evento'])}',
-                            style: TextStyle(fontSize: 14, color: Colors.grey),
+                            style: const TextStyle(fontSize: 14, color: Colors.grey),
                           ),
                           trailing: Icon(
                             ant['es_importante'] ? Icons.warning : Icons.check,

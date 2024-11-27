@@ -95,9 +95,38 @@ class TriajeServices {
     } else {
       return false; // Si la respuesta no es 200, consideramos que hubo un error
     }
-  } catch (e) {
+    } catch (e) {
     print('Error al eliminar el triaje: $e');
     return false; // Si ocurre un error, devolvemos false
+    }
   }
+
+
+  Future<List<Map<String, dynamic>>> getTriajesPorUsuario(int usuarioId) async {
+    final response = await http.get(Uri.parse('${Constantes.uri}/triaje/usuario/$usuarioId'));
+
+    if (response.statusCode == 200) {
+      List<dynamic> triajes = json.decode(response.body);
+
+      return triajes.map((t) {
+        return {
+          'id': t['id'],
+          'usuario_id': t['usuario_id'],
+          'fecha': t['fecha'],
+          'hora': t['hora'],
+          'nivel_prioridad': t['nivel_prioridad'],
+          'frecuencia_cardiaca': t['frecuencia_cardiaca'],
+          'frecuencia_respiratoria': t['frecuencia_respiratoria'],
+          'temperatura': t['temperatura'],
+          'saturacion_oxigeno': t['saturacion_oxigeno'],
+          'presion_arterial': t['presion_arterial'],
+          'descripcion': t['descripcion'],
+          'vision_inicial_od': t['vision_inicial_od'],
+          'vision_inicial_oi': t['vision_inicial_oi'],
+        };
+      }).toList();
+    } else {
+      throw Exception('Failed to load triajes');
+    }
   }
 }

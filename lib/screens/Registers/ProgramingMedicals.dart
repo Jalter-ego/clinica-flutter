@@ -2,7 +2,6 @@ import 'package:OptiVision/servicios/programingMedicalsServices.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:intl/intl.dart';
 
 import '../../componets/CustomAppBar.dart';
 import '../../componets/CustomButtom.dart';

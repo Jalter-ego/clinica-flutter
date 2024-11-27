@@ -4,7 +4,6 @@ import 'package:OptiVision/screens/recetasMedicas.dart';
 import 'package:OptiVision/screens/tratamientos.dart';
 import 'package:OptiVision/screens/splash.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';

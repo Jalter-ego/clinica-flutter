@@ -3,13 +3,10 @@ import 'package:OptiVision/screens/Registers/CitasRegister.dart';
 import '../../componets/CustomAppBar.dart';
 import '../../componets/CustomButtom.dart';
 import '../../servicios/citasServices.dart'; // Importa tu servicio
-import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 class Citas extends StatefulWidget {
   const Citas({super.key});
 

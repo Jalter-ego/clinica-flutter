@@ -50,7 +50,7 @@ class AntecedentesPageState extends State<HistorialPage> {
       );
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content: const Text('Reporte de antecedentes descargado')),
+            content: Text('Reporte de antecedentes descargado')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -100,7 +100,7 @@ class AntecedentesPageState extends State<HistorialPage> {
                   // Los antecedentes se muestran después del botón
                   ...snapshot.data!
                       .map((antecedente) => buildAntecedenteCard(antecedente))
-                      .toList(),
+                      ,
                 ],
               ),
             ),

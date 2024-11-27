@@ -9,7 +9,7 @@ import '../servicios/citasServices.dart';
 import '../../servicios/paymentServices.dart';
 
 class Cupos extends StatefulWidget {
-  const Cupos({Key? key}) : super(key: key);
+  const Cupos({super.key});
 
   @override
   _CuposState createState() => _CuposState();
@@ -115,10 +115,10 @@ class _CuposState extends State<Cupos> {
   }
 
   Future<void> _showModalRegistroCita(String horaInicio, String horaFin, String fecha) async {
-    final TextEditingController _idUsuarioController = TextEditingController();
-    final TextEditingController _idEspecialistaController = TextEditingController();
-    final TextEditingController _idServicioController = TextEditingController();
-    final TextEditingController _comentariosController = TextEditingController();
+    final TextEditingController idUsuarioController = TextEditingController();
+    final TextEditingController idEspecialistaController = TextEditingController();
+    final TextEditingController idServicioController = TextEditingController();
+    final TextEditingController comentariosController = TextEditingController();
      final SharedPreferences prefs = await SharedPreferences.getInstance();
       String? nombreServicio = prefs.getString('servicio');
       String? nombreEspecialista= prefs.getString('nombre');
@@ -129,14 +129,14 @@ class _CuposState extends State<Cupos> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Registrar Cita'),
+          title: const Text('Registrar Cita'),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextField(
-                  controller: _idUsuarioController,
-                  decoration: InputDecoration(labelText: 'ID Usuario'),
+                  controller: idUsuarioController,
+                  decoration: const InputDecoration(labelText: 'ID Usuario'),
                 ),
                 TextField(
                   enabled:false,
@@ -155,8 +155,8 @@ class _CuposState extends State<Cupos> {
                   decoration: InputDecoration(labelText: horaInicio),
                 ),
                 TextField(
-                  controller: _comentariosController,
-                  decoration: InputDecoration(labelText: 'Comentarios'),
+                  controller: comentariosController,
+                  decoration: const InputDecoration(labelText: 'Comentarios'),
                 ),
               ],
             ),
@@ -170,12 +170,12 @@ class _CuposState extends State<Cupos> {
               child: TextButton(
                 onPressed: () {
                   _handlePaymentAndCita(
-                    _idUsuarioController.text.isNotEmpty ? int.parse(_idUsuarioController.text) : 0, // ID Usuario
+                    idUsuarioController.text.isNotEmpty ? int.parse(idUsuarioController.text) : 0, // ID Usuario
                     idEspecialista ?? 0, // ID Especialista
                     idServicio ?? 0, // ID Servicio
                     fecha, // fecha
                     horaInicio, // horaInicio
-                    _comentariosController.text, // comentario
+                    comentariosController.text, // comentario
                   );
                 },
                 child: const Text('Registrar Cita', style: TextStyle(color: Colors.white)), // Texto en blanco

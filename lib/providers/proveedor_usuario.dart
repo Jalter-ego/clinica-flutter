@@ -5,7 +5,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 
 class UserProvider with ChangeNotifier {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
-
+  int? _id;
   String? _ci;
   String? _nombre;
   String? _apellido_paterno;
@@ -14,7 +14,8 @@ class UserProvider with ChangeNotifier {
   String? _telefono;
   String? _rol;
   List<String>? _permisos;
-
+  
+  int? get id => _id;
   String? get ci => _ci;
   String? get nombre => _nombre;
   String? get apellido_paterno => _apellido_paterno;
@@ -45,6 +46,7 @@ class UserProvider with ChangeNotifier {
     final token = await _storage.read(key: 'token');
     if (token != null && !JwtDecoder.isExpired(token)) {
       final decodedToken = JwtDecoder.decode(token);
+      _id = decodedToken['id'];
       _ci = decodedToken['ci'];
       _nombre = decodedToken['nombre'];
       _apellido_paterno = decodedToken['apellido_paterno'];
@@ -67,6 +69,7 @@ class UserProvider with ChangeNotifier {
   // Borra el token (logout)
   Future<void> clearToken() async {
     await _storage.delete(key: 'token');
+    _id=null;
     _ci = null;
     _nombre = null;
     _apellido_paterno = null;

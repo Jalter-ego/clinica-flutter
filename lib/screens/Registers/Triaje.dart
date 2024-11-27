@@ -73,7 +73,7 @@ class _GestionarTriajeState extends State<GestionarTriaje> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Nuevo Triaje'),
+          title: const Text('Nuevo Triaje'),
           content: SingleChildScrollView(
             // Agregamos el SingleChildScrollView
             child: Form(
@@ -83,7 +83,7 @@ class _GestionarTriajeState extends State<GestionarTriaje> {
                 children: [
                   TextFormField(
                     controller: _idUsuarioController,
-                    decoration: InputDecoration(labelText: 'ID Usuario'),
+                    decoration: const InputDecoration(labelText: 'ID Usuario'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor ingrese un ID de usuario';
@@ -94,7 +94,7 @@ class _GestionarTriajeState extends State<GestionarTriaje> {
                   TextFormField(
                     controller: _fechaController,
                     decoration:
-                        InputDecoration(labelText: 'Fecha (yyyy-MM-dd)'),
+                        const InputDecoration(labelText: 'Fecha (yyyy-MM-dd)'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor ingrese una fecha';
@@ -104,7 +104,7 @@ class _GestionarTriajeState extends State<GestionarTriaje> {
                   ),
                   TextFormField(
                     controller: _horaController,
-                    decoration: InputDecoration(labelText: 'Hora'),
+                    decoration: const InputDecoration(labelText: 'Hora'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor ingrese una hora';
@@ -115,7 +115,7 @@ class _GestionarTriajeState extends State<GestionarTriaje> {
                   TextFormField(
                     controller: _nivelPrioridadController,
                     decoration:
-                        InputDecoration(labelText: 'Nivel de Prioridad'),
+                        const InputDecoration(labelText: 'Nivel de Prioridad'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor ingrese el nivel de prioridad';
@@ -126,7 +126,7 @@ class _GestionarTriajeState extends State<GestionarTriaje> {
                   TextFormField(
                     controller: _frecuenciaCardiacaController,
                     decoration:
-                        InputDecoration(labelText: 'Frecuencia Cardiaca'),
+                        const InputDecoration(labelText: 'Frecuencia Cardiaca'),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -138,7 +138,7 @@ class _GestionarTriajeState extends State<GestionarTriaje> {
                   TextFormField(
                     controller: _frecuenciaRespiratoriaController,
                     decoration:
-                        InputDecoration(labelText: 'Frecuencia Respiratoria'),
+                        const InputDecoration(labelText: 'Frecuencia Respiratoria'),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -149,7 +149,7 @@ class _GestionarTriajeState extends State<GestionarTriaje> {
                   ),
                   TextFormField(
                     controller: _temperaturaController,
-                    decoration: InputDecoration(labelText: 'Temperatura'),
+                    decoration: const InputDecoration(labelText: 'Temperatura'),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -161,7 +161,7 @@ class _GestionarTriajeState extends State<GestionarTriaje> {
                   TextFormField(
                     controller: _saturacionOxigenoController,
                     decoration:
-                        InputDecoration(labelText: 'Saturación de Oxígeno'),
+                        const InputDecoration(labelText: 'Saturación de Oxígeno'),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -172,7 +172,7 @@ class _GestionarTriajeState extends State<GestionarTriaje> {
                   ),
                   TextFormField(
                     controller: _presionArterialController,
-                    decoration: InputDecoration(labelText: 'Presión Arterial'),
+                    decoration: const InputDecoration(labelText: 'Presión Arterial'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor ingrese la presión arterial';
@@ -182,7 +182,7 @@ class _GestionarTriajeState extends State<GestionarTriaje> {
                   ),
                   TextFormField(
                     controller: _descripcionController,
-                    decoration: InputDecoration(labelText: 'Descripción'),
+                    decoration: const InputDecoration(labelText: 'Descripción'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor ingrese una descripción';
@@ -192,7 +192,7 @@ class _GestionarTriajeState extends State<GestionarTriaje> {
                   ),
                   TextFormField(
                     controller: _vision_inicial_odController,
-                    decoration: InputDecoration(labelText: 'Vision inicial od'),
+                    decoration: const InputDecoration(labelText: 'Vision inicial od'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor ingrese un valor';
@@ -202,7 +202,7 @@ class _GestionarTriajeState extends State<GestionarTriaje> {
                   ),
                   TextFormField(
                     controller: _vision_inicial_oiController,
-                    decoration: InputDecoration(labelText: 'Vision incial oi'),
+                    decoration: const InputDecoration(labelText: 'Vision incial oi'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor ingrese un valor';
@@ -228,7 +228,7 @@ class _GestionarTriajeState extends State<GestionarTriaje> {
                     onPressed: () {
                       Navigator.of(context).pop(); // Cerrar el modal
                     },
-                    child: Text('Cancelar'),
+                    child: const Text('Cancelar'),
                   ),
                   TextButton(
                     onPressed: () {
@@ -258,21 +258,21 @@ class _GestionarTriajeState extends State<GestionarTriaje> {
                             .then((success) {
                           if (success) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                   content: Text('Triaje creado exitosamente')),
                             );
                             _fetchTriajes(); // Recargar la lista de triajes
                             Navigator.of(context).pop(); // Cerrar el modal
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                   content: Text('Error al crear el triaje')),
                             );
                           }
                         });
                       }
                     },
-                    child: Text('Guardar'),
+                    child: const Text('Guardar'),
                   ),
                 ],
               ),
@@ -287,12 +287,12 @@ class _GestionarTriajeState extends State<GestionarTriaje> {
     TriajeServices().eliminarTriaje(id).then((success) {
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Triaje eliminado exitosamente')),
+          const SnackBar(content: Text('Triaje eliminado exitosamente')),
         );
         _fetchTriajes(); // Recargar la lista de triajes después de la eliminación
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al eliminar el triaje')),
+          const SnackBar(content: Text('Error al eliminar el triaje')),
         );
       }
     });

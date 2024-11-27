@@ -3,6 +3,8 @@ import '../componets/CustomAppBar.dart';
 import '../servicios/patologiasServices.dart';
 
 class InformacionScreen extends StatefulWidget {
+  const InformacionScreen({super.key});
+
   @override
   _InformacionScreenState createState() => _InformacionScreenState();
 }
@@ -30,11 +32,11 @@ class _InformacionScreenState extends State<InformacionScreen> {
         future: _patologiasFuture, 
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No hay patologías disponibles.'));
+            return const Center(child: Text('No hay patologías disponibles.'));
           } else {
             List<Map<String, dynamic>> patologias = snapshot.data!;
 
@@ -43,7 +45,7 @@ class _InformacionScreenState extends State<InformacionScreen> {
               itemBuilder: (context, index) {
                 final patologia = patologias[index];
                 return Card(
-                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   elevation: 5,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -71,7 +73,7 @@ class _InformacionScreenState extends State<InformacionScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Text(
                             patologia['descripcion'],
-                            style: TextStyle(fontSize: 16),
+                            style: const TextStyle(fontSize: 16),
                             textAlign: TextAlign.center,
                           ),
                         ),
