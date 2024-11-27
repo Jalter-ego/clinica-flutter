@@ -99,7 +99,7 @@ class _HorariosState extends State<Horarios> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title1: 'Programación de',
+        title1: 'Vista de',
         title2: 'Horarios',
         icon: Icons.date_range_outlined,
         onIconPressed: () {

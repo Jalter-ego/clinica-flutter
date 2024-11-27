@@ -71,7 +71,7 @@ class AppDrawer extends StatelessWidget {
                 ),
                 _listTile(
                   'Antecedentes',
-                  Icons.abc,
+                  Icons.attribution_outlined,
                   context,
                   const AntecedentesScreen(),
                 ),
