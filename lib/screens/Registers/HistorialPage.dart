@@ -1,5 +1,5 @@
 import 'package:OptiVision/componets/CustomButtom.dart';
-import 'package:OptiVision/servicios/antecedentesServices.dart';
+import 'package:OptiVision/servicios/HistorilServices.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -7,14 +7,14 @@ import 'package:provider/provider.dart';
 import '../../componets/CustomAppBar.dart';
 import '../../providers/proveedor_usuario.dart';
 
-class AntecedentesPage extends StatefulWidget {
-  const AntecedentesPage({super.key});
+class HistorialPage extends StatefulWidget {
+  const HistorialPage({super.key});
 
   @override
   _AntecedentesPageState createState() => _AntecedentesPageState();
 }
 
-class _AntecedentesPageState extends State<AntecedentesPage> {
+class _AntecedentesPageState extends State<HistorialPage> {
   late Future<List<Map<String, dynamic>>> antecedentes;
 
   @override
@@ -29,7 +29,7 @@ class _AntecedentesPageState extends State<AntecedentesPage> {
 
     if (userId != null) {
       try {
-        return await AntecedenteService.getAntecedentesByUser(1);
+        return await HistorialService.getAntecedentesByUser(1);
       } catch (e) {
         debugPrint('Error al cargar atenciones: $e');
         return [];
@@ -42,7 +42,7 @@ class _AntecedentesPageState extends State<AntecedentesPage> {
 
   void _reporte() async {
     try {
-      await AntecedenteService.report(
+      await HistorialService.report(
           1); // Llamamos al servicio para descargar el reporte
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

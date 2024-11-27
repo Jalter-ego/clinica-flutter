@@ -1,4 +1,5 @@
 import 'package:OptiVision/componets/HomeCardService.dart';
+import 'package:OptiVision/screens/Registers/HistorialPage.dart';
 import 'package:OptiVision/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,8 +7,6 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/proveedor_usuario.dart';
-import '../utils/assets.dart';
-import 'Registers/AntecedentesPage.dart';
 import 'drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -76,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       context,
                       icon: Icons.history,
                       label: 'Historial',
-                      page: const AntecedentesPage(),
+                      page: const HistorialPage(),
                     ),
                     _buildQuickAction(
                       context,

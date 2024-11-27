@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import '../utils/constantes.dart';
 import 'package:http/http.dart' as http;
 
-class AntecedenteService {
+class HistorialService {
   static Future<List<Map<String, dynamic>>> getAntecedentesByUser(
       int id) async {
     final response =
