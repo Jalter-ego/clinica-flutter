@@ -6,6 +6,7 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import '../../providers/proveedor_usuario.dart';
 import '../../providers/theme_Provider.dart';
+import '../HistorialPaciente.dart';
 import '../login.dart';
 
 class PerfilScreen extends StatefulWidget {
@@ -90,7 +91,48 @@ class _PerfilScreenState extends State<PerfilScreen> {
               Divider(color: isDark ? Colors.white30 : Colors.black38),
 
               const _ListTile("Configuración", Icons.settings, true),
-              const _ListTile("Historial", Icons.history_outlined, true),
+              ListTile(
+  onTap: () {
+    // Obtener el ID del usuario desde el UserProvider
+    int? userId = userProvider.id;
+
+    if (userId != null) {
+      // Navegar a la pantalla de historial pasando el ID del usuario
+      Get.to(() => HistorialScreen(idPaciente: userId));
+    } else {
+      // Manejo de error si no se encuentra el ID
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('No se pudo obtener el ID del usuario')),
+      );
+    }
+  },
+  leading: Container(
+    width: 40,
+    height: 40,
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: const Color.fromARGB(255, 196, 205, 209)),
+    child: const Icon(
+      Icons.history_outlined,
+      color: Colors.black45,
+    ),
+  ),
+  title: const Text(
+    "Historial",
+    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+  ),
+  trailing: Container(
+    width: 30,
+    height: 30,
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: const Color.fromARGB(255, 233, 238, 241)),
+    child: const Icon(
+      Icons.arrow_forward_ios_rounded,
+      color: Colors.grey,
+    ),
+  ),
+),
 
               Divider(color: isDark ? Colors.white30 : Colors.black38),
 
