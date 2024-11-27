@@ -72,7 +72,7 @@ class ProgramingMedicalsServices {
         (s) => '${s['nombre']}'.toLowerCase() == specialistName.toLowerCase(),
         orElse: () => {}, // Devuelve null si no se encuentra
       );
-      return specialist?['id']; // Devuelve el ID o null si no se encontró
+      return specialist['id']; // Devuelve el ID o null si no se encontró
     } catch (e) {
       print('Error: $e'); // Manejo de errores
       return null; // Retorna null en caso de error
@@ -102,7 +102,7 @@ class ProgramingMedicalsServices {
         orElse: () => {}, // Devuelve null si no se encuentra
       );
 
-      return service?['id']; // Devuelve el ID o null si no se encontró
+      return service['id']; // Devuelve el ID o null si no se encontró
     } catch (e) {
       print('Error: $e'); // Manejo de errores
       return null; // Retorna null en caso de error

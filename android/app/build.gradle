@@ -1,8 +1,8 @@
 plugins {
     id "com.android.application"
     id "kotlin-android"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
+    id 'com.google.gms.google-services' // Asegúrate de que se aplique aquí
 }
 
 android {
@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.flutter_frontend"
-        minSdk = flutter.minSdkVersion
+        minSdk = 21
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -36,6 +36,9 @@ android {
     // Añade esta línea
     dependencies {
         implementation 'androidx.appcompat:appcompat:1.5.1' // Asegúrate de tener esto
+        implementation platform('com.google.firebase:firebase-bom:33.6.0')
+        implementation 'com.google.firebase:firebase-analytics'
+        implementation 'com.google.firebase:firebase-messaging'
     }
 }
 

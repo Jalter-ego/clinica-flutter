@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "276980818386",
+    "project_id": "optivision-168ff",
+    "storage_bucket": "optivision-168ff.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:276980818386:android:a1507207dedc30afb0280b",
+        "android_client_info": {
+          "package_name": "com.example.flutter_frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPa4OhHchu59IooyQ9Fd5pgOufxHuVdwk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,3 @@
-import 'package:OptiVision/providers/theme_Provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../componets/CustomAppBar.dart';
@@ -11,10 +10,10 @@ class Departaments extends StatefulWidget {
   const Departaments({super.key});
 
   @override
-  _Departaments createState() => _Departaments();
+  DepartamentsState createState() => DepartamentsState();
 }
 
-class _Departaments extends State<Departaments> {
+class DepartamentsState extends State<Departaments> {
   List<Map<String, dynamic>> departments = [];
   final TextEditingController _departmentController = TextEditingController();
   final AutenticacionServices authService = AutenticacionServices();
@@ -129,8 +128,6 @@ class _Departaments extends State<Departaments> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     ci = userProvider.ci!;
-    final themeProvider = Provider.of<ThemeProvider>(context);
-    final isDark = themeProvider.isDarkMode;
 
     return Scaffold(
       appBar: CustomAppBar(

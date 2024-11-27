@@ -1,5 +1,6 @@
-import 'package:OptiVision/screens/Registers/Pathologies.dart';
+import 'package:OptiVision/screens/Registers/AntecedentesPage.dart';
 import 'package:OptiVision/screens/Registers/ProgramingMedicals.dart';
+import 'package:OptiVision/screens/Registers/Triaje.dart';
 
 import 'Registers/Services.dart';
 import 'Registers/Citas.dart';
@@ -63,10 +64,16 @@ class AppDrawer extends StatelessWidget {
                   const Citas(),
                 ),
                 _listTile(
-                  'Patologias',
+                  'Gestion de Triaje',
+                  Icons.my_library_books_sharp,
+                  context,
+                  const GestionarTriaje(),
+                ),
+                _listTile(
+                  'Antecedentes',
                   Icons.abc,
                   context,
-                  Pathologies(),
+                  const AntecedentesScreen(),
                 ),
               ],
             ),

@@ -20,7 +20,7 @@ class _Nav_Rutas_State extends State<Nav_Rutas> {
   final List<Widget> screens = [
     const HomeScreen(),
     const Horarios(),
-    const InformacionScreen(),
+    InformacionScreen(),
     const PerfilScreen(),
   ];
 

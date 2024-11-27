@@ -1,5 +1,6 @@
 import 'package:OptiVision/screens/Registers/HistorialPage.dart';
 import 'package:OptiVision/utils/constantes.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ import 'screens/login.dart';
 import 'screens/splash.dart';
 import 'screens/navegador.dart';
 import 'screens/registro_de_empleados.dart';
+import 'servicios/firebase_api.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +25,8 @@ void main() async {
 
   await initializeDateFormatting('es_ES', null);
   await Stripe.instance.applySettings();
+  //await Firebase.initializeApp();
+  //await FirebaseApi().initNotifications();
 
   runApp(const MyApp());
 }
