@@ -6,15 +6,16 @@ import 'package:provider/provider.dart';
 
 import '../../componets/CustomAppBar.dart';
 import '../../providers/proveedor_usuario.dart';
+import '../../servicios/notificationServices.dart';
 
 class HistorialPage extends StatefulWidget {
   const HistorialPage({super.key});
 
   @override
-  _AntecedentesPageState createState() => _AntecedentesPageState();
+  AntecedentesPageState createState() => AntecedentesPageState();
 }
 
-class _AntecedentesPageState extends State<HistorialPage> {
+class AntecedentesPageState extends State<HistorialPage> {
   late Future<List<Map<String, dynamic>>> antecedentes;
 
   @override
@@ -42,8 +43,11 @@ class _AntecedentesPageState extends State<HistorialPage> {
 
   void _reporte() async {
     try {
-      await HistorialService.report(
-          1); // Llamamos al servicio para descargar el reporte
+      await HistorialService.report(1);
+      await mostrarNotificacion(
+        titulo: 'Reporte descargado',
+        cuerpo: 'El reporte de historial fue descargado exitosamente.',
+      );
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: const Text('Reporte de antecedentes descargado')),

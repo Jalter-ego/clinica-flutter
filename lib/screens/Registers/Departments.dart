@@ -1,3 +1,4 @@
+import 'package:OptiVision/servicios/notificationServices.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../componets/CustomAppBar.dart';
@@ -38,11 +39,18 @@ class DepartamentsState extends State<Departaments> {
           ci: ci,
           fecha: DateTime.now(),
           hora: DateTime.now(),
-          accion: 'Se creo un departamento',
+          accion: 'Se creó un departamento',
           tabla_afectada: 'departamentos',
         );
         _departmentController.clear();
         _fetchDepartments();
+
+        // Notificación
+        await mostrarNotificacion(
+          titulo: 'Departamento creado',
+          cuerpo: 'El departamento "$nombre" fue creado exitosamente.',
+        );
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Departamento creado exitosamente')),
         );
@@ -82,12 +90,22 @@ class DepartamentsState extends State<Departaments> {
         ci: ci,
         fecha: DateTime.now(),
         hora: DateTime.now(),
-        accion: 'Se elimino un departamento',
+        accion: 'Se eliminó un departamento',
         tabla_afectada: 'departamentos',
       );
+
+      final deletedDept =
+          departments.firstWhere((dep) => dep['id'] == departmentId)['nombre'];
+
       setState(() {
         departments.removeWhere((dep) => dep['id'] == departmentId);
       });
+
+      // Notificación
+      await mostrarNotificacion(
+        titulo: 'Departamento eliminado',
+        cuerpo: 'El departamento "$deletedDept" fue eliminado.',
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error de conexión')),
@@ -104,9 +122,13 @@ class DepartamentsState extends State<Departaments> {
         ci: ci,
         fecha: DateTime.now(),
         hora: DateTime.now(),
-        accion: 'Se edito un departamento',
+        accion: 'Se editó un departamento',
         tabla_afectada: 'departamentos',
       );
+
+      final oldName =
+          departments.firstWhere((dep) => dep['id'] == departmentId)['nombre'];
+
       setState(() {
         final index =
             departments.indexWhere((dep) => dep['id'] == departmentId);
@@ -114,6 +136,13 @@ class DepartamentsState extends State<Departaments> {
           departments[index]['nombre'] = newName;
         }
       });
+
+      // Notificación
+      await mostrarNotificacion(
+        titulo: 'Departamento editado',
+        cuerpo: 'El departamento "$oldName" fue renombrado a "$newName".',
+      );
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Departamento editado exitosamente')),
       );
