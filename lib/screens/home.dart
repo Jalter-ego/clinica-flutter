@@ -1,11 +1,15 @@
 import 'package:OptiVision/componets/HomeCardService.dart';
 import 'package:OptiVision/screens/Registers/HistorialPage.dart';
+import 'package:OptiVision/screens/recetasMedicas.dart';
+import 'package:OptiVision/screens/tratamientos.dart';
 import 'package:OptiVision/screens/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../componets/FadePage.dart';
 import '../providers/proveedor_usuario.dart';
 import 'drawer.dart';
 
@@ -13,10 +17,10 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   String obtenerSaludo() {
     final horaActual = DateTime.now().hour;
     if (horaActual >= 6 && horaActual < 12) {
@@ -115,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
-                const Column(
+                Column(
                   children: [
                     HomeCardService(
                       width: 320,
@@ -123,22 +127,37 @@ class _HomeScreenState extends State<HomeScreen> {
                       icon1: LineAwesomeIcons.user_md_solid,
                       text1: 'Consulta Médica',
                       text2: 'Agende su consulta general',
+                      onTap: () {},
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     HomeCardService(
                       width: 320,
                       height: 90,
                       icon1: LineAwesomeIcons.capsules_solid,
-                      text1: 'Farmacia',
-                      text2: 'Encuentre medicinas y más',
+                      text1: 'Recetas Medicas',
+                      text2: 'Encuentre sus recetas medicas',
+                      onTap: () {
+                        Navigator.of(context).push(
+                          FadeThroughPageRoute(
+                            page: const RecetasMedicasPage(),
+                          ),
+                        );
+                      },
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     HomeCardService(
                       width: 320,
                       height: 90,
                       icon1: LineAwesomeIcons.vial_solid,
-                      text1: 'Chequeos',
-                      text2: 'Chequeos de salud preventiva',
+                      text1: 'Tratamientos',
+                      text2: 'Encuentre sus tratamientos',
+                      onTap: () {
+                        Navigator.of(context).push(
+                          FadeThroughPageRoute(
+                            page: const TratamientosPage(),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

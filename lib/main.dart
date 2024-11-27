@@ -14,7 +14,6 @@ import 'providers/theme_Provider.dart';
 import 'screens/login.dart';
 import 'screens/splash.dart';
 import 'screens/navegador.dart';
-import 'screens/registro_de_empleados.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,10 +68,6 @@ class MyApp extends StatelessWidget {
               GetPage(name: '/login', page: () => const LoginPage()),
               GetPage(name: '/home', page: () => const Nav_Rutas()),
               GetPage(name: '/antecedentes', page: () => const HistorialPage()),
-              GetPage(
-                name: '/registro_empleados',
-                page: () => const EmployeeRegistrationPage(),
-              ),
             ],
             localizationsDelegates: const [
               GlobalMaterialLocalizations.delegate,
