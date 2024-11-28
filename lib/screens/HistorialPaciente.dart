@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:OptiVision/servicios/medidasServices.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import '../componets/CustomAppBar.dart';
@@ -31,7 +32,7 @@ class _HistorialScreenState extends State<HistorialScreen> {
   late Future<Map<String, dynamic>> _antecedentes;
   late Future<List<Map<String, dynamic>>> _consultas;
   late Future<List<Map<String, dynamic>>> _diagnosticos;
-  
+  late Future<List<Map<String, dynamic>>> _medidas;
 
 void _reporte() async {
   try {
@@ -42,7 +43,7 @@ void _reporte() async {
     var cirugias = await _cirugias;
     var triajes = await _triajes;
     var antecedentes = await _antecedentes;
-
+    var medidas = await _medidas;
     final pdf = pw.Document();
     pdf.addPage(
       pw.Page(
@@ -130,13 +131,27 @@ void _reporte() async {
                   ],
                 );
               }).toList(),
-
+              pw.Text('Medidas:', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 5),
+              ...medidas.map((medid) {
+                return pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Text('Fecha: ${medid['fecha']}'),
+                    pw.Text('Adicion_od: ${medid['adicion_od']}'),
+                    pw.Text('Adicion_oi: ${medid['adicion_oi']}'),
+                    pw.SizedBox(height: 10),
+                  ],
+                );
+              }).toList(),
               // Antecedentes
               pw.Text('Antecedentes:', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 5),
               pw.Text('Nombre del Paciente: ${antecedentes['paciente']['nombre']}'),
               pw.Text('Fecha de Apertura: ${antecedentes['fecha_apertura']}'),
               pw.SizedBox(height: 10),
+
+              
             ],
           );
         },
@@ -174,6 +189,7 @@ void _reporte() async {
     _antecedentes = AntecedentesServices().getAntecedenteById(widget.idPaciente);
     _consultas = ConsultasServices().getConsultasPorUsuario(widget.idPaciente);
     _diagnosticos = DiagnosticoServices().getDiagnosticosPorUsuario(widget.idPaciente);
+    _medidas = MedidasServices().getMedidasPorUsuario(widget.idPaciente);
   }
 
   @override
@@ -207,6 +223,8 @@ void _reporte() async {
           _buildTriajesSection(),
           _buildSectionTitle("Antecedentes", Icons.history),
           _buildAntecedentesSection(),
+          _buildSectionTitle("Medidas", Icons.remove_red_eye_rounded),
+          _buildMedidasSection(),
         ],
         ),
       ),
@@ -438,6 +456,40 @@ void _reporte() async {
           );
         } else {
           return Text('No hay antecedentes disponibles');
+        }
+      },
+    );
+  }
+  Widget _buildMedidasSection() {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: _medidas,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (snapshot.hasData) {
+          var medidas = snapshot.data!;
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: medidas.length,
+            itemBuilder: (context, index) {
+              var medida = medidas[index];
+              return ListTile(
+                title: Text('Medidas del: ${medida['fecha']}'),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('adicion od -> ${medida['adicion_od']}'),
+                  Text('adicion_oi -> ${medida['adicion_oi']}'),
+                ],
+                )
+              );
+            },
+          );
+        } else {
+          return Text('No hay cirugías disponibles');
         }
       },
     );

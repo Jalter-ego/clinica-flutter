@@ -1,4 +1,5 @@
 import 'package:OptiVision/screens/Registers/AntecedentesPage.dart';
+import 'package:OptiVision/screens/Registers/Medidas.dart';
 import 'package:OptiVision/screens/Registers/ProgramingMedicals.dart';
 import 'package:OptiVision/screens/Registers/Triaje.dart';
 
@@ -74,6 +75,12 @@ class AppDrawer extends StatelessWidget {
                   Icons.attribution_outlined,
                   context,
                   const AntecedentesScreen(),
+                ),
+                _listTile(
+                  'Medidas',
+                  Icons.remove_red_eye_outlined,
+                  context,
+                  const GestionarMedidas(),
                 ),
               ],
             ),
