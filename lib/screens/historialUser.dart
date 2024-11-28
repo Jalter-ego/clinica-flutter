@@ -19,7 +19,7 @@ class AntecedentesPageState extends State<HistorialPage> {
 
   void _reporte() async {
     try {
-      await HistorialService.report(1);
+      await HistorialService.reportHistorial(1);
       await mostrarNotificacion(
         titulo: 'Reporte descargado',
         cuerpo: 'El reporte de historial fue descargado exitosamente.',
