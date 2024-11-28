@@ -18,7 +18,9 @@ import 'screens/navegador.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initNotifications();
-  mostrarNotificacion(titulo: '', cuerpo: '');
+  mostrarNotificacion(
+      titulo: 'Bienvenido a Optivision',
+      cuerpo: 'no se olvide revisar sus recetas medicas, tratamientos....');
   Stripe.publishableKey = Constantes.publicKey;
   Stripe.merchantIdentifier = Constantes.merchantIdentifier;
 

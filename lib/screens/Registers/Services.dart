@@ -7,6 +7,7 @@ import '../../componets/RegisterInput.dart';
 import '../../componets/ModalDelete.dart';
 import '../../providers/proveedor_usuario.dart';
 import '../../servicios/autenticacion_Services.dart';
+import '../../servicios/notificationServices.dart';
 
 class Services extends StatefulWidget {
   const Services({super.key});
@@ -82,6 +83,10 @@ class _Services extends State<Services> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Servicio creado exitosamente')),
         );
+        await mostrarNotificacion(
+          titulo: 'Servicio creado',
+          cuerpo: 'El servicio fue creado exitosamente.',
+        );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Error al crear el servicio')),
@@ -117,6 +122,10 @@ class _Services extends State<Services> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Servicio editado exitosamente')),
       );
+      await mostrarNotificacion(
+        titulo: 'Servicio editado',
+        cuerpo: 'El servicio fue editado exitosamente.',
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error de conexión')),
@@ -139,6 +148,10 @@ class _Services extends State<Services> {
       setState(() {
         services.removeWhere((dep) => dep['id'] == serviceId);
       });
+      await mostrarNotificacion(
+        titulo: 'Servicio eliminado',
+        cuerpo: 'El servicio fue eliminado exitosamente.',
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error de conexión')),
