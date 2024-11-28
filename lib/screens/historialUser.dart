@@ -1,12 +1,11 @@
-import 'package:OptiVision/componets/CustomButtom.dart';
-import 'package:OptiVision/servicios/HistorilServices.dart';
+import 'package:OptiVision/componets/CustomAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 
-import '../../componets/CustomAppBar.dart';
-import '../../providers/proveedor_usuario.dart';
-import '../../servicios/notificationServices.dart';
+import '../componets/CustomButtom.dart';
+import '../servicios/HistorilServices.dart';
+import '../servicios/notificationServices.dart';
+import 'Registers/mock_data.dart';
 
 class HistorialPage extends StatefulWidget {
   const HistorialPage({super.key});
@@ -18,29 +17,6 @@ class HistorialPage extends StatefulWidget {
 class AntecedentesPageState extends State<HistorialPage> {
   late Future<List<Map<String, dynamic>>> antecedentes;
 
-  @override
-  void initState() {
-    super.initState();
-    antecedentes = _loadAntecedentes();
-  }
-
-  Future<List<Map<String, dynamic>>> _loadAntecedentes() async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final userId = userProvider.ci;
-
-    if (userId != null) {
-      try {
-        return await HistorialService.getAntecedentesByUser(1);
-      } catch (e) {
-        debugPrint('Error al cargar atenciones: $e');
-        return [];
-      }
-    } else {
-      debugPrint('El usuario no está autenticado.');
-      return [];
-    }
-  }
-
   void _reporte() async {
     try {
       await HistorialService.report(1);
@@ -49,8 +25,7 @@ class AntecedentesPageState extends State<HistorialPage> {
         cuerpo: 'El reporte de historial fue descargado exitosamente.',
       );
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('Reporte de antecedentes descargado')),
+        const SnackBar(content: Text('Reporte de antecedentes descargado')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -63,54 +38,54 @@ class AntecedentesPageState extends State<HistorialPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title1: 'Mis antecedentes',
+        title1: 'Mi Historial',
         icon: LineAwesomeIcons.angle_left_solid,
         title2: '',
         onIconPressed: () {
           Navigator.of(context).pop();
         },
       ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: antecedentes,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(
-                child: Text('No hay antecedentes disponibles.'));
-          }
-
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  // Botón para el reporte encima de los antecedentes
-                  CustomButton(
-                      textColor: Colors.white,
-                      backgroundColor: Colors.green,
-                      text: 'Reporte de antecedentes',
-                      onPressed: _reporte),
-                  // Los antecedentes se muestran después del botón
-                  ...snapshot.data!
-                      .map((antecedente) => buildAntecedenteCard(antecedente))
-                      ,
-                ],
-              ),
-            ),
-          );
-        },
+      body: ListView(
+        padding: const EdgeInsets.all(16.0),
+        children: [
+          CustomButton(
+              textColor: Colors.white,
+              backgroundColor: Colors.green,
+              text: 'Reporte de antecedentes',
+              onPressed: _reporte),
+          _buildSection(
+            'Antecedentes',
+            (antecedentesMock['antecedentes'] as List<dynamic>?) ?? [],
+          ),
+          _buildSection('Consultas', consultasMock),
+          _buildSection('Diagnósticos', diagnosticosMock),
+          _buildSection('Tratamientos', tratamientosMock),
+        ],
       ),
     );
   }
 
-  Widget buildAntecedenteCard(Map<String, dynamic> antecedente) {
+  Widget _buildSection(String title, List<dynamic> items) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 68, 85, 102),
+            ),
+          ),
+        ),
+        ...items.map((item) => _buildCard(item)).toList(),
+      ],
+    );
+  }
+
+  Widget _buildCard(Map<String, dynamic> data) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 16.0),
@@ -136,7 +111,7 @@ class AntecedentesPageState extends State<HistorialPage> {
               borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
             ),
             child: Text(
-              antecedente['tipo_antecedente'] ?? 'Tipo desconocido',
+              data['tipo'] ?? 'Tipo no especificado',
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -149,19 +124,11 @@ class AntecedentesPageState extends State<HistorialPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                buildInfoRow('Descripción', antecedente['descripcion']),
+                _buildInfoRow('Descripción', data['descripcion']),
                 const Divider(),
-                buildInfoRow('Fecha del Evento',
-                    formatDate(antecedente['fecha_evento'])),
+                _buildInfoRow('Fecha del Evento', _formatDate(data['fecha'])),
                 const Divider(),
-                buildInfoRow('Especifico 1', antecedente['especifico1']),
-                const Divider(),
-                buildInfoRow('Especifico 2', antecedente['especifico2']),
-                const Divider(),
-                buildInfoRow('Fecha de Creación',
-                    formatDate(antecedente['fecha_creacion'])),
-                const Divider(),
-                buildEstadoChip('Importante', antecedente['es_importante']),
+                _buildEstadoChip('Importante', data['es_importante']),
               ],
             ),
           ),
@@ -170,20 +137,21 @@ class AntecedentesPageState extends State<HistorialPage> {
     );
   }
 
-  Widget buildInfoRow(String title, String? value) {
+  Widget _buildInfoRow(String title, String? value) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           '$title: ',
           style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 12.0,
-              color: Colors.black38),
+            fontWeight: FontWeight.bold,
+            fontSize: 12.0,
+            color: Colors.black38,
+          ),
         ),
         Expanded(
           child: Text(
-            value ?? '',
+            value ?? 'No disponible',
             style: const TextStyle(
               fontSize: 12.0,
               color: Colors.black54,
@@ -194,7 +162,7 @@ class AntecedentesPageState extends State<HistorialPage> {
     );
   }
 
-  Widget buildEstadoChip(String title, bool? estado) {
+  Widget _buildEstadoChip(String title, bool? estado) {
     Color estadoColor = estado == true ? Colors.green : Colors.grey;
 
     return Row(
@@ -227,8 +195,13 @@ class AntecedentesPageState extends State<HistorialPage> {
     );
   }
 
-  String formatDate(String date) {
-    final DateTime parsedDate = DateTime.parse(date);
-    return '${parsedDate.day}/${parsedDate.month}/${parsedDate.year}';
+  String _formatDate(String? date) {
+    if (date == null) return 'Fecha no disponible';
+    try {
+      final DateTime parsedDate = DateTime.parse(date);
+      return '${parsedDate.day}/${parsedDate.month}/${parsedDate.year}';
+    } catch (e) {
+      return 'Fecha inválida';
+    }
   }
 }

@@ -1,4 +1,4 @@
-import 'package:OptiVision/screens/Registers/HistorialPage.dart';
+import 'package:OptiVision/screens/Registers/AntecedentesUsuario.dart';
 import 'package:OptiVision/servicios/notificationServices.dart';
 import 'package:OptiVision/utils/constantes.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -69,7 +69,6 @@ class MyApp extends StatelessWidget {
               GetPage(name: '/', page: () => const SplashScreen()),
               GetPage(name: '/login', page: () => const LoginPage()),
               GetPage(name: '/home', page: () => const Nav_Rutas()),
-              GetPage(name: '/antecedentes', page: () => const HistorialPage()),
             ],
             localizationsDelegates: const [
               GlobalMaterialLocalizations.delegate,

@@ -1,5 +1,6 @@
 import 'package:OptiVision/componets/HomeCardService.dart';
-import 'package:OptiVision/screens/Registers/HistorialPage.dart';
+import 'package:OptiVision/screens/Registers/AntecedentesUsuario.dart';
+import 'package:OptiVision/screens/historialUser.dart';
 import 'package:OptiVision/screens/recetasMedicas.dart';
 import 'package:OptiVision/screens/tratamientos.dart';
 import 'package:OptiVision/screens/splash.dart';
@@ -77,14 +78,14 @@ class HomeScreenState extends State<HomeScreen> {
                     _buildQuickAction(
                       context,
                       icon: Icons.history,
-                      label: 'Historial',
-                      page: const HistorialPage(),
+                      label: 'Antecedentes',
+                      page: const AntecedentesUsuario(),
                     ),
                     _buildQuickAction(
                       context,
-                      icon: Icons.remove_red_eye,
-                      label: 'Exámenes',
-                      page: const SplashScreen(),
+                      icon: Icons.history,
+                      label: 'Historial',
+                      page: HistorialPage(),
                     ),
                   ],
                 ),
