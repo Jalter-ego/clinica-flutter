@@ -8,10 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../componets/FadePage.dart';
 import '../providers/proveedor_usuario.dart';
 import 'drawer.dart';
+import 'feedbackModal.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,6 +23,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _showRatingModal());
+  }
+
+  Future<void> _showRatingModal() async {
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const RatingModal(),
+    );
+  }
+
   String obtenerSaludo() {
     final horaActual = DateTime.now().hour;
     if (horaActual >= 6 && horaActual < 12) {

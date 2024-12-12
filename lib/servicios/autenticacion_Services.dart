@@ -214,4 +214,29 @@ class AutenticacionServices {
     var wifiIP = await info.getWifiIP();
     return wifiIP ?? 'IP no disponible';
   }
+
+  Future<void> createComentario(
+      String comentario, int valoracion, String usuario, int idUsuario) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${Constantes.uri}/comentarios/crear'),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({
+          'comentario': comentario,
+          'valoracion': valoracion,
+          'usuario': usuario,
+          'id_usuario': idUsuario
+        }),
+      );
+
+      if (response.statusCode != 201) {
+        print('Error al crear comentario: ${response.statusCode}');
+        print('Detalles: ${response.body}');
+        throw Exception('Failed to create service');
+      }
+    } catch (e) {
+      print('Error de conexión: $e');
+      rethrow;
+    }
+  }
 }
